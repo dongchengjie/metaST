@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <!-- 程序入口 -->
+    <StartupObject>Program</StartupObject>
+    <!-- 隐式导入 -->
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!-- 空值检查 -->
+    <Nullable>enable</Nullable>
+    <!-- 目标编译版本 -->
+    <TargetFramework>net8.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <!-- 软件包依赖 -->
+  <ItemGroup>
+    <!-- EXE打包 -->
+    <PackageReference Include="Costura.Fody" Version="5.7.0">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <!-- 命令行参数校验 -->
+    <PackageReference Include="CommandLineParser" Version="2.9.1" />
+    <!-- JSON解析 -->
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <!-- YAML解析 -->
+    <PackageReference Include="YamlDotNet" Version="15.1.2" />
+    <!-- emoji转文字 -->
+    <PackageReference Include="EmojiOne" Version="4.5.0" />
+  </ItemGroup>
+
+  <!-- 嵌入资源 -->
+  <ItemGroup>
+    <!-- Meta内核 -->
+    <EmbeddedResource Include="Resources\meta\mihomo.exe" />
+    <!-- Clash配置模板 -->
+    <EmbeddedResource Include="Resources\template\basic.yaml" />
+    <EmbeddedResource Include="Resources\template\standard.yaml" />
+    <!-- Clash规则模板 -->
+    <EmbeddedResource Include="Resources\template\rulesets\acl4ssr.yaml" />
+    <EmbeddedResource Include="Resources\template\rulesets\loyalsoldier.yaml" />
+  </ItemGroup>
+</Project>

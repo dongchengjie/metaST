@@ -1,0 +1,6 @@
+{
+  "dotnet.defaultSolution": "metaST.sln",
+  "dotnet.preferCSharpExtension": true,
+  "dotnet.completion.showNameCompletionSuggestions": true,
+  "dotnet.completion.showCompletionItemsFromUnimportedNamespaces": true
+}
