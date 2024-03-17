@@ -1,8 +1,15 @@
 name: 编译发布
 
 on:
+  push:
+    tags:
+      - 'v*.*.*'
   workflow_dispatch:
     inputs:
+      tag_name:
+        description: 'tag'
+        required: true
+        type: string
       prerelease:
         description: '预发布'
         required: false
@@ -11,10 +18,6 @@ on:
         options:
           - true
           - false
-
-  push:
-    tags:
-      - '*'
 
 jobs:
   build:
