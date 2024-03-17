@@ -46,7 +46,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.event.inputs.tag_name }}
-          body_path: metaST/${{ github.workspace }}-CHANGELOG.txt
+          body_path: ${{ github.workspace }}/metaST/-CHANGELOG.md
           prerelease: ${{ github.event.inputs.prerelease }}
           make_latest: true
           files: |
