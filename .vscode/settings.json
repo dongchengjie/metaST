@@ -2,5 +2,12 @@
   "dotnet.defaultSolution": "metaST.sln",
   "dotnet.preferCSharpExtension": true,
   "dotnet.completion.showNameCompletionSuggestions": true,
-  "dotnet.completion.showCompletionItemsFromUnimportedNamespaces": true
+  "dotnet.completion.showCompletionItemsFromUnimportedNamespaces": true,
+
+  "files.exclude": {
+    ".gitattributes": true,
+    ".gitignore": true,
+    "metaST.sln": true,
+    "metaST/obj": true
+  }
 }

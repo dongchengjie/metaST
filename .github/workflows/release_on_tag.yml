@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
     inputs:
       tag_name:
-        description: 'tag'
-        required: true
+        description: 'Tag'
         type: string
+        required: false
 
 jobs:
   build:

@@ -1,10 +1,8 @@
-## [v1.0.0]
-
 > 首个发布版本
 
 ### 新增
 
-- 基于 Clash.Meta 内核，支持多种协议
+- 基于 Clash.Meta 内核，支持多种[协议](https://wiki.metacubex.one/config/proxies/ss/)
 - 节点延迟测试、筛选
 - 节点下载速度测试、筛选
 - 节点归属地重命名

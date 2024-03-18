@@ -2,7 +2,7 @@
   <PropertyGroup>
     <!-- 程序信息 -->
     <StartupObject>Program</StartupObject>
-    <ApplicationIcon>icon.ico</ApplicationIcon>
+    <ApplicationIcon>Resources/icon.ico</ApplicationIcon>
     <!-- 输出配置 -->
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
