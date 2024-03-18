@@ -14,9 +14,16 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-  <!-- 生产版本启用编译器优化 -->
+  <!-- 生产版本配置 -->
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <!-- 启用编译器优化 -->
     <Optimize>true</Optimize>
+    <!-- AOT编译 -->
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <!-- 单文件 -->
+    <PublishSingleFile>true</PublishSingleFile>
+    <!-- 包含.NET环境 -->
+    <PublishSelfContained>true</PublishSelfContained>
   </PropertyGroup>
 
   <!-- 软件包依赖 -->
