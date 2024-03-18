@@ -2,17 +2,14 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "调试程序",
+      "name": "调试",
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",
-      "program": "${workspaceFolder}/metaST/bin/Debug/net8.0/metaST.dll",
-      // 应用参数
+      "program": "${workspaceFolder}/metaST/bin/Debug/metaST.dll",
       "args": ["--config", "D:\\桌面\\dev.yaml", "--pause"],
       "cwd": "${workspaceFolder}/metaST",
-      // 控制台类型（内置：internalConsole 外部：externalTerminal）
       "console": "externalTerminal",
-      // 启动后在程序入口暂停
       "stopAtEntry": false
     }
   ]

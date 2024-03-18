@@ -1,4 +1,3 @@
-
 using System.Reflection;
 using Core.CommandLine;
 using Core.Geo;
@@ -16,7 +15,7 @@ public class MetaSpeedTest
     {
         // 初始化
         Init(options);
-        IGeoLookup api = new Youtube();
+        Youtube? api = new();
         GeoInfo? geoInfo = api.Lookup(null);
         System.Console.WriteLine(geoInfo);
     }

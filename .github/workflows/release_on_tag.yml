@@ -10,14 +10,6 @@ on:
         description: 'tag'
         required: true
         type: string
-      prerelease:
-        description: '预发布'
-        required: false
-        default: 'false'
-        type: choice
-        options:
-          - true
-          - false
 
 jobs:
   build:
@@ -47,7 +39,7 @@ jobs:
         with:
           tag_name: ${{ github.event.inputs.tag_name }}
           body_path: ${{ github.workspace }}/CHANGELOG.md
-          prerelease: ${{ github.event.inputs.prerelease }}
+          prerelease: false
           make_latest: true
           files: |
             metaST/bin/Debug/net8.0/*

@@ -24,13 +24,6 @@
         "/consoleloggerparameters:NoSummary;ForceNoAlign"
       ],
       "problemMatcher": "$msCompile"
-    },
-    {
-      "label": "watch",
-      "command": "dotnet",
-      "type": "process",
-      "args": ["watch", "run", "--project", "${workspaceFolder}/metaST.sln"],
-      "problemMatcher": "$msCompile"
     }
   ]
 }
