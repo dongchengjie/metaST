@@ -1,10 +1,9 @@
-name: 编译发布
+name: Tag时自动编译发布
 
 on:
   push:
     tags:
       - 'v*.*.*'
-  workflow_dispatch:
 
 jobs:
   build-and-release:
