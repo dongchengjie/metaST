@@ -17,10 +17,10 @@ jobs:
 
     steps:
       - name: 拉取最新代码
-        uses: actions\checkout@v4
+        uses: actions/checkout@v4
 
       - name: 设置.NET环境
-        uses: actions\setup-dotnet@v4
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
 
@@ -50,12 +50,12 @@ jobs:
 
       - name: 发布
         id: create_release
-        uses: softprops\action-gh-release@v2
+        uses: softprops/action-gh-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.event.inputs.tag_name }}
-          body_path: ${{ github.workspace }}\CHANGELOG.md
+          body_path: ${{ github.workspace }}/CHANGELOG.md
           prerelease: false
           make_latest: true
           files: |
