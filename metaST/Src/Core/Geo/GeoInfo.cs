@@ -1,4 +1,3 @@
-using System.Globalization;
 using System.Net;
 
 namespace Core.Geo;
@@ -12,9 +11,9 @@ public class GeoInfo
     {
         get
         {
-            return string.IsNullOrWhiteSpace(_country) ?
-            string.IsNullOrWhiteSpace(CountryCode) || CountryCode.Length != 2 ? "UNKNOWN" : GetCountryByCode(CountryCode)
-            : _country;
+            string? name = !string.IsNullOrWhiteSpace(CountryCode) && CountryCode.Length == 2
+            ? CountryNames.Looup(CountryCode) : (string.IsNullOrWhiteSpace(_country) ? null : _country);
+            return string.IsNullOrWhiteSpace(name) ? "UNKNOWN" : name;
         }
         set { _country = value; }
     }
@@ -28,16 +27,17 @@ public class GeoInfo
         }
     }
     public IWebProxy? Proxy { get; set; }
-    private static string GetCountryByCode(string countryCode)
+    public GeoInfo()
     {
-        try
-        {
-            return new RegionInfo(countryCode).DisplayName;
-        }
-        catch (ArgumentException)
-        {
-            return string.Empty;
-        }
+
+    }
+    public GeoInfo(string? address, string? countryCode, string? country, string? organization, IWebProxy? proxy)
+    {
+        Address = address;
+        CountryCode = countryCode;
+        Country = country;
+        Organization = organization;
+        Proxy = proxy;
     }
     private static string GetEmojiByCode(string countryCode)
     {

@@ -15,9 +15,8 @@ public class MetaSpeedTest
     {
         // 初始化
         Init(options);
-        Youtube? api = new();
-        GeoInfo? geoInfo = api.Lookup(null);
-        System.Console.WriteLine(geoInfo);
+        GeoInfo result = GeoElector.LookupAsnyc(null).Result;
+        System.Console.WriteLine(result);
     }
 
     private static void Init(CommandLineOptions options)
