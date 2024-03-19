@@ -7,7 +7,7 @@
       "request": "launch",
       "preLaunchTask": "build",
       "program": "${workspaceFolder}/metaST/bin/Debug/metaST.dll",
-      "args": ["--config", "D:\\桌面\\dev.yaml", "--pause"],
+      "args": ["--config", "D:\\桌面\\dev.yaml", "--verbose", "--pause"],
       "cwd": "${workspaceFolder}/metaST",
       "console": "externalTerminal",
       "stopAtEntry": false

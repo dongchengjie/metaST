@@ -1,11 +1,10 @@
 using System.Reflection;
 using Core.CommandLine;
-using Core.Geo;
 using Util;
 
 // 程序信息
 [assembly: AssemblyTitle("metaST")]
-[assembly: AssemblyDescription("A clash.meta-based CLI program for proxy testing.")]
+[assembly: AssemblyDescription("A Clash.Meta-based CLI program for proxy testing.")]
 [assembly: AssemblyVersion("1.0.0.0")]
 
 namespace Core.MetaSpeedTest;
@@ -15,8 +14,6 @@ public class MetaSpeedTest
     {
         // 初始化
         Init(options);
-        GeoInfo result = GeoElector.LookupAsnyc(null).Result;
-        System.Console.WriteLine(result);
     }
 
     private static void Init(CommandLineOptions options)

@@ -35,23 +35,34 @@ public class Logger
 
     private static void Flush()
     {
-        while (queue.TryDequeue(out var log))
+        lock (queue)
         {
-            PrintAndWrite(log);
+            List<Log> logs = [];
+            while (queue.TryDequeue(out var log))
+            {
+                logs.Add(log);
+            }
+            PrintAndWrite(logs);
         }
     }
-    private static void PrintAndWrite(Log log)
+    
+    private static void PrintAndWrite(IEnumerable<Log> logs)
     {
-        lock (queue)
+        // 打印到控制台
+        string lines = string.Empty;
+        foreach (Log log in logs)
         {
             Console.ForegroundColor = log.Color;
             Console.WriteLine(log);
-            Console.ForegroundColor = primitiveColor;
-            using MemoryStream stream = new(Encoding.UTF8.GetBytes(log + Environment.NewLine));
-            Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "log"));
-            using FileStream fileStream = new(logFile, FileMode.Append);
-            stream.CopyTo(fileStream);
+            lines = lines + log + Environment.NewLine;
         }
+        // 恢复颜色
+        Console.ForegroundColor = primitiveColor;
+        // 写入文件
+        using MemoryStream stream = new(Encoding.UTF8.GetBytes(lines));
+        Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "log"));
+        using FileStream fileStream = new(logFile, FileMode.Append);
+        stream.CopyTo(fileStream);
     }
 
     public static void Log(LogLevel level, object message, ConsoleColor color)
@@ -62,7 +73,7 @@ public class Logger
             // trace级别直接输出
             if (LogLevel == LogLevel.trace)
             {
-                PrintAndWrite(log);
+                PrintAndWrite([log]);
             }
             else
             {
