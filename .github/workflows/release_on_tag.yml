@@ -28,8 +28,6 @@ jobs:
           dotnet publish -c Release -r win-arm64
           dotnet publish -c Release -r linux-x64
           dotnet publish -c Release -r linux-arm64
-          dotnet publish -c Release -r osx-x64
-          dotnet publish -c Release -r osx-arm64
 
       - name: 文件移动、重命名
         id: rename
@@ -39,8 +37,6 @@ jobs:
           mv metaST/bin/Release/win-arm64/publish/metaST.exe metaST/dest/metaST-win-arm64.exe
           mv metaST/bin/Release/linux-x64/publish/metaST     metaST/dest/metaST-linux-amd64
           mv metaST/bin/Release/linux-arm64/publish/metaST   metaST/dest/metaST-linux-arm64
-          mv metaST/bin/Release/osx-x64/publish/metaST       metaST/dest/metaST-mac-amd64
-          mv metaST/bin/Release/osx-arm64/publish/metaST     metaST/dest/metaST-mac-arm64
 
       - name: 发布
         id: create_release

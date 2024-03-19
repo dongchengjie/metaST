@@ -40,6 +40,9 @@ public class CommandLineOptions
     [Option("sd", Required = false, Default = 10 * 1000, HelpText = "下载测试时长(ms)")]
     public required int SpeedTestDuration { get; set; }
 
+    [Option("sr", Required = false, Default = 1, HelpText = "下载测试测试轮数")]
+    public required int SpeedTestRounds { get; set; }
+
     [Option("sf", Required = false, Default = 500 * 1024 * 8, HelpText = "下载测试过滤阈值(bps)")]
     public required int SpeedTestFilter { get; set; }
 
@@ -52,7 +55,7 @@ public class CommandLineOptions
     [Option("tag", Required = false, HelpText = "节点命名前缀")]
     public string Tag { get; set; } = string.Empty;
 
-    [Option("geo", Required = false, Default = true, HelpText = "是否查询Geo信息重命名")]
+    [Option("geo", Required = false, Default = true, HelpText = "是否查询GEO信息并重命名")]
     public required bool GeoLookup { get; set; }
 
     [Option("ruleset", Required = false, Default = RuleSet.acl4ssr, HelpText = "结果配置文件使用的规则集")]

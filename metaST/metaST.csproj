@@ -14,12 +14,26 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-  <!-- 生产版本配置 -->
+  <!-- 开发配置 -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <Identifier Condition="'$(OS)' == 'Windows_NT' and '$(Processor_Architecture)' == 'AMD64'">
+      win-x64
+    </Identifier>
+    <Identifier Condition="'$(OS)' == 'Windows_NT' and '$(Processor_Architecture)' == 'ARM64'">
+      win-arm64
+    </Identifier>
+    <Identifier Condition="'$(OS)' != 'Windows_NT' and '$(Processor_Architecture)' == 'AMD64'">
+      linux-x64
+    </Identifier>
+    <Identifier Condition="'$(OS)' != 'Windows_NT' and '$(Processor_Architecture)' == 'AMD64'">
+      linux-arm64
+    </Identifier>
+  </PropertyGroup>
+
+  <!-- 生产配置 -->
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <!-- 启用编译器优化 -->
     <Optimize>true</Optimize>
-    <!-- AOT编译 -->
-    <PublishReadyToRun>true</PublishReadyToRun>
     <!-- 单文件 -->
     <PublishSingleFile>true</PublishSingleFile>
     <!-- 包含.NET环境 -->
@@ -33,13 +47,26 @@
     <!-- JSON解析 -->
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <!-- YAML解析 -->
-    <PackageReference Include="YamlDotNet" Version="15.1.2" />
+    <PackageReference Include="SharpYaml" Version="2.1.1" />
     <!-- emoji转文字 -->
     <PackageReference Include="EmojiOne" Version="4.5.0" />
   </ItemGroup>
 
-  <!-- 嵌入的资源 -->
+  <!-- 通用资源嵌入 -->
   <ItemGroup>
-    <EmbeddedResource Include="Resources\**\*" />
+    <EmbeddedResource Include="Resources\template\**\*" />
+  </ItemGroup>
+  <!-- 平台资源嵌入 -->
+  <ItemGroup Condition="'$(Identifier)' == 'win-x64'">
+    <EmbeddedResource Include="Resources\meta\win-amd64\*" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Identifier)' == 'win-arm64'">
+    <EmbeddedResource Include="Resources\meta\win-arm64\*" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Identifier)' == 'linux-x64'">
+    <EmbeddedResource Include="Resources\meta\linux-x64\*" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Identifier)' == 'linux-arm64'">
+    <EmbeddedResource Include="Resources\meta\linux-arm64\*" />
   </ItemGroup>
 </Project>
