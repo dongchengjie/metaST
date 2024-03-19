@@ -1,5 +1,6 @@
 using System.Reflection;
 using Core.CommandLine;
+using Core.Meta;
 using Util;
 
 // 程序信息
@@ -14,6 +15,7 @@ public class MetaSpeedTest
     {
         // 初始化
         Init(options);
+        MetaProxy.Proxy();
     }
 
     private static void Init(CommandLineOptions options)
@@ -21,6 +23,7 @@ public class MetaSpeedTest
         // 日志配置
         Logger.LogLevel = options.Verbose ? LogLevel.trace : LogLevel.info;
         Logger.RefreshInterval = 500;
+        Logger.LogPath = Constants.WorkSpace;
         ExitRegistrar.RegisterAction(type => Logger.Terminate());
     }
 }

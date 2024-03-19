@@ -16,5 +16,5 @@ public class Constants
     // 工作目录
     public static readonly string WorkSpace = Path.Combine(TempPath, "." + Assembly.GetEntryAssembly()?.GetName().Name);
     // 工作目录/临时目录
-    public static readonly string WorkingTemp = Path.Combine(WorkSpace, "temp");
+    public static readonly string WorkSpaceTemp = Path.Combine(WorkSpace, "temp");
 }

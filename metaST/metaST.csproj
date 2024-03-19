@@ -15,30 +15,9 @@
   </PropertyGroup>
 
   <!-- 开发配置 -->
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <Identifier Condition="'$(OS)' == 'Windows_NT' and '$(Processor_Architecture)' == 'AMD64'">
-      win-x64
-    </Identifier>
-    <Identifier Condition="'$(OS)' == 'Windows_NT' and '$(Processor_Architecture)' == 'ARM64'">
-      win-arm64
-    </Identifier>
-    <Identifier Condition="'$(OS)' != 'Windows_NT' and '$(Processor_Architecture)' == 'AMD64'">
-      linux-x64
-    </Identifier>
-    <Identifier Condition="'$(OS)' != 'Windows_NT' and '$(Processor_Architecture)' == 'AMD64'">
-      linux-arm64
-    </Identifier>
-  </PropertyGroup>
-
+  <Import Project="metaST_Debug.csproj" />
   <!-- 生产配置 -->
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <!-- 启用编译器优化 -->
-    <Optimize>true</Optimize>
-    <!-- 单文件 -->
-    <PublishSingleFile>true</PublishSingleFile>
-    <!-- 包含.NET环境 -->
-    <PublishSelfContained>true</PublishSelfContained>
-  </PropertyGroup>
+  <Import Project="metaST_Release.csproj" />
 
   <!-- 软件包依赖 -->
   <ItemGroup>
@@ -56,17 +35,18 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\template\**\*" />
   </ItemGroup>
+
   <!-- 平台资源嵌入 -->
   <ItemGroup Condition="'$(Identifier)' == 'win-x64'">
-    <EmbeddedResource Include="Resources\meta\win-amd64\*" />
+    <EmbeddedResource Include="Resources\meta\win_amd64\*" />
   </ItemGroup>
   <ItemGroup Condition="'$(Identifier)' == 'win-arm64'">
-    <EmbeddedResource Include="Resources\meta\win-arm64\*" />
+    <EmbeddedResource Include="Resources\meta\win_arm64\*" />
   </ItemGroup>
   <ItemGroup Condition="'$(Identifier)' == 'linux-x64'">
-    <EmbeddedResource Include="Resources\meta\linux-x64\*" />
+    <EmbeddedResource Include="Resources\meta\linux_x64\*" />
   </ItemGroup>
   <ItemGroup Condition="'$(Identifier)' == 'linux-arm64'">
-    <EmbeddedResource Include="Resources\meta\linux-arm64\*" />
+    <EmbeddedResource Include="Resources\meta\linux_arm64\*" />
   </ItemGroup>
 </Project>

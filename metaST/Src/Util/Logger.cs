@@ -16,7 +16,7 @@ public class Logger
     // 日志队列
     protected static readonly ConcurrentQueue<Log> queue = new();
     // 日志输出文件
-    protected static readonly string logFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "log", DateTimeOffset.Now.ToUnixTimeSeconds() + ".log");
+    public static string LogPath = AppDomain.CurrentDomain.BaseDirectory;
     static Logger()
     {
         // 设置控制台编码
@@ -45,7 +45,7 @@ public class Logger
             PrintAndWrite(logs);
         }
     }
-    
+
     private static void PrintAndWrite(IEnumerable<Log> logs)
     {
         // 打印到控制台
@@ -60,7 +60,8 @@ public class Logger
         Console.ForegroundColor = primitiveColor;
         // 写入文件
         using MemoryStream stream = new(Encoding.UTF8.GetBytes(lines));
-        Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "log"));
+        Directory.CreateDirectory(Path.Combine(LogPath, "log"));
+        string logFile = Path.Combine(LogPath, "log", DateTimeOffset.Now.ToUnixTimeSeconds() + ".log");
         using FileStream fileStream = new(logFile, FileMode.Append);
         stream.CopyTo(fileStream);
     }
@@ -127,7 +128,7 @@ public class Log
     {
         string format = Logger.LogLevel switch
         {
-            LogLevel.trace => "[{0:yyyy-MM-dd HH:mm:ss}] [{1,-5}] {2} at {4}",
+            LogLevel.trace => "[{0:yyyy-MM-dd HH:mm:ss}] [{1,-5}] {2} at {3} {4}",
             LogLevel.debug => "[{0:yyyy-MM-dd HH:mm:ss}] [{1,-5}] {2} at {3}",
             _ => "[{0:yyyy-MM-dd HH:mm:ss}] [{1,-5}] {2}",
         };

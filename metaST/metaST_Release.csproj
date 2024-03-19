@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <!-- 生产配置 -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <!-- 启用编译器优化 -->
+    <Optimize>true</Optimize>
+    <!-- 单文件 -->
+    <PublishSingleFile>true</PublishSingleFile>
+    <!-- 包含.NET环境 -->
+    <PublishSelfContained>true</PublishSelfContained>
+  </PropertyGroup>
+</Project>
