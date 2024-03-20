@@ -33,7 +33,7 @@ public class DelayProfiler(string url = "https://www.google.com/gen_204", int ti
                     }
                     catch (Exception ex)
                     {
-                        Logger.Debug($"Erroring Testing delay: ${ex.Message}");
+                        Logger.Debug($"Erroring Testing delay: {ex.Message}");
                         return false;
                     }
                 }, Timeout, proxy);

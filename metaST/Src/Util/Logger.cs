@@ -16,7 +16,7 @@ public class Logger
     // 日志队列
     protected static readonly ConcurrentQueue<Log> queue = new();
     // 日志输出文件
-    public static string LogPath = AppDomain.CurrentDomain.BaseDirectory;
+    public static string LogPath { get; set; } = AppDomain.CurrentDomain.BaseDirectory;
     static Logger()
     {
         // 设置控制台编码
@@ -128,8 +128,7 @@ public class Log
     {
         string format = Logger.LogLevel switch
         {
-            LogLevel.trace => "[{0:yyyy-MM-dd HH:mm:ss}] [{1,-5}] {2} at {3} {4}",
-            LogLevel.debug => "[{0:yyyy-MM-dd HH:mm:ss}] [{1,-5}] {2} at {3}",
+            LogLevel.trace => Level >= LogLevel.error ? "[{0:yyyy-MM-dd HH:mm:ss}] [{1,-5}] {2} {3} {4}" : "[{0:yyyy-MM-dd HH:mm:ss}] [{1,-5}] {2}",
             _ => "[{0:yyyy-MM-dd HH:mm:ss}] [{1,-5}] {2}",
         };
         return string.Format(format, [

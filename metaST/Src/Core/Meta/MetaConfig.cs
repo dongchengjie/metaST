@@ -1,0 +1,126 @@
+using System.Text;
+using Core.CommandLine.Enum;
+using Util;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
+
+namespace Core.Meta;
+
+public class MetaConfig
+{
+    public static List<Proxy> GetProxies(string config, bool includeProxies = true, bool includeProviders = true)
+    {
+        // 不包含任何节点
+        if (!includeProxies && !includeProviders) return [];
+
+        // 订阅链接 或 节点池链接
+        if (config.StartsWith("http"))
+        {
+            try
+            {
+                Logger.Info("下载配置文件：" + config);
+                // 下载获取文件内容
+                string? content = HttpRequest.UsingHttpClient((client) =>
+                {
+                    // 设置User-Agent为clash
+                    client.DefaultRequestHeaders.Add("User-Agent", "clash");
+                    return client.GetAsync(config).Result.Content.ReadAsStringAsync().Result;
+                });
+                // 文件内容要求不为空
+                if (string.IsNullOrWhiteSpace(content)) throw new Exception(config);
+                // 需要Base64解码
+                if (Strings.IsBase64String(content)) content = Strings.ToBase64String(content, Encoding.UTF8);
+                Logger.Info("下载配置文件完成");
+                // 保存到临时目录
+                string dest = Path.Combine(Constants.WorkSpaceTemp, Strings.Md5(config) + ".yaml");
+                try
+                {
+                    Files.WriteToFile(new MemoryStream(Encoding.UTF8.GetBytes(content)), dest);
+                    return GetProxies(dest, includeProxies, includeProviders);
+                }
+                finally
+                {
+                    Files.DeleteFile(dest);
+                }
+            }
+            catch (Exception ex)
+            {
+                Exception temp = ex;
+                while (temp.InnerException != null)
+                {
+                    temp = temp.InnerException;
+                }
+                Logger.Warn("下载配置文件失败:" + temp.Message);
+                return [];
+            }
+        }
+
+        // 保存节点列表
+        List<Proxy> proxyList = [];
+        try
+        {
+            // 解析配置文件
+            string yaml = File.ReadAllText(config);
+            Dictionary<dynamic, dynamic> yamlObject =
+                new DeserializerBuilder()
+                .WithNamingConvention(NullNamingConvention.Instance)
+                .Build()
+                .Deserialize<dynamic>(yaml);
+
+            // 如果存在proxies
+            if (includeProxies && yamlObject.ContainsKey("proxies"))
+            {
+                List<dynamic> proxies = yamlObject["proxies"];
+                proxies.ForEach((proxy) => proxyList.Add(new Proxy(proxy)));
+            }
+
+            // 如果存在proxy-providers
+            if (includeProviders && yamlObject.ContainsKey("proxy-providers"))
+            {
+                Dictionary<dynamic, dynamic> providers = yamlObject["proxy-providers"];
+                // 读取provider提供的配置
+                List<Proxy> proxies = providers
+                   .Where(entry => "http".Equals(entry.Value["type"]) && entry.Value["url"]?.StartsWith("http"))
+                   .Select((entry) => (List<Proxy>)GetProxies(entry.Value["url"], includeProxies, includeProviders))
+                   .SelectMany(list => list).ToList();
+                // 添加到节点列表
+                proxyList.AddRange(proxies);
+            }
+            return proxyList;
+        }
+        catch (Exception ex)
+        {
+            Logger.Warn("解析配置" + config + "文件出错：" + ex.Message);
+        }
+        return proxyList;
+    }
+
+    public static List<Proxy> Distinct(List<Proxy> proxies, DistinctStrategy strategy)
+    {
+        // 按去重策略去重
+        switch (strategy)
+        {
+            case DistinctStrategy.type_server_port:
+                proxies = proxies.DistinctBy((proxy) => string.Join('_', [proxy.Type, proxy.Server, proxy.Port])).ToList();
+                break;
+            case DistinctStrategy.type_server:
+                proxies = proxies.DistinctBy((proxy) => string.Join('_', [proxy.Type, proxy.Server])).ToList();
+                break;
+            case DistinctStrategy.server_port:
+                proxies = proxies.DistinctBy((proxy) => string.Join('_', [proxy.Server, proxy.Port])).ToList();
+                break;
+            case DistinctStrategy.server:
+                proxies = proxies.DistinctBy((proxy) => string.Join('_', [proxy.Server])).ToList();
+                break;
+        }
+        // 名称重复的添加序号后缀
+        proxies = proxies
+        .GroupBy(p => p.Name)
+        .SelectMany(grp => grp.Select((p, i) =>
+        {
+            p.Name = grp.Count() > 1 ? $"{p.Name}_{i + 1}" : p.Name;
+            return p;
+        })).ToList();
+        return proxies;
+    }
+}

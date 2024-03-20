@@ -1,0 +1,97 @@
+﻿# 代理
+proxies: []
+
+# 代理集合
+proxy-providers: []
+
+# 代理组
+proxy-groups:
+  - name: 节点选择
+    type: select
+    proxies:
+      - 自动选择
+      - 故障转移
+      - 负载均衡-轮询
+      - 负载均衡-散列
+      - DIRECT
+    include-all: true
+
+  - name: 自动选择
+    type: url-test
+    tolerance: 100
+    include-all: true
+    lazy: true
+    interval: 300
+    timeout: 2000
+    url: ${url}
+
+  - name: 故障转移
+    type: fallback
+    include-all: true
+    lazy: true
+    interval: 300
+    timeout: 2000
+    url: ${url}
+
+  - name: 负载均衡-轮询
+    type: load-balance
+    strategy: round-robin
+    include-all: true
+    lazy: true
+    interval: 300
+    timeout: 2000
+    url: ${url}
+
+  - name: 负载均衡-散列
+    type: load-balance
+    strategy: consistent-hashing
+    include-all: true
+    lazy: true
+    interval: 300
+    timeout: 2000
+    url: ${url}
+
+  - name: 国外媒体
+    type: select
+    proxies: ['节点选择', '自动选择', '故障转移', '负载均衡-轮询', '负载均衡-散列', '全球直连']
+    include-all: true
+
+  - name: 电报信息
+    type: select
+    proxies: ['节点选择', '自动选择', '故障转移', '负载均衡-轮询', '负载均衡-散列', '全球直连']
+    include-all: true
+
+  - name: 微软服务
+    type: select
+    proxies: ['全球直连', '节点选择', '自动选择', '故障转移', '负载均衡-轮询', '负载均衡-散列']
+    include-all: true
+
+  - name: 苹果服务
+    type: select
+    proxies: ['节点选择', '自动选择', '故障转移', '负载均衡-轮询', '负载均衡-散列', '全球直连']
+    include-all: true
+
+  - name: 谷歌FCM
+    type: select
+    proxies: ['节点选择', '自动选择', '故障转移', '负载均衡-轮询', '负载均衡-散列', '全球直连']
+    include-all: true
+
+  - name: 全球直连
+    type: select
+    proxies: ['DIRECT', '节点选择', '自动选择', '故障转移', '负载均衡-轮询', '负载均衡-散列']
+
+  - name: 全球拦截
+    type: select
+    proxies: ['REJECT', 'DIRECT']
+
+  - name: 应用净化
+    type: select
+    proxies: ['REJECT', 'DIRECT']
+
+  - name: 漏网之鱼
+    type: select
+    proxies: ['节点选择', '自动选择', '故障转移', '负载均衡-轮询', '负载均衡-散列', '全球直连']
+    include-all: true
+
+# 规则
+rules: []

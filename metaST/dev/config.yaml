@@ -33,7 +33,7 @@ geox-url:
 
 proxies:
   - {
-      'name': '🇭🇰 中国香港特别行政区_2',
+      'name': '🇭🇰 中国香港特别行政区',
       'server': 'data-hk-v1.shwjfkw.cn',
       'port': '20207',
       'type': 'vmess',
@@ -46,7 +46,7 @@ proxies:
       'ws-opts': { 'headers': { 'Host': 'data-hk-v1.shwjfkw.cn' }, 'path': '/debian' }
     }
   - {
-      'name': '🇯🇵 日本_3',
+      'name': '🇭🇰 日本',
       'type': 'vmess',
       'server': 'jp01.aikunapp.com',
       'port': '20005',
@@ -58,7 +58,7 @@ proxies:
       'network': 'tcp'
     }
   - {
-      'name': '🇮🇳 印度_1',
+      'name': '🇮🇳 印度',
       'server': '139.59.24.215',
       'port': '3389',
       'type': 'vmess',
@@ -71,7 +71,11 @@ proxies:
       'http-opts': { 'method': 'GET', 'path': ['/'], 'headers': { 'Host': ['internet.life.com.by'] } },
       'udp': true
     }
-# proxy-providers:
+proxy-providers:
+  lianjiajichang:
+    type: http
+    url: 'https://lianjiajichang.com/api/v1/client/subscribe?token=9f13b818322eb0f3bacae13a530808e9'
+    path: ./providers/lianjiajichang.yaml
 
 proxy-groups:
   - name: 🚀 节点选择

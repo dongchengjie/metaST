@@ -14,7 +14,7 @@ public class DBIP : IGeoLookup
     protected virtual string CountryField { get; } = "countryName";
     protected virtual string OrganizationField { get; } = "_OrganizationField";
 
-    public GeoInfo? Lookup(IWebProxy? proxy) => Lookup(proxy, AddressField, CountryCodeField, CountryField, OrganizationField);
+    public GeoInfo Lookup(IWebProxy? proxy) => Lookup(proxy, AddressField, CountryCodeField, CountryField, OrganizationField);
 
     protected virtual HttpRequestMessage GetMessage()
     {
@@ -30,8 +30,9 @@ public class DBIP : IGeoLookup
         };
     }
 
-    protected GeoInfo? Lookup(IWebProxy? proxy, string addressField, string countryCodeField, string countryField, string organizationField)
+    protected GeoInfo Lookup(IWebProxy? proxy, string addressField, string countryCodeField, string countryField, string organizationField)
     {
+        GeoInfo geoInfo = new();
         // 读取JSON串
         string? json = HttpRequest.UsingHttpClient((client) =>
         {
@@ -44,26 +45,25 @@ public class DBIP : IGeoLookup
             }
             catch (Exception ex)
             {
-                Logger.Debug($"Error looking up Geo via ${this.GetType().Name}: ${ex.Message}");
+                Logger.Debug($"Error looking up Geo via {GetType().Name}: {ex.Message}");
                 return string.Empty;
             }
         }, IGeoLookup.LookupTimout, proxy);
         // 提取JSON串中属性并赋值
         if (!string.IsNullOrWhiteSpace(json))
         {
-            GeoInfo? geoInfo = ParseAndApply(json, new Dictionary<string, AttributesApplier<GeoInfo, string?>>()
+            return ParseAndApply(json, new Dictionary<string, AttributesApplier<GeoInfo, string?>>()
             {
-                { addressField,      (info, val) => info.Address = val      },
-                { countryCodeField,  (info, val) => info.CountryCode = val  },
-                { countryField,      (info, val) => info.Country = val      },
-                { organizationField, (info, val) => info.Organization = val }
+                { addressField,      (info, val) => info.Address = val                },
+                { countryCodeField,  (info, val) => info.CountryCode = val??"UNKNOWN" },
+                { countryField,      (info, val) => info.Country = val                },
+                { organizationField, (info, val) => info.Organization = val           }
             });
-            return geoInfo;
         }
-        return null;
+        return geoInfo;
     }
 
-    protected static GeoInfo? ParseAndApply(string? json, Dictionary<string, AttributesApplier<GeoInfo, string?>> actions)
+    protected static GeoInfo ParseAndApply(string? json, Dictionary<string, AttributesApplier<GeoInfo, string?>> actions)
     {
         if (!string.IsNullOrWhiteSpace(json))
         {
@@ -92,9 +92,9 @@ public class DBIP : IGeoLookup
             }
             catch (Exception ex)
             {
-                Logger.Debug($"Error parsing Geo JSON: ${ex.Message}");
+                Logger.Debug($"Error parsing Geo JSON: {ex.Message}");
             }
         }
-        return null;
+        return new();
     }
 }

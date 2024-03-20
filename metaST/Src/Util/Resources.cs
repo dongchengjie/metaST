@@ -23,5 +23,15 @@ public class Resources
         return reader.ReadToEnd();
     }
 
+    public static byte[] ReadAsBytes(string resourceName)
+    {
+        string resourcePath = ResourcePath(resourceName);
+        using Stream? stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourcePath);
+        if (stream is null) return [];
+        using MemoryStream memoryStream = new();
+        stream.CopyTo(memoryStream);
+        return memoryStream.ToArray();
+    }
+
     private static string ResourcePath(string resourceName) => Assembly.GetExecutingAssembly().GetName().Name + ".Resources." + resourceName;
 }

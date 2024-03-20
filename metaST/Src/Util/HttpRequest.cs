@@ -18,14 +18,14 @@ public class HttpRequest
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"Error using HttpClient: ${ex.Message}");
+            Console.Error.WriteLine($"Error using HttpClient: {ex.Message}");
             return default;
         }
     }
 
     public static string GetForBody(string url, double? timeout = null, IWebProxy? proxy = null)
     {
-        return UsingHttpClient<string>((client) =>
+        return UsingHttpClient((client) =>
         {
             using HttpResponseMessage response = client.GetAsync(url).Result;
             return response.IsSuccessStatusCode ? response.Content.ReadAsStringAsync().Result : string.Empty;

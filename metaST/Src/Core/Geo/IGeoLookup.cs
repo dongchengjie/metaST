@@ -4,7 +4,7 @@ namespace Core.Geo;
 
 public interface IGeoLookup
 {
-    GeoInfo? Lookup(IWebProxy? proxy);
+    GeoInfo Lookup(IWebProxy? proxy);
 
     protected static readonly double LookupTimout = 3000;
 }

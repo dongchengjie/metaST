@@ -1,11 +1,12 @@
 using System.Net;
+using Util;
 
 namespace Core.Geo;
 
 public class GeoInfo
 {
     public string? Address { get; set; }
-    public string? CountryCode { get; set; }
+    public string CountryCode { get; set; } = "UNKNOWN";
     public string? _country;
     public string? Country
     {
@@ -26,12 +27,20 @@ public class GeoInfo
             "❓" : GetEmojiByCode(CountryCode);
         }
     }
+    public string Icon
+    {
+        get
+        {
+            return string.IsNullOrWhiteSpace(CountryCode) || CountryCode.Length != 2 ?
+           GetIconByCode(CountryCode, false) : GetIconByCode(CountryCode, true);
+        }
+    }
     public IWebProxy? Proxy { get; set; }
     public GeoInfo()
     {
 
     }
-    public GeoInfo(string? address, string? countryCode, string? country, string? organization, IWebProxy? proxy)
+    public GeoInfo(string? address, string countryCode, string? country, string? organization, IWebProxy? proxy)
     {
         Address = address;
         CountryCode = countryCode;
@@ -44,5 +53,11 @@ public class GeoInfo
         countryCode = countryCode.ToUpper();
         const int offset = 0x1F1E6 - 'A';
         return char.ConvertFromUtf32(countryCode[0] + offset) + char.ConvertFromUtf32(countryCode[1] + offset);
+    }
+    private static string GetIconByCode(string countryCode, bool flag)
+    {
+        string fileName = countryCode.ToLower() + ".svg";
+        string resourceName = flag ? "icons.flags." + fileName : "icons." + fileName;
+        return "data:image/svg+xml;base64," + Convert.ToBase64String(Resources.ReadAsBytes(resourceName));
     }
 }

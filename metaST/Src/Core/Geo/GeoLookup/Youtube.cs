@@ -6,8 +6,9 @@ namespace Core.Geo;
 
 public partial class Youtube : IGeoLookup
 {
-    public GeoInfo? Lookup(IWebProxy? proxy)
+    public GeoInfo Lookup(IWebProxy? proxy)
     {
+        GeoInfo geoInfo = new();
         try
         {
             string html = HttpRequest.GetForBody("https://www.youtube.com/", IGeoLookup.LookupTimout, proxy);
@@ -20,16 +21,16 @@ public partial class Youtube : IGeoLookup
                     return new()
                     {
                         Address = addressMatch.Success ? addressMatch.Groups[1].Value : null,
-                        CountryCode = countryCodeMatch.Success ? countryCodeMatch.Groups[1].Value : null,
+                        CountryCode = countryCodeMatch.Success ? countryCodeMatch.Groups[1].Value : "UNKNOWN",
                     };
                 }
             }
         }
         catch (Exception ex)
         {
-            Logger.Debug($"Error looking up Geo via ${this.GetType().Name}: ${ex.Message}");
+            Logger.Debug($"Error looking up Geo via {GetType().Name}: {ex.Message}");
         }
-        return null;
+        return geoInfo;
     }
 
     [GeneratedRegex(@".*""remoteHost"": ?""(.*?)""")]

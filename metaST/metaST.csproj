@@ -15,9 +15,22 @@
   </PropertyGroup>
 
   <!-- 开发配置 -->
-  <Import Project="metaST_Debug.csproj" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <Identifier Condition="'$(OS)' == 'Windows_NT' and '$(Processor_Architecture)' == 'AMD64'">win-x64</Identifier>
+    <Identifier Condition="'$(OS)' == 'Windows_NT' and '$(Processor_Architecture)' == 'ARM64'">win-arm64</Identifier>
+    <Identifier Condition="'$(OS)' != 'Windows_NT' and '$(Processor_Architecture)' == 'AMD64'">linux-x64</Identifier>
+    <Identifier Condition="'$(OS)' != 'Windows_NT' and '$(Processor_Architecture)' == 'AMD64'">linux-arm64</Identifier>
+  </PropertyGroup>
+
   <!-- 生产配置 -->
-  <Import Project="metaST_Release.csproj" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <!-- 启用编译器优化 -->
+    <Optimize>true</Optimize>
+    <!-- 单文件 -->
+    <PublishSingleFile>true</PublishSingleFile>
+    <!-- 包含.NET环境 -->
+    <PublishSelfContained>true</PublishSelfContained>
+  </PropertyGroup>
 
   <!-- 软件包依赖 -->
   <ItemGroup>
@@ -26,7 +39,7 @@
     <!-- JSON解析 -->
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <!-- YAML解析 -->
-    <PackageReference Include="SharpYaml" Version="2.1.1" />
+    <PackageReference Include="YamlDotNet" Version="15.1.2" />
     <!-- emoji转文字 -->
     <PackageReference Include="EmojiOne" Version="4.5.0" />
   </ItemGroup>
@@ -34,6 +47,7 @@
   <!-- 通用资源嵌入 -->
   <ItemGroup>
     <EmbeddedResource Include="Resources\template\**\*" />
+    <EmbeddedResource Include="Resources\icons\**\*" />
   </ItemGroup>
 
   <!-- 平台资源嵌入 -->

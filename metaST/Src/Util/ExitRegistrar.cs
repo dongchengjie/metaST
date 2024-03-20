@@ -21,18 +21,25 @@ public class ExitRegistrar
         {
             switch (type)
             {
-                case EventType.CTRL_C_EVENT:
-                case EventType.CTRL_BREAK_EVENT:
-                case EventType.CLOSE_EVENT:
-                case EventType.LOGOFF_EVENT:
-                case EventType.SHUTDOWN_EVENT:
+                case EventType.CTRL_C_EVENT:        // Ctrl + C
+                case EventType.CTRL_BREAK_EVENT:    // Ctrl + Break
+                case EventType.CLOSE_EVENT:         // 窗口关闭
+                case EventType.LOGOFF_EVENT:        // 退出登录
+                case EventType.SHUTDOWN_EVENT:      // 关机
                     {
                         try
                         {
                             Console.WriteLine("Waiting for program to exit...");
                             while (actions.TryDequeue(out var action))
                             {
-                                action.Invoke(type);
+                                try
+                                {
+                                    action.Invoke(type);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine($"Error invoking exit action: {ex.Message}");
+                                }
                             }
                             Console.WriteLine("Program exited");
                             return true;

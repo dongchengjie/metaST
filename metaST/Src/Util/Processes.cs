@@ -45,7 +45,7 @@ public class Processes
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"Error killing process ${processName} : {ex.Message}");
+            Console.Error.WriteLine($"Error killing process {processName} : {ex.Message}");
         }
     }
 }
