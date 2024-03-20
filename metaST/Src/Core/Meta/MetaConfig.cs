@@ -1,8 +1,7 @@
+using System.Net;
 using System.Text;
 using Core.CommandLine.Enum;
 using Util;
-using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
 
 namespace Core.Meta;
 
@@ -61,11 +60,7 @@ public class MetaConfig
         {
             // 解析配置文件
             string yaml = File.ReadAllText(config);
-            Dictionary<dynamic, dynamic> yamlObject =
-                new DeserializerBuilder()
-                .WithNamingConvention(NullNamingConvention.Instance)
-                .Build()
-                .Deserialize<dynamic>(yaml);
+            Dictionary<dynamic, dynamic> yamlObject = YamlDot.DeserializeObject(yaml);
 
             // 如果存在proxies
             if (includeProxies && yamlObject.ContainsKey("proxies"))
@@ -122,5 +117,46 @@ public class MetaConfig
             return p;
         })).ToList();
         return proxies;
+    }
+
+    public class MetaInfo(string config, string configPath, PortManager portManager, List<Proxy> proxies)
+    {
+        public string Config { get; set; } = config;
+        public string ConfigPath { get; set; } = configPath;
+        public PortManager PortManager { get; set; } = portManager;
+        public List<Proxy> Proxies { get; set; } = proxies;
+    }
+
+    public static string GetTemplate(string resourceName) => string.Join(Environment.NewLine, [Resources.ReadAsText("template.common.yaml"), Resources.ReadAsText(resourceName)]);
+
+    public static MetaInfo CreateMixed(List<Proxy> proxies)
+    {
+        // 读取模板内容
+        string yaml = GetTemplate("template.mixed.yaml");
+
+        PortManager portManager = PortManager.Claim(proxies.Count);
+        // mixed监听端口
+        string listenerList = string.Join(Environment.NewLine, proxies.Select((proxy, index) => $"- name: mixed{index}\n  type: mixed\n  port: {portManager.Get(index)}\n  proxy: {Json.SerializeObject(proxy.Name)}"));
+        // mixed出口代理
+        string proxyList = string.Join(Environment.NewLine, proxies.Select((proxy, index) => $"  - {Json.SerializeObject(proxy.Info)}"));
+
+        // 生成配置文件
+        string config = yaml
+            .Replace("listeners: []", $"listeners: \n{listenerList}")
+            .Replace("proxies: []", $"proxies: \n{proxyList}");
+
+        // 输出到文件
+        string configPath = Path.Combine(Constants.WorkSpaceTemp, "mixed", Guid.NewGuid().ToString() + ".yaml");
+        Files.WriteToFile(new MemoryStream(Encoding.UTF8.GetBytes(config)), configPath);
+
+        // 节点配置本地代理
+        proxies = proxies.Select((proxy, index) =>
+        {
+            proxy.Mixed = new WebProxy("127.0.0.1", portManager.Get(index));
+            return proxy;
+        }).ToList();
+
+        // 返回服务信息
+        return new(config, configPath, portManager, proxies);
     }
 }

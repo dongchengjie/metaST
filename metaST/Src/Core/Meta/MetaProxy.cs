@@ -16,7 +16,7 @@ public class MetaProxy
         Resources.Extract(resourceName, metaCorePath, false);
     }
 
-    public static Task<Process> Proxy(string configPath)
+    public static Task<Process> StartProxy(string configPath)
     {
         TaskCompletionSource<bool> tcs = new();
         Task<Process> task = Processes.Start(metaCorePath, "-f " + configPath, (sender, e) =>

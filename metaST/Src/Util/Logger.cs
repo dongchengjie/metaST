@@ -45,7 +45,6 @@ public class Logger
             PrintAndWrite(logs);
         }
     }
-
     private static void PrintAndWrite(IEnumerable<Log> logs)
     {
         // 打印到控制台
@@ -71,14 +70,11 @@ public class Logger
         if (level >= LogLevel)
         {
             Log log = new(level, message, color);
+            queue.Enqueue(log);
             // trace级别直接输出
             if (LogLevel == LogLevel.trace)
             {
-                PrintAndWrite([log]);
-            }
-            else
-            {
-                queue.Enqueue(log);
+                Flush();
             }
         }
     }

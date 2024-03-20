@@ -38,8 +38,12 @@ public class PortManager : IDisposable
                 currentPort = currentPort + 1 <= endingPort ? currentPort + 1 : startingPort;
             }
         }
-        Logger.Debug("Ports claimed: " + PortRanges(manager.ports));
         return manager;
+    }
+
+    public int Get(int index)
+    {
+        return ports[index];
     }
 
     public int Use(int index)

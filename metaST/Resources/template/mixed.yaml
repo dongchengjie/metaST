@@ -1,2 +1,5 @@
 ﻿# 监听端口
 listeners: []
+
+# 代理
+proxies: []

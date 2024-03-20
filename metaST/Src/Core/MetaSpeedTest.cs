@@ -1,10 +1,8 @@
 using System.Net;
 using System.Reflection;
 using Core.CommandLine;
-using Core.CommandLine.Enum;
 using Core.Geo;
 using Core.Meta;
-using Microsoft.VisualBasic;
 using Util;
 
 // 程序信息
@@ -17,24 +15,29 @@ public class MetaSpeedTest
 {
     public static void Main(CommandLineOptions options)
     {
-        // 初始化
-        Init(options);
-        GeoInfo result = GeoElector.LookupAsnyc(new WebProxy("127.0.0.1", 7897)).Result;
-
-        // 获取节点列表
-        List<Proxy> proxies = MetaConfig.GetProxies(options.Config);
-        // 节点去重
-        proxies = MetaConfig.Distinct(proxies, options.DistinctStrategy);
-        // 节点重命名
-        Rename(proxies, options);
-        // 生产配置文件
-        
-
-        // 程序结束时暂停
-        if (options.Pause)
+        try
         {
-            Console.WriteLine("按任意键继续");
-            Console.ReadKey(true);
+            // 初始化
+            Init(options);
+            GeoInfo result = GeoElector.LookupAsnyc(new WebProxy("127.0.0.1", 7897)).Result;
+
+            // 获取节点列表
+            List<Proxy> proxies = MetaConfig.GetProxies(options.Config);
+            // 节点去重
+            proxies = MetaConfig.Distinct(proxies, options.DistinctStrategy);
+
+            // 节点重命名
+            Rename(proxies, options);
+            // 生产配置文件
+        }
+        finally
+        {
+            // 程序结束时暂停
+            if (options.Pause)
+            {
+                Console.WriteLine("按任意键继续");
+                Console.ReadKey(true);
+            }
         }
     }
 
@@ -56,17 +59,14 @@ public class MetaSpeedTest
             {
                 Logger.Info("开始GEO重命名...");
                 // 查询GEO信息
-                Dictionary<IWebProxy, GeoInfo> dictionary = proxies.Select((proxy) => Task.Run(() =>
+                Dictionary<IWebProxy, GeoInfo> dictionary = MetaService.UsingProxies(proxies, proxied =>
                 {
-                    GeoInfo info = new()
-                    {
-                        // 待实现
-                    };
-                    return info;
-                }))
-                .Select(task => task.Result)
-                .DistinctBy((info) => info.Proxy)
-                .ToDictionary(info => info.Proxy ??= new WebProxy(), info => info);
+                    return proxied
+                        .Select(proxy => Task.Run(() => GeoElector.LookupAsnyc(proxy.Mixed)))
+                        .Select(task => task.Result)
+                        .DistinctBy((info) => info.Proxy)
+                        .ToDictionary(info => info.Proxy ??= new WebProxy(), info => info);
+                });
                 // 分配GEO信息，并重命名
                 proxies.ForEach((proxy) =>
                 {

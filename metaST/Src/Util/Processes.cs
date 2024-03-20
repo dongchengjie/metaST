@@ -48,4 +48,19 @@ public class Processes
             Console.Error.WriteLine($"Error killing process {processName} : {ex.Message}");
         }
     }
+
+    public static void Kill(Process? process)
+    {
+        if (process != null)
+        {
+            using (process)
+            {
+                try
+                {
+                    process.Kill();
+                }
+                catch { }
+            }
+        }
+    }
 }

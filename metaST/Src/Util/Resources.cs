@@ -10,7 +10,8 @@ public class Resources
         string resourcePath = ResourcePath(resourceName);
         if (deleteIfExists && File.Exists(dest)) File.Delete(dest);
         using Stream? stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourcePath);
-        stream?.CopyTo(new FileStream(dest, FileMode.Create));
+        using FileStream fileStream = new(dest, FileMode.Create);
+        stream?.CopyTo(fileStream);
     }
 
     public static string ReadAsText(string resourceName, Encoding? encoding = null)
