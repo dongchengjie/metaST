@@ -3,7 +3,7 @@ using Core.Geo;
 
 namespace Core.Meta;
 
-public class Proxy(Dictionary<dynamic, dynamic> info)
+public class ProxyNode(Dictionary<dynamic, dynamic> info)
 {
     public int Id { get; } = info.GetHashCode();
 

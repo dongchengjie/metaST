@@ -5,7 +5,7 @@ using Util;
 
 namespace Core.Meta.Config;
 
-public partial class MetaProperty
+public partial class MetaPostProperty
 {
     public static string Resolve(string config, CommandLineOptions options)
     {

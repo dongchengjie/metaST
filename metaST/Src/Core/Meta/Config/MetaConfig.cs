@@ -8,7 +8,7 @@ namespace Core.Meta.Config;
 
 public class MetaConfig
 {
-    public static List<Proxy> GetProxies(string config, bool includeProxies = true, bool includeProviders = true)
+    public static List<ProxyNode> GetProxies(string config, bool includeProxies = true, bool includeProviders = true)
     {
         // 不包含任何节点
         if (!includeProxies && !includeProviders) return [];
@@ -56,7 +56,7 @@ public class MetaConfig
         }
 
         // 保存节点列表
-        List<Proxy> proxyList = [];
+        List<ProxyNode> proxyList = [];
         try
         {
             // 解析配置文件
@@ -67,7 +67,7 @@ public class MetaConfig
             if (includeProxies && yamlObject.ContainsKey("proxies"))
             {
                 List<dynamic> proxies = yamlObject["proxies"];
-                proxies.ForEach((proxy) => proxyList.Add(new Proxy(proxy)));
+                proxies.ForEach((proxy) => proxyList.Add(new ProxyNode(proxy)));
             }
 
             // 如果存在proxy-providers
@@ -75,9 +75,9 @@ public class MetaConfig
             {
                 Dictionary<dynamic, dynamic> providers = yamlObject["proxy-providers"];
                 // 读取provider提供的配置
-                List<Proxy> proxies = providers
+                List<ProxyNode> proxies = providers
                    .Where(entry => "http".Equals(entry.Value["type"]) && entry.Value["url"]?.StartsWith("http"))
-                   .Select((entry) => (List<Proxy>)GetProxies(entry.Value["url"], includeProxies, includeProviders))
+                   .Select((entry) => (List<ProxyNode>)GetProxies(entry.Value["url"], includeProxies, includeProviders))
                    .SelectMany(list => list).ToList();
                 // 添加到节点列表
                 proxyList.AddRange(proxies);
@@ -91,7 +91,7 @@ public class MetaConfig
         return proxyList;
     }
 
-    public static List<Proxy> Distinct(List<Proxy> proxies, DistinctStrategy strategy)
+    public static List<ProxyNode> Distinct(List<ProxyNode> proxies, DistinctStrategy strategy)
     {
         // 按去重策略去重
         switch (strategy)
@@ -120,17 +120,17 @@ public class MetaConfig
         return proxies;
     }
 
-    public class MetaInfo(string config, string configPath, PortManager portManager, List<Proxy> proxies)
+    public class MetaInfo(string config, string configPath, PortManager portManager, List<ProxyNode> proxies)
     {
         public string Config { get; set; } = config;
         public string ConfigPath { get; set; } = configPath;
         public PortManager PortManager { get; set; } = portManager;
-        public List<Proxy> Proxies { get; set; } = proxies;
+        public List<ProxyNode> Proxies { get; set; } = proxies;
     }
 
     public static string GetTemplate(string resourceName) => string.Join(Environment.NewLine, [Resources.ReadAsText("template.common.yaml"), Resources.ReadAsText(resourceName)]);
 
-    public static MetaInfo CreateMixed(List<Proxy> proxies)
+    public static MetaInfo CreateMixed(List<ProxyNode> proxies)
     {
         // 读取模板内容
         string yaml = GetTemplate("template.mixed.yaml");
@@ -161,7 +161,7 @@ public class MetaConfig
         return new(config, configPath, portManager, proxies);
     }
 
-    public static string CreateStandard(List<Proxy> proxies, CommandLineOptions options)
+    public static string CreateStandard(List<ProxyNode> proxies, CommandLineOptions options)
     {
         // 读取模板内容
         string yaml = GetTemplate("template.standard.yaml");
@@ -170,7 +170,7 @@ public class MetaConfig
         string proxyList = string.Join(Environment.NewLine, proxies.Select((proxy, index) => $"  - {Json.SerializeObject(proxy.Info)}"));
 
         // 读取规则集
-        string rules = MetaRule.GetRules(options.RuleSet);
+        string rules = MetaRule.GetRuleSetRules(options.RuleSet);
 
         // 生成配置文件
         string config = yaml
@@ -178,7 +178,7 @@ public class MetaConfig
             .Replace("rules: []", $"{rules}");
 
         // 处理参数
-        config = MetaProperty.Resolve(config, options);
+        config = MetaPostProperty.Resolve(config, options);
 
         return config;
     }

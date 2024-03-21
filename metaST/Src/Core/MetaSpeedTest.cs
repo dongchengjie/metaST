@@ -23,15 +23,15 @@ public class MetaSpeedTest
             // 初始化
             Init(options);
             // 获取节点列表
-            List<Proxy> proxies = MetaConfig.GetProxies(options.Config);
+            List<ProxyNode> proxies = MetaConfig.GetProxies(options.Config);
             // 节点去重
             proxies = MetaConfig.Distinct(proxies, options.DistinctStrategy);
 
             // 节点重命名
             // Rename(proxies, options);
             // 生成配置文件
-            string s=MetaConfig.CreateStandard(proxies, options);
-            Files.WriteToFile(new MemoryStream(Encoding.UTF8.GetBytes(s)),"D:/桌面/aa.yaml");
+            string s = MetaConfig.CreateStandard(proxies, options);
+            Files.WriteToFile(new MemoryStream(Encoding.UTF8.GetBytes(s)), "D:/桌面/aa.yaml");
         }
         finally
         {
@@ -53,7 +53,7 @@ public class MetaSpeedTest
         ExitRegistrar.RegisterAction(type => Logger.Terminate());
     }
 
-    private static void Rename(List<Proxy> proxies, CommandLineOptions options)
+    private static void Rename(List<ProxyNode> proxies, CommandLineOptions options)
     {
         if (proxies != null && proxies.Count > 0)
         {

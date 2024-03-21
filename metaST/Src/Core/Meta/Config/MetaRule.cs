@@ -7,7 +7,7 @@ namespace Core.Meta.Config;
 
 public class MetaRule
 {
-    public static string GetRules(RuleSet ruleSet)
+    public static string GetRuleSetRules(RuleSet ruleSet)
     {
         // 读取字符集资源名称
         MemberInfo memberInfo = typeof(RuleSet).GetMember(ruleSet.ToString())[0];

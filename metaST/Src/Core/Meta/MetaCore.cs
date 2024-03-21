@@ -4,11 +4,11 @@ using Util;
 
 namespace Core.Meta;
 
-public class MetaProxy
+public class MetaCore
 {
     private static readonly string metaCorePath;
 
-    static MetaProxy()
+    static MetaCore()
     {
         string fileName = Constants.MetaCoreName + (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ".exe" : string.Empty);
         string resourceName = "meta." + Platform.GetPlatform() + "." + fileName;
