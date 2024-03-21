@@ -1,18 +1,19 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography.X509Certificates;
 using Util;
 
 namespace Core.Meta;
 
 public class MetaCore
 {
-    private static readonly string metaCorePath;
-
+    // Meta内核可执行程序名
+    public static readonly string executableName = Constants.MetaCoreName + (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ".exe" : string.Empty);
+    // Meta内核解压路径
+    private static readonly string metaCorePath = Path.Combine(Constants.WorkSpace, executableName);
     static MetaCore()
     {
-        string fileName = Constants.MetaCoreName + (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ".exe" : string.Empty);
-        string resourceName = "meta." + Platform.GetPlatform() + "." + fileName;
-        metaCorePath = Path.Combine(Constants.WorkSpace, fileName);
+        string resourceName = "meta." + Platform.GetPlatform() + "." + executableName;
         Resources.Extract(resourceName, metaCorePath, false);
     }
 

@@ -32,6 +32,6 @@ public class Strings
     {
         byte[] inputBytes = Encoding.UTF8.GetBytes(input);
         byte[] hashBytes = MD5.HashData(inputBytes);
-        return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
+        return BitConverter.ToString(hashBytes).Replace("-", string.Empty).ToLower();
     }
 }

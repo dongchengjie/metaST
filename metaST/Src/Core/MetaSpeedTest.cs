@@ -1,9 +1,6 @@
-using System.Net;
 using System.Reflection;
 using System.Text;
 using Core.CommandLine;
-using Core.CommandLine.Enum;
-using Core.Geo;
 using Core.Meta;
 using Core.Meta.Config;
 using Util;
@@ -26,19 +23,21 @@ public class MetaSpeedTest
             List<ProxyNode> proxies = MetaConfig.GetConfigProxies(options.Config);
             // 节点去重
             proxies = ProxyNode.Distinct(proxies, options.DistinctStrategy);
-
-            // 节点重命名
-            Rename(proxies, options);
+            // 延迟测试、筛选
+            // 下载速度测试、筛选
+            // 节点GEO重命名
+            proxies = !string.IsNullOrWhiteSpace(options.Tag) || options.GeoLookup ? ProxyNode.Rename(proxies, options) : proxies;
             // 生成配置文件
-            string s = MetaConfig.GenerateRegionConfig(proxies, options);
-            Files.WriteToFile(new MemoryStream(Encoding.UTF8.GetBytes(s)), "D:/桌面/aa.yaml");
+            string configYaml = MetaConfig.GenerateRegionConfig(proxies, options);
+            // 输出到文件
+            WriteToFile(configYaml, options);
         }
         finally
         {
             // 程序结束时暂停
             if (options.Pause)
             {
-                Console.WriteLine("按任意键继续");
+                Console.WriteLine("按任意键继续...");
                 Console.ReadKey(true);
             }
         }
@@ -46,6 +45,8 @@ public class MetaSpeedTest
 
     private static void Init(CommandLineOptions options)
     {
+        // 清理残余进程
+        Processes.FindAndKill(MetaCore.executableName);
         // 日志配置
         Logger.LogLevel = options.Verbose ? LogLevel.trace : LogLevel.info;
         Logger.RefreshInterval = 500;
@@ -53,40 +54,16 @@ public class MetaSpeedTest
         ExitRegistrar.RegisterAction(type => Logger.Terminate());
     }
 
-    private static void Rename(List<ProxyNode> proxies, CommandLineOptions options)
+    private static void WriteToFile(string configContent, CommandLineOptions options)
     {
-        if (proxies != null && proxies.Count > 0)
+        string outputPath = options.Output ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(outputPath))
         {
-            // 根据GEO重命名
-            if (options.GeoLookup)
-            {
-                Logger.Info("开始GEO重命名...");
-                // 查询GEO信息
-                Dictionary<IWebProxy, GeoInfo> infoMap = MetaService.UsingProxies(proxies, proxied =>
-                {
-                    return proxied
-                        .Select(proxy => Task.Run(() => GeoElector.LookupAsnyc(proxy.Mixed)))
-                        .Select(task => task.Result)
-                        .DistinctBy((info) => info.Proxy)
-                        .ToDictionary(info => info.Proxy ??= new WebProxy(), info => info);
-                });
-                // 分配GEO信息，并重命名
-                proxies.ForEach((proxy) =>
-                {
-                    proxy.GeoInfo = proxy.Mixed != null && infoMap.TryGetValue(proxy.Mixed, out var geoInfo) ? geoInfo : new GeoInfo();
-                    proxy.Name = $"{proxy.GeoInfo.Emoji} {proxy.GeoInfo.Country}";
-                });
-                // 国家名称_序号
-                ProxyNode.Distinct(proxies, options.DistinctStrategy);
-                Logger.Info("GEO重命名完成");
-            }
-            // 添加节点前缀
-            if (!string.IsNullOrWhiteSpace(options.Tag))
-            {
-                Logger.Info($"添加Tag: {options.Tag}");
-                proxies.ForEach(proxy => proxy.Name = $"{options.Tag}_{proxy.Name}");
-                Logger.Info($"添加Tag完成");
-            }
+            string configFile = options.Config.StartsWith("http") ? Strings.Md5(options.Config) : options.Config;
+            configFile = Path.GetFileNameWithoutExtension(configFile);
+            outputPath = Path.Combine(Constants.AppPath, configFile + "_result.yaml");
         }
+        Files.WriteToFile(new MemoryStream(Encoding.UTF8.GetBytes(configContent)), outputPath);
+        Logger.Info($"输出配置文件: {outputPath}");
     }
 }

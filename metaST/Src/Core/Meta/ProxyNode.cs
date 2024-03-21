@@ -1,6 +1,8 @@
 using System.Net;
+using Core.CommandLine;
 using Core.CommandLine.Enum;
 using Core.Geo;
+using Util;
 
 namespace Core.Meta;
 
@@ -64,5 +66,43 @@ public class ProxyNode(Dictionary<dynamic, dynamic> info)
                 return p;
             })).ToList();
         return proxies;
+    }
+
+    public static List<ProxyNode> Rename(List<ProxyNode> proxies, CommandLineOptions options)
+    {
+        if (proxies != null && proxies.Count > 0)
+        {
+            // 根据GEO重命名
+            if (options.GeoLookup)
+            {
+                Logger.Info("开始GEO重命名...");
+                // 查询GEO信息
+                Dictionary<IWebProxy, GeoInfo> infoMap = MetaService.UsingProxies(proxies, proxied =>
+                {
+                    return proxied
+                        .Select(proxy => Task.Run(() => GeoElector.LookupAsnyc(proxy.Mixed)))
+                        .Select(task => task.Result)
+                        .DistinctBy((info) => info.Proxy)
+                        .ToDictionary(info => info.Proxy ??= new WebProxy(), info => info);
+                });
+                // 分配GEO信息，并重命名
+                proxies.ForEach((proxy) =>
+                {
+                    proxy.GeoInfo = proxy.Mixed != null && infoMap.TryGetValue(proxy.Mixed, out var geoInfo) ? geoInfo : new GeoInfo();
+                    proxy.Name = $"{proxy.GeoInfo.Emoji} {proxy.GeoInfo.Country}";
+                });
+                // 国家名称_序号
+                Distinct(proxies, options.DistinctStrategy);
+                Logger.Info("GEO重命名完成");
+            }
+            // 添加节点前缀
+            if (!string.IsNullOrWhiteSpace(options.Tag))
+            {
+                Logger.Info($"添加Tag: {options.Tag}");
+                proxies.ForEach(proxy => proxy.Name = $"{options.Tag}_{proxy.Name}");
+                Logger.Info($"添加Tag完成");
+            }
+        }
+        return [];
     }
 }
