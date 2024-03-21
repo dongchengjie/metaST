@@ -3,154 +3,154 @@
     type: http
     behavior: classical
     format: text
-    url: https://mirror.ghproxy.com/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Apple.list
+    url: ${options.GithubMirror}https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Apple.list
     path: ./rulesets/acl4ssr/Apple.list
     interval: 86400
   BanAD:
     type: http
     behavior: classical
     format: text
-    url: https://mirror.ghproxy.com/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanAD.list
+    url: ${options.GithubMirror}https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanAD.list
     path: ./rulesets/acl4ssr/BanAD.list
     interval: 86400
   BanEasyList:
     type: http
     behavior: classical
     format: text
-    url: https://mirror.ghproxy.com/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanEasyList.list
+    url: ${options.GithubMirror}https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanEasyList.list
     path: ./rulesets/acl4ssr/BanEasyList.list
     interval: 86400
   BanEasyListChina:
     type: http
     behavior: classical
     format: text
-    url: https://mirror.ghproxy.com/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanEasyListChina.list
+    url: ${options.GithubMirror}https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanEasyListChina.list
     path: ./rulesets/acl4ssr/BanEasyListChina.list
     interval: 86400
   BanEasyPrivacy:
     type: http
     behavior: classical
     format: text
-    url: https://mirror.ghproxy.com/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanEasyPrivacy.list
+    url: ${options.GithubMirror}https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanEasyPrivacy.list
     path: ./rulesets/acl4ssr/BanEasyPrivacy.list
     interval: 86400
   BanProgramAD:
     type: http
     behavior: classical
     format: text
-    url: https://mirror.ghproxy.com/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanProgramAD.list
+    url: ${options.GithubMirror}https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanProgramAD.list
     path: ./rulesets/acl4ssr/BanProgramAD.list
     interval: 86400
   Bing:
     type: http
     behavior: classical
     format: text
-    url: https://mirror.ghproxy.com/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Bing.list
+    url: ${options.GithubMirror}https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Bing.list
     path: ./rulesets/acl4ssr/Bing.list
     interval: 86400
   ChinaCompanyIp:
     type: http
     behavior: classical
     format: text
-    url: https://mirror.ghproxy.com/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaCompanyIp.list
+    url: ${options.GithubMirror}https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaCompanyIp.list
     path: ./rulesets/acl4ssr/ChinaCompanyIp.list
     interval: 86400
   ChinaDomain:
     type: http
     behavior: classical
     format: text
-    url: https://mirror.ghproxy.com/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaDomain.list
+    url: ${options.GithubMirror}https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaDomain.list
     path: ./rulesets/acl4ssr/ChinaDomain.list
     interval: 86400
   ChinaIp:
     type: http
     behavior: classical
     format: text
-    url: https://mirror.ghproxy.com/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaIp.list
+    url: ${options.GithubMirror}https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaIp.list
     path: ./rulesets/acl4ssr/ChinaIp.list
     interval: 86400
   ChinaIpV6:
     type: http
     behavior: classical
     format: text
-    url: https://mirror.ghproxy.com/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaIpV6.list
+    url: ${options.GithubMirror}https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaIpV6.list
     path: ./rulesets/acl4ssr/ChinaIpV6.list
     interval: 86400
   ChinaMedia:
     type: http
     behavior: classical
     format: text
-    url: https://mirror.ghproxy.com/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaMedia.list
+    url: ${options.GithubMirror}https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaMedia.list
     path: ./rulesets/acl4ssr/ChinaMedia.list
     interval: 86400
   Download:
     type: http
     behavior: classical
     format: text
-    url: https://mirror.ghproxy.com/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Download.list
+    url: ${options.GithubMirror}https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Download.list
     path: ./rulesets/acl4ssr/Download.list
     interval: 86400
   Google:
     type: http
     behavior: classical
     format: text
-    url: https://mirror.ghproxy.com/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Google.list
+    url: ${options.GithubMirror}https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Google.list
     path: ./rulesets/acl4ssr/Google.list
     interval: 86400
   LocalAreaNetwork:
     type: http
     behavior: classical
     format: text
-    url: https://mirror.ghproxy.com/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/LocalAreaNetwork.list
+    url: ${options.GithubMirror}https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/LocalAreaNetwork.list
     path: ./rulesets/acl4ssr/LocalAreaNetwork.list
     interval: 86400
   Microsoft:
     type: http
     behavior: classical
     format: text
-    url: https://mirror.ghproxy.com/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Microsoft.list
+    url: ${options.GithubMirror}https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Microsoft.list
     path: ./rulesets/acl4ssr/Microsoft.list
     interval: 86400
   Netflix:
     type: http
     behavior: classical
     format: text
-    url: https://mirror.ghproxy.com/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Netflix.list
+    url: ${options.GithubMirror}https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Netflix.list
     path: ./rulesets/acl4ssr/Netflix.list
     interval: 86400
   OneDrive:
     type: http
     behavior: classical
     format: text
-    url: https://mirror.ghproxy.com/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/OneDrive.list
+    url: ${options.GithubMirror}https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/OneDrive.list
     path: ./rulesets/acl4ssr/OneDrive.list
     interval: 86400
   ProxyGFWlist:
     type: http
     behavior: classical
     format: text
-    url: https://mirror.ghproxy.com/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ProxyGFWlist.list
+    url: ${options.GithubMirror}https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ProxyGFWlist.list
     path: ./rulesets/acl4ssr/ProxyGFWlist.list
     interval: 86400
   ProxyMedia:
     type: http
     behavior: classical
     format: text
-    url: https://mirror.ghproxy.com/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ProxyMedia.list
+    url: ${options.GithubMirror}https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ProxyMedia.list
     path: ./rulesets/acl4ssr/ProxyMedia.list
     interval: 86400
   Telegram:
     type: http
     behavior: classical
     format: text
-    url: https://mirror.ghproxy.com/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Telegram.list
+    url: ${options.GithubMirror}https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Telegram.list
     path: ./rulesets/acl4ssr/Telegram.list
     interval: 86400
   UnBan:
     type: http
     behavior: classical
     format: text
-    url: https://mirror.ghproxy.com/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/UnBan.list
+    url: ${options.GithubMirror}https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/UnBan.list
     path: ./rulesets/acl4ssr/UnBan.list
     interval: 86400
 

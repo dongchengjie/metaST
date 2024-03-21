@@ -64,6 +64,9 @@ public class CommandLineOptions
     [Option("ruleset", Required = false, Default = RuleSet.acl4ssr, HelpText = "结果配置文件使用的规则集")]
     public required RuleSet RuleSet { get; set; }
 
+    [Option("mirror", Required = false, Default = "https://mirror.ghproxy.com/", HelpText = "Github资源镜像加速地址")]
+    public required string GithubMirror { get; set; }
+
     [Option("output", Required = false, HelpText = "输出路径/文件名")]
     public string? Output { get; set; }
 
