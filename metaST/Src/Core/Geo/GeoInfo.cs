@@ -5,7 +5,7 @@ namespace Core.Geo;
 
 public class GeoInfo
 {
-    public string? Address { get; set; }
+    public string Address { get; set; } = string.Empty;
     public string CountryCode { get; set; } = "UNKNOWN";
     public string? _country;
     public string Country
@@ -13,12 +13,12 @@ public class GeoInfo
         get
         {
             string? name = !string.IsNullOrWhiteSpace(CountryCode) && CountryCode.Length == 2
-            ? CountryNames.Looup(CountryCode) : (string.IsNullOrWhiteSpace(_country) ? null : _country);
+            ? CountryNames.Looup(CountryCode) : (string.IsNullOrWhiteSpace(_country) ? string.Empty : _country);
             return string.IsNullOrWhiteSpace(name) ? "未知" : name;
         }
         set { _country = value; }
     }
-    public string? Organization { get; set; }
+    public string Organization { get; set; } = string.Empty;
     public string Emoji
     {
         get
@@ -40,7 +40,7 @@ public class GeoInfo
     {
 
     }
-    public GeoInfo(string? address, string countryCode, string? country, string? organization, IWebProxy? proxy)
+    public GeoInfo(string address, string countryCode, string country, string organization, IWebProxy? proxy)
     {
         Address = address;
         CountryCode = countryCode;

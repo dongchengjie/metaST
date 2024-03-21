@@ -56,7 +56,7 @@ public class DBIP : IGeoLookup
             {
                 { addressField,      (info, val) => info.Address = val                },
                 { countryCodeField,  (info, val) => info.CountryCode = val??"UNKNOWN" },
-                { countryField,      (info, val) => info.Country = val                },
+                { countryField,      (info, val) => info.Country = val??string.Empty  },
                 { organizationField, (info, val) => info.Organization = val           }
             });
         }

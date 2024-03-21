@@ -22,11 +22,15 @@ public class GeoElector
                 Task.Delay(5000)
             );
             infos = infos.Where(value => value != null).ToList();
-            dynamic? address = Elect(infos, (info) => info?.Address);
-            dynamic? countryCode = Elect(infos, (info) => info?.CountryCode);
-            dynamic? country = Elect(infos, (info) => info?.Country);
-            dynamic? organization = Elect(infos, (info) => info?.Organization);
-            return new GeoInfo(address, countryCode, country, organization, proxy);
+            if (infos.Count > 0)
+            {
+                dynamic? address = Elect(infos, (info) => info?.Address);
+                dynamic? countryCode = Elect(infos, (info) => info?.CountryCode);
+                dynamic? country = Elect(infos, (info) => info?.Country);
+                dynamic? organization = Elect(infos, (info) => info?.Organization);
+                return new GeoInfo(address, countryCode, country, organization, proxy);
+            }
+            return new GeoInfo();
         });
     }
 
