@@ -57,6 +57,7 @@ public class MetaSpeedTest
         Logger.LogLevel = options.Verbose ? LogLevel.trace : LogLevel.info;
         Logger.RefreshInterval = 500;
         Logger.LogPath = Constants.WorkSpace;
+        Logger.PreProcessor = (message, console) => console ? Emoji.EmojiToShort(message) : message;
         ExitRegistrar.RegisterAction(type => Logger.Terminate());
     }
 

@@ -10,13 +10,15 @@ public class Logger
     public static LogLevel LogLevel { get; set; } = LogLevel.info;
     // 日志刷新间隔
     public static double RefreshInterval { get; set; } = 1000;
+    // 日志输出文件
+    public static string LogPath { get; set; } = AppDomain.CurrentDomain.BaseDirectory;
+    // 前置处理器
+    public static Func<string, bool, string> PreProcessor { get; set; } = (str, console) => str;
     // 控制台原始颜色
     public static readonly ConsoleColor primitiveColor = Console.ForegroundColor;
     protected static readonly Timer timer;
     // 日志队列
     protected static readonly ConcurrentQueue<Log> queue = new();
-    // 日志输出文件
-    public static string LogPath { get; set; } = AppDomain.CurrentDomain.BaseDirectory;
     static Logger()
     {
         // 设置控制台编码
@@ -52,8 +54,8 @@ public class Logger
         foreach (Log log in logs)
         {
             Console.ForegroundColor = log.Color;
-            Console.WriteLine(log);
-            lines = lines + log + Environment.NewLine;
+            Console.WriteLine(PreProcessor(log.ToString(), true));
+            lines = lines + PreProcessor(log.ToString(), false) + Environment.NewLine;
         }
         // 恢复颜色
         Console.ForegroundColor = primitiveColor;
