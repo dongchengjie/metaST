@@ -8,13 +8,13 @@ public class GeoInfo
     public string? Address { get; set; }
     public string CountryCode { get; set; } = "UNKNOWN";
     public string? _country;
-    public string? Country
+    public string Country
     {
         get
         {
             string? name = !string.IsNullOrWhiteSpace(CountryCode) && CountryCode.Length == 2
             ? CountryNames.Looup(CountryCode) : (string.IsNullOrWhiteSpace(_country) ? null : _country);
-            return string.IsNullOrWhiteSpace(name) ? "UNKNOWN" : name;
+            return string.IsNullOrWhiteSpace(name) ? "未知" : name;
         }
         set { _country = value; }
     }

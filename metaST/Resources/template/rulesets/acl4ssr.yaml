@@ -178,6 +178,7 @@ rules:
   - RULE-SET,BanEasyListChina,广告过滤
   - RULE-SET,BanEasyPrivacy,广告过滤
   - RULE-SET,BanProgramAD,广告过滤
+  # 其他
   - GEOIP,LAN,全局直连
   - GEOIP,CN,全局直连
   - MATCH,漏网之鱼

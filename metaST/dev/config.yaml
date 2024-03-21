@@ -92,7 +92,7 @@ proxy-groups:
     type: url-test
     tolerance: 100
     include-all: true
-    lazy: true
+    lazy: false
     interval: 300
     timeout: 5000
     url: https://www.google.com/gen_204
@@ -100,7 +100,7 @@ proxy-groups:
   - name: 🚑 故障转移
     type: fallback
     include-all: true
-    lazy: true
+    lazy: false
     interval: 300
     timeout: 5000
     url: https://www.google.com/gen_204
@@ -109,7 +109,7 @@ proxy-groups:
     type: load-balance
     strategy: round-robin
     include-all: true
-    lazy: true
+    lazy: false
     interval: 300
     timeout: 5000
     url: https://www.google.com/gen_204
@@ -118,7 +118,7 @@ proxy-groups:
     type: load-balance
     strategy: consistent-hashing
     include-all: true
-    lazy: true
+    lazy: false
     interval: 300
     timeout: 5000
     url: https://www.google.com/gen_204

@@ -9,7 +9,7 @@ public class MetaService
     public static T UsingProxies<T>(List<ProxyNode> proxies, Func<List<ProxyNode>, T> action)
     {
         // 生成mixed配置文件
-        MetaConfig.MetaInfo metaInfo = MetaConfig.CreateMixed(proxies);
+        MetaConfig.MetaInfo metaInfo = MetaConfig.GenerateMixedConfig(proxies);
         Task<Process>? task = null;
         try
         {

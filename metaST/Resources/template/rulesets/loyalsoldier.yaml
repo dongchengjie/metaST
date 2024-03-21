@@ -106,6 +106,7 @@ rules:
   - RULE-SET,lancidr,全局直连
   - RULE-SET,applications,全局直连
   - RULE-SET,reject,广告过滤
+    # 其他
   - GEOIP,LAN,全局直连
   - GEOIP,CN,全局直连
   - MATCH,漏网之鱼

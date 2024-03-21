@@ -23,14 +23,14 @@ public class MetaSpeedTest
             // 初始化
             Init(options);
             // 获取节点列表
-            List<ProxyNode> proxies = MetaConfig.GetProxies(options.Config);
+            List<ProxyNode> proxies = MetaConfig.GetConfigProxies(options.Config);
             // 节点去重
-            proxies = MetaConfig.Distinct(proxies, options.DistinctStrategy);
+            proxies = ProxyNode.Distinct(proxies, options.DistinctStrategy);
 
             // 节点重命名
-            // Rename(proxies, options);
+            Rename(proxies, options);
             // 生成配置文件
-            string s = MetaConfig.CreateStandard(proxies, options);
+            string s = MetaConfig.GenerateRegionConfig(proxies, options);
             Files.WriteToFile(new MemoryStream(Encoding.UTF8.GetBytes(s)), "D:/桌面/aa.yaml");
         }
         finally
@@ -77,7 +77,7 @@ public class MetaSpeedTest
                     proxy.Name = $"{proxy.GeoInfo.Emoji} {proxy.GeoInfo.Country}";
                 });
                 // 国家名称_序号
-                MetaConfig.Distinct(proxies, options.DistinctStrategy);
+                ProxyNode.Distinct(proxies, options.DistinctStrategy);
                 Logger.Info("GEO重命名完成");
             }
             // 添加节点前缀

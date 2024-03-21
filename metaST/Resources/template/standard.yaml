@@ -5,104 +5,100 @@ proxies: []
 proxy-groups:
   - name: 节点选择
     type: select
-    proxies:
-      - 延迟优选
-      - 故障转移
-      - 负载均衡-轮询
-      - 负载均衡-散列
-      - DIRECT
-    include-all: true
     icon: ${icons.adjust.svg}
+    proxies: ['延迟优选', '故障转移', '负载均衡-轮询', '负载均衡-散列', 'DIRECT']
+    include-all: true
 
   - name: 延迟优选
     type: url-test
     tolerance: 100
-    include-all: true
-    lazy: true
+    lazy: false
     interval: 300
     timeout: ${options.DelayTestTimeout}
     url: ${options.DelayTestUrl}
     icon: ${icons.speed.svg}
+    include-all: true
 
   - name: 故障转移
     type: fallback
-    include-all: true
-    lazy: true
+    lazy: false
     interval: 300
     timeout: ${options.DelayTestTimeout}
     url: ${options.DelayTestUrl}
     icon: ${icons.ambulance.svg}
+    include-all: true
 
   - name: 负载均衡-轮询
     type: load-balance
     strategy: round-robin
-    include-all: true
-    lazy: true
+    lazy: false
     interval: 300
     timeout: ${options.DelayTestTimeout}
     url: ${options.DelayTestUrl}
     icon: ${icons.balance.svg}
+    include-all: true
 
   - name: 负载均衡-散列
     type: load-balance
     strategy: consistent-hashing
-    include-all: true
-    lazy: true
+    lazy: false
     interval: 300
     timeout: ${options.DelayTestTimeout}
     url: ${options.DelayTestUrl}
     icon: ${icons.merry_go.svg}
+    include-all: true
 
   - name: 谷歌服务
     type: select
+    icon: ${icons.google.svg}
     proxies: ['节点选择', '延迟优选', '故障转移', '负载均衡-轮询', '负载均衡-散列', '全局直连']
     include-all: true
-    icon: ${icons.google.svg}
 
   - name: 国外媒体
     type: select
+    icon: ${icons.youtube.svg}
     proxies: ['节点选择', '延迟优选', '故障转移', '负载均衡-轮询', '负载均衡-散列', '全局直连']
     include-all: true
-    icon: ${icons.youtube.svg}
 
   - name: 电报消息
     type: select
+    icon: ${icons.telegram.svg}
     proxies: ['节点选择', '延迟优选', '故障转移', '负载均衡-轮询', '负载均衡-散列', '全局直连']
     include-all: true
-    icon: ${icons.telegram.svg}
 
   - name: 微软服务
     type: select
+    icon: ${icons.microsoft.svg}
     proxies: ['全局直连', '节点选择', '延迟优选', '故障转移', '负载均衡-轮询', '负载均衡-散列']
     include-all: true
-    icon: ${icons.microsoft.svg}
 
   - name: 苹果服务
     type: select
+    icon: ${icons.apple.svg}
     proxies: ['节点选择', '延迟优选', '故障转移', '负载均衡-轮询', '负载均衡-散列', '全局直连']
     include-all: true
-    icon: ${icons.apple.svg}
 
   - name: 广告过滤
     type: select
-    proxies: ['REJECT', 'DIRECT']
     icon: ${icons.bug.svg}
+    proxies: ['REJECT', 'DIRECT']
 
   - name: 全局直连
     type: select
-    proxies: ['DIRECT', '节点选择', '延迟优选', '故障转移', '负载均衡-轮询', '负载均衡-散列']
     icon: ${icons.link.svg}
+    proxies: ['DIRECT', '节点选择', '延迟优选', '故障转移', '负载均衡-轮询', '负载均衡-散列']
+    include-all: true
 
   - name: 全局拦截
     type: select
-    proxies: ['REJECT', 'DIRECT']
     icon: ${icons.block.svg}
+    proxies: ['REJECT', 'DIRECT']
 
   - name: 漏网之鱼
     type: select
+    icon: ${icons.fish.svg}
     proxies: ['节点选择', '延迟优选', '故障转移', '负载均衡-轮询', '负载均衡-散列', '全局直连']
     include-all: true
-    icon: ${icons.fish.svg}
 
 # 规则
 rules: []
