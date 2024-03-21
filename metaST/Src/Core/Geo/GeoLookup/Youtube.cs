@@ -20,7 +20,7 @@ public partial class Youtube : IGeoLookup
                     Match countryCodeMatch = CountryCodeRegex().Match(html);
                     return new()
                     {
-                        Address = addressMatch.Success ? addressMatch.Groups[1].Value : null,
+                        Address = addressMatch.Success ? addressMatch.Groups[1].Value : string.Empty,
                         CountryCode = countryCodeMatch.Success ? countryCodeMatch.Groups[1].Value : "UNKNOWN",
                     };
                 }

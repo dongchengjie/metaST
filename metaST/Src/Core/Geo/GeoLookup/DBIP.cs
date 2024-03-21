@@ -54,10 +54,10 @@ public class DBIP : IGeoLookup
         {
             return ParseAndApply(json, new Dictionary<string, AttributesApplier<GeoInfo, string?>>()
             {
-                { addressField,      (info, val) => info.Address = val                },
-                { countryCodeField,  (info, val) => info.CountryCode = val??"UNKNOWN" },
-                { countryField,      (info, val) => info.Country = val??string.Empty  },
-                { organizationField, (info, val) => info.Organization = val           }
+                { addressField,      (info, val) => info.Address = val ?? string.Empty      },
+                { countryCodeField,  (info, val) => info.CountryCode = val ?? "UNKNOWN"     },
+                { countryField,      (info, val) => info.Country = val ?? string.Empty      },
+                { organizationField, (info, val) => info.Organization = val ?? string.Empty }
             });
         }
         return geoInfo;
