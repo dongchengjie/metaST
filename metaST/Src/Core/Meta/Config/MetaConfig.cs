@@ -1,9 +1,10 @@
 using System.Net;
 using System.Text;
+using Core.CommandLine;
 using Core.CommandLine.Enum;
 using Util;
 
-namespace Core.Meta;
+namespace Core.Meta.Config;
 
 public class MetaConfig
 {
@@ -159,4 +160,28 @@ public class MetaConfig
         // 返回服务信息
         return new(config, configPath, portManager, proxies);
     }
+
+    public static string CreateStandard(List<Proxy> proxies, CommandLineOptions options)
+    {
+        // 读取模板内容
+        string yaml = GetTemplate("template.standard.yaml");
+
+        // 代理列表
+        string proxyList = string.Join(Environment.NewLine, proxies.Select((proxy, index) => $"  - {Json.SerializeObject(proxy.Info)}"));
+
+        // 读取规则集
+        string rules = MetaRule.GetRules(options.RuleSet);
+
+        // 生成配置文件
+        string config = yaml
+            .Replace("proxies: []", $"proxies: \n{proxyList}")
+            .Replace("rules: []", $"{rules}");
+
+        // 处理参数
+        config = MetaProperty.Resolve(config, options);
+
+        return config;
+    }
+
+
 }

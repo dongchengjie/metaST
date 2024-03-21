@@ -57,7 +57,6 @@ public class GeoInfo
     private static string GetIconByCode(string countryCode, bool flag)
     {
         string fileName = countryCode.ToLower() + ".svg";
-        string resourceName = flag ? "icons.flags." + fileName : "icons." + fileName;
-        return "data:image/svg+xml;base64," + Convert.ToBase64String(Resources.ReadAsBytes(resourceName));
+        return flag ? "icons.flags." + fileName : "icons." + fileName;
     }
 }

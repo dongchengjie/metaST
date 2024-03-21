@@ -1,9 +1,6 @@
 ﻿# 代理
 proxies: []
 
-# 代理集合
-proxy-providers: []
-
 # 代理组
 proxy-groups:
   - name: 节点选择
@@ -23,7 +20,7 @@ proxy-groups:
     lazy: true
     interval: 300
     timeout: 2000
-    url: https://www.google.com/gen_204
+    url: ${options.DelayTestUrl}
 
   - name: 故障转移
     type: fallback
@@ -31,7 +28,7 @@ proxy-groups:
     lazy: true
     interval: 300
     timeout: 2000
-    url: https://www.google.com/gen_204
+    url: ${options.DelayTestUrl}
 
   - name: 负载均衡-轮询
     type: load-balance
@@ -40,7 +37,7 @@ proxy-groups:
     lazy: true
     interval: 300
     timeout: 2000
-    url: https://www.google.com/gen_204
+    url: ${options.DelayTestUrl}
 
   - name: 负载均衡-散列
     type: load-balance
@@ -49,7 +46,7 @@ proxy-groups:
     lazy: true
     interval: 300
     timeout: 2000
-    url: https://www.google.com/gen_204
+    url: ${options.DelayTestUrl}
 
   - name: 国外媒体
     type: select

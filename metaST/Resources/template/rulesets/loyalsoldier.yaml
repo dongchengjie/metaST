@@ -92,6 +92,7 @@
     interval: 86400
 
 rules:
+  # loyalsoldier规则集
   - RULE-SET,reject,全球拦截
   - RULE-SET,icloud,节点选择
   - RULE-SET,apple,苹果服务

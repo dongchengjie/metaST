@@ -1,8 +1,11 @@
 using System.Net;
 using System.Reflection;
+using System.Text;
 using Core.CommandLine;
+using Core.CommandLine.Enum;
 using Core.Geo;
 using Core.Meta;
+using Core.Meta.Config;
 using Util;
 
 // 程序信息
@@ -19,16 +22,16 @@ public class MetaSpeedTest
         {
             // 初始化
             Init(options);
-            GeoInfo result = GeoElector.LookupAsnyc(new WebProxy("127.0.0.1", 7897)).Result;
-
             // 获取节点列表
             List<Proxy> proxies = MetaConfig.GetProxies(options.Config);
             // 节点去重
             proxies = MetaConfig.Distinct(proxies, options.DistinctStrategy);
 
             // 节点重命名
-            Rename(proxies, options);
-            // 生产配置文件
+            // Rename(proxies, options);
+            // 生成配置文件
+            string s=MetaConfig.CreateStandard(proxies, options);
+            Files.WriteToFile(new MemoryStream(Encoding.UTF8.GetBytes(s)),"D:/桌面/aa.yaml");
         }
         finally
         {
@@ -59,7 +62,7 @@ public class MetaSpeedTest
             {
                 Logger.Info("开始GEO重命名...");
                 // 查询GEO信息
-                Dictionary<IWebProxy, GeoInfo> dictionary = MetaService.UsingProxies(proxies, proxied =>
+                Dictionary<IWebProxy, GeoInfo> infoMap = MetaService.UsingProxies(proxies, proxied =>
                 {
                     return proxied
                         .Select(proxy => Task.Run(() => GeoElector.LookupAsnyc(proxy.Mixed)))
@@ -70,7 +73,7 @@ public class MetaSpeedTest
                 // 分配GEO信息，并重命名
                 proxies.ForEach((proxy) =>
                 {
-                    proxy.GeoInfo = proxy.Mixed != null && dictionary.TryGetValue(proxy.Mixed, out var geoInfo) ? geoInfo : new GeoInfo();
+                    proxy.GeoInfo = proxy.Mixed != null && infoMap.TryGetValue(proxy.Mixed, out var geoInfo) ? geoInfo : new GeoInfo();
                     proxy.Name = $"{proxy.GeoInfo.Emoji} {proxy.GeoInfo.Country}";
                 });
                 // 国家名称_序号
