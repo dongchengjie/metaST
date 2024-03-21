@@ -22,15 +22,21 @@ public class MetaSpeedTest
             // 获取节点列表
             List<ProxyNode> proxies = MetaConfig.GetConfigProxies(options.Config);
             // 节点去重
+            EnsurePorxiesLeft(proxies);
             proxies = ProxyNode.Distinct(proxies, options.DistinctStrategy);
             // 延迟测试、筛选
             // 下载速度测试、筛选
             // 节点GEO重命名
+            EnsurePorxiesLeft(proxies);
             proxies = !string.IsNullOrWhiteSpace(options.Tag) || options.GeoLookup ? ProxyNode.Rename(proxies, options) : proxies;
-            // 生成配置文件
+            // 生成配置文件并输出
+            EnsurePorxiesLeft(proxies);
             string configYaml = MetaConfig.GenerateRegionConfig(proxies, options);
-            // 输出到文件
             WriteToFile(configYaml, options);
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"程序异常退出: {ex.Message}");
         }
         finally
         {
@@ -52,6 +58,14 @@ public class MetaSpeedTest
         Logger.RefreshInterval = 500;
         Logger.LogPath = Constants.WorkSpace;
         ExitRegistrar.RegisterAction(type => Logger.Terminate());
+    }
+
+    private static void EnsurePorxiesLeft(List<ProxyNode> proxies)
+    {
+        if (proxies == null || proxies.Count == 0)
+        {
+            throw new InvalidDataException("无满足条件的代理");
+        }
     }
 
     private static void WriteToFile(string configContent, CommandLineOptions options)

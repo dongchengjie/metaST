@@ -12,7 +12,7 @@ public class BigData : DBIP
         return new()
         {
             Method = HttpMethod.Get,
-            RequestUri = new Uri("https://api.bigdatacloud.net/data/reverse-geocode-client")
+            RequestUri = new Uri("http://api.bigdatacloud.net/data/reverse-geocode-client")
         }; ;
     }
 }

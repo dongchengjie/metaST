@@ -103,6 +103,6 @@ public class ProxyNode(Dictionary<dynamic, dynamic> info)
                 Logger.Info($"添加Tag完成");
             }
         }
-        return [];
+        return proxies ?? [];
     }
 }

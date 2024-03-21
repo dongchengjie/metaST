@@ -12,7 +12,7 @@ public class IPGeoLocation : DBIP
         return new()
         {
             Method = HttpMethod.Get,
-            RequestUri = new Uri("https://api.ipgeolocation.io/ipgeo"),
+            RequestUri = new Uri("http://api.ipgeolocation.io/ipgeo"),
             Headers =
             {
                 { "Origin",  "https://ipgeolocation.io" },

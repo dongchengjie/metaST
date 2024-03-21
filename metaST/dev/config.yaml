@@ -81,14 +81,14 @@ proxy-groups:
   - name: 🚀 节点选择
     type: select
     proxies:
-      - ♻️ 延迟优选
+      - ♻️ 延迟选优
       - 🚑 故障转移
-      - ⚖️ 负载均衡-轮询
-      - ⚖️ 负载均衡-散列
+      - ⚖️ 负载均衡(轮询)
+      - ⚖️ 负载均衡(散列)
       - DIRECT
     include-all: true
 
-  - name: ♻️ 延迟优选
+  - name: ♻️ 延迟选优
     type: url-test
     tolerance: 100
     include-all: true
@@ -105,7 +105,7 @@ proxy-groups:
     timeout: 5000
     url: https://www.google.com/gen_204
 
-  - name: ⚖️ 负载均衡-轮询
+  - name: ⚖️ 负载均衡(轮询)
     type: load-balance
     strategy: round-robin
     include-all: true
@@ -114,7 +114,7 @@ proxy-groups:
     timeout: 5000
     url: https://www.google.com/gen_204
 
-  - name: ⚖️ 负载均衡-散列
+  - name: ⚖️ 负载均衡(散列)
     type: load-balance
     strategy: consistent-hashing
     include-all: true
@@ -125,32 +125,32 @@ proxy-groups:
 
   - name: 🌍 国外媒体
     type: select
-    proxies: ['🚀 节点选择', '♻️ 延迟优选', '🚑 故障转移', '⚖️ 负载均衡-轮询', '⚖️ 负载均衡-散列', '🎯 全局直连']
+    proxies: ['🚀 节点选择', '♻️ 延迟选优', '🚑 故障转移', '⚖️ 负载均衡(轮询)', '⚖️ 负载均衡(散列)', '🎯 全局直连']
     include-all: true
 
   - name: 📲 电报消息
     type: select
-    proxies: ['🚀 节点选择', '♻️ 延迟优选', '🚑 故障转移', '⚖️ 负载均衡-轮询', '⚖️ 负载均衡-散列', '🎯 全局直连']
+    proxies: ['🚀 节点选择', '♻️ 延迟选优', '🚑 故障转移', '⚖️ 负载均衡(轮询)', '⚖️ 负载均衡(散列)', '🎯 全局直连']
     include-all: true
 
   - name: Ⓜ️ 微软服务
     type: select
-    proxies: ['🎯 全局直连', '🚀 节点选择', '♻️ 延迟优选', '🚑 故障转移', '⚖️ 负载均衡-轮询', '⚖️ 负载均衡-散列']
+    proxies: ['🎯 全局直连', '🚀 节点选择', '♻️ 延迟选优', '🚑 故障转移', '⚖️ 负载均衡(轮询)', '⚖️ 负载均衡(散列)']
     include-all: true
 
   - name: 🍎 苹果服务
     type: select
-    proxies: ['🚀 节点选择', '♻️ 延迟优选', '🚑 故障转移', '⚖️ 负载均衡-轮询', '⚖️ 负载均衡-散列', '🎯 全局直连']
+    proxies: ['🚀 节点选择', '♻️ 延迟选优', '🚑 故障转移', '⚖️ 负载均衡(轮询)', '⚖️ 负载均衡(散列)', '🎯 全局直连']
     include-all: true
 
   - name: 📢 谷歌服务
     type: select
-    proxies: ['🚀 节点选择', '♻️ 延迟优选', '🚑 故障转移', '⚖️ 负载均衡-轮询', '⚖️ 负载均衡-散列', '🎯 全局直连']
+    proxies: ['🚀 节点选择', '♻️ 延迟选优', '🚑 故障转移', '⚖️ 负载均衡(轮询)', '⚖️ 负载均衡(散列)', '🎯 全局直连']
     include-all: true
 
   - name: 🎯 全局直连
     type: select
-    proxies: ['DIRECT', '🚀 节点选择', '♻️ 延迟优选', '🚑 故障转移', '⚖️ 负载均衡-轮询', '⚖️ 负载均衡-散列']
+    proxies: ['DIRECT', '🚀 节点选择', '♻️ 延迟选优', '🚑 故障转移', '⚖️ 负载均衡(轮询)', '⚖️ 负载均衡(散列)']
 
   - name: 🛑 全局拦截
     type: select
@@ -162,7 +162,7 @@ proxy-groups:
 
   - name: 🐟 漏网之鱼
     type: select
-    proxies: ['🚀 节点选择', '♻️ 延迟优选', '🚑 故障转移', '⚖️ 负载均衡-轮询', '⚖️ 负载均衡-散列', '🎯 全局直连']
+    proxies: ['🚀 节点选择', '♻️ 延迟选优', '🚑 故障转移', '⚖️ 负载均衡(轮询)', '⚖️ 负载均衡(散列)', '🎯 全局直连']
     include-all: true
 
 rule-providers:
