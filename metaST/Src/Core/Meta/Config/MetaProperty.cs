@@ -39,7 +39,16 @@ public partial class MetaProperty
         // 处理图标资源
         if (prorperty.StartsWith("icons"))
         {
-            return "data:image/svg+xml;base64," + Convert.ToBase64String(Resources.ReadAsBytes(prorperty));
+            string base64 = Convert.ToBase64String(Resources.ReadAsBytes(prorperty));
+            if (prorperty.EndsWith(".jpeg") || prorperty.EndsWith(".jpg"))
+            {
+                return "data:image/jpeg;base64," + base64;
+            }
+            if (prorperty.EndsWith(".svg"))
+            {
+                return "data:image/svg+xml;base64," + base64;
+            }
+            return "data:image/png;base64," + base64;
         }
         throw new InvalidDataException($"处理配置属性值错误，未知的属性: {prorperty}");
     }

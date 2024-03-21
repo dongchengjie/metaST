@@ -81,14 +81,14 @@ proxy-groups:
   - name: 🚀 节点选择
     type: select
     proxies:
-      - ♻️ 自动选择
+      - ♻️ 延迟优选
       - 🚑 故障转移
       - ⚖️ 负载均衡-轮询
       - ⚖️ 负载均衡-散列
       - DIRECT
     include-all: true
 
-  - name: ♻️ 自动选择
+  - name: ♻️ 延迟优选
     type: url-test
     tolerance: 100
     include-all: true
@@ -125,44 +125,44 @@ proxy-groups:
 
   - name: 🌍 国外媒体
     type: select
-    proxies: ['🚀 节点选择', '♻️ 自动选择', '🚑 故障转移', '⚖️ 负载均衡-轮询', '⚖️ 负载均衡-散列', '🎯 全球直连']
+    proxies: ['🚀 节点选择', '♻️ 延迟优选', '🚑 故障转移', '⚖️ 负载均衡-轮询', '⚖️ 负载均衡-散列', '🎯 全局直连']
     include-all: true
 
-  - name: 📲 电报信息
+  - name: 📲 电报消息
     type: select
-    proxies: ['🚀 节点选择', '♻️ 自动选择', '🚑 故障转移', '⚖️ 负载均衡-轮询', '⚖️ 负载均衡-散列', '🎯 全球直连']
+    proxies: ['🚀 节点选择', '♻️ 延迟优选', '🚑 故障转移', '⚖️ 负载均衡-轮询', '⚖️ 负载均衡-散列', '🎯 全局直连']
     include-all: true
 
   - name: Ⓜ️ 微软服务
     type: select
-    proxies: ['🎯 全球直连', '🚀 节点选择', '♻️ 自动选择', '🚑 故障转移', '⚖️ 负载均衡-轮询', '⚖️ 负载均衡-散列']
+    proxies: ['🎯 全局直连', '🚀 节点选择', '♻️ 延迟优选', '🚑 故障转移', '⚖️ 负载均衡-轮询', '⚖️ 负载均衡-散列']
     include-all: true
 
   - name: 🍎 苹果服务
     type: select
-    proxies: ['🚀 节点选择', '♻️ 自动选择', '🚑 故障转移', '⚖️ 负载均衡-轮询', '⚖️ 负载均衡-散列', '🎯 全球直连']
+    proxies: ['🚀 节点选择', '♻️ 延迟优选', '🚑 故障转移', '⚖️ 负载均衡-轮询', '⚖️ 负载均衡-散列', '🎯 全局直连']
     include-all: true
 
-  - name: 📢 谷歌FCM
+  - name: 📢 谷歌服务
     type: select
-    proxies: ['🚀 节点选择', '♻️ 自动选择', '🚑 故障转移', '⚖️ 负载均衡-轮询', '⚖️ 负载均衡-散列', '🎯 全球直连']
+    proxies: ['🚀 节点选择', '♻️ 延迟优选', '🚑 故障转移', '⚖️ 负载均衡-轮询', '⚖️ 负载均衡-散列', '🎯 全局直连']
     include-all: true
 
-  - name: 🎯 全球直连
+  - name: 🎯 全局直连
     type: select
-    proxies: ['DIRECT', '🚀 节点选择', '♻️ 自动选择', '🚑 故障转移', '⚖️ 负载均衡-轮询', '⚖️ 负载均衡-散列']
+    proxies: ['DIRECT', '🚀 节点选择', '♻️ 延迟优选', '🚑 故障转移', '⚖️ 负载均衡-轮询', '⚖️ 负载均衡-散列']
 
-  - name: 🛑 全球拦截
+  - name: 🛑 全局拦截
     type: select
     proxies: ['REJECT', 'DIRECT']
 
-  - name: 🍃 应用净化
+  - name: 🍃 广告过滤
     type: select
     proxies: ['REJECT', 'DIRECT']
 
   - name: 🐟 漏网之鱼
     type: select
-    proxies: ['🚀 节点选择', '♻️ 自动选择', '🚑 故障转移', '⚖️ 负载均衡-轮询', '⚖️ 负载均衡-散列', '🎯 全球直连']
+    proxies: ['🚀 节点选择', '♻️ 延迟优选', '🚑 故障转移', '⚖️ 负载均衡-轮询', '⚖️ 负载均衡-散列', '🎯 全局直连']
     include-all: true
 
 rule-providers:
@@ -280,22 +280,22 @@ rule-providers:
     interval: 86400
 
 rules:
-  - RULE-SET,LocalAreaNetwork,🎯 全球直连
-  - RULE-SET,UnBan,🎯 全球直连
-  - RULE-SET,BanAD,🛑 全球拦截
-  - RULE-SET,BanProgramAD,🍃 应用净化
-  - RULE-SET,GoogleFCM,📢 谷歌FCM
-  - RULE-SET,GoogleCN,🎯 全球直连
-  - RULE-SET,SteamCN,🎯 全球直连
+  - RULE-SET,LocalAreaNetwork,🎯 全局直连
+  - RULE-SET,UnBan,🎯 全局直连
+  - RULE-SET,BanAD,🛑 全局拦截
+  - RULE-SET,BanProgramAD,🍃 广告过滤
+  - RULE-SET,GoogleFCM,📢 谷歌服务
+  - RULE-SET,GoogleCN,🎯 全局直连
+  - RULE-SET,SteamCN,🎯 全局直连
   - RULE-SET,Microsoft,Ⓜ️ 微软服务
   - RULE-SET,Apple,🍎 苹果服务
-  - RULE-SET,Telegram,📲 电报信息
+  - RULE-SET,Telegram,📲 电报消息
   - RULE-SET,ProxyMedia,🌍 国外媒体
   - RULE-SET,ProxyGFWlist,🚀 节点选择
-  - RULE-SET,ChinaIp,🎯 全球直连
-  - RULE-SET,ChinaDomain,🎯 全球直连
-  - RULE-SET,ChinaCompanyIp,🎯 全球直连
-  - RULE-SET,Download,🎯 全球直连
-  - GEOIP,LAN,🎯 全球直连
-  - GEOIP,CN,🎯 全球直连
+  - RULE-SET,ChinaIp,🎯 全局直连
+  - RULE-SET,ChinaDomain,🎯 全局直连
+  - RULE-SET,ChinaCompanyIp,🎯 全局直连
+  - RULE-SET,Download,🎯 全局直连
+  - GEOIP,LAN,🎯 全局直连
+  - GEOIP,CN,🎯 全局直连
   - MATCH,🐟 漏网之鱼
