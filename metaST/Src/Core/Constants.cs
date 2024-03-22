@@ -1,10 +1,13 @@
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace Core;
 public class Constants
 {
     // 内核名称
     public static readonly string MetaCoreName = "mihomo";
+    // Meta内核可执行程序名
+    public static readonly string executableName = MetaCoreName + (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ".exe" : string.Empty);
     // 用户目录
     public static readonly string UserProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
     // 配置目录

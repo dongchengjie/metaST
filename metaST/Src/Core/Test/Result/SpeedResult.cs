@@ -21,10 +21,9 @@ public class SpeedResult : TestResult
     {
         bool flag = IsSuccess();
         double bitRate = Result();
-        LogLevel logLevel = flag ? LogLevel.info : LogLevel.error;
         string format = flag ? "{0} {1}MB/s" : "{0} {1}";
-        string message = flag ? string.Format(format, prefix, (bitRate / 8 / 1024 / 1024).ToString("0.00")) : ErrMsg;
-        ConsoleColor color = colors[thresholds.OrderDescending().Where((threshold, index) => bitRate >= threshold).Select((threshold, index) => index).First()];
-        Logger.Log(logLevel, message, color);
+        string message = flag ? string.Format(format, prefix, (bitRate / 8 / 1024 / 1024).ToString("0.00")) : string.Format(format, prefix, ErrMsg);
+        ConsoleColor color = flag ? colors[thresholds.OrderDescending().Where((threshold, index) => bitRate >= threshold).Select((threshold, index) => index).First()] : ConsoleColor.DarkRed;
+        Logger.Log(LogLevel.info, message, color);
     }
 }

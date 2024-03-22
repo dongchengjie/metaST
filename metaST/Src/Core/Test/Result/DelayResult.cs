@@ -17,10 +17,9 @@ public class DelayResult : TestResult
     {
         bool flag = IsSuccess();
         double delay = Result();
-        LogLevel logLevel = flag ? LogLevel.info : LogLevel.error;
         string format = flag ? "{0} {1}ms" : "{0} {1}";
-        string message = flag ? string.Format(format, prefix, delay) : ErrMsg;
-        ConsoleColor color = colors[thresholds.Order().Where((threshold, index) => delay < threshold).Select((threshold, index) => index).First()];
-        Logger.Log(logLevel, message, color);
+        string message = flag ? string.Format(format, prefix, Convert.ToInt32(delay)) : string.Format(format, prefix, ErrMsg);
+        ConsoleColor color = flag ? colors[thresholds.Order().Where((threshold, index) => delay < threshold).Select((threshold, index) => index).First()] : ConsoleColor.DarkRed;
+        Logger.Log(LogLevel.info, message, color);
     }
 }

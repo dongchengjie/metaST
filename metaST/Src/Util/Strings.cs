@@ -5,7 +5,7 @@ namespace Util;
 
 public class Strings
 {
-    public static string Padding(string str, int width, char paddingChar, bool chinsesAsDouble = true)
+    public static string Padding(string str, int width, char paddingChar = ' ', bool chinsesAsDouble = true)
     {
         if (string.IsNullOrEmpty(str))
         {

@@ -19,14 +19,14 @@ public class CommandLineOptions
     [Option("dt", Required = false, Default = 1500, HelpText = "延迟测试超时(ms)")]
     public required int DelayTestTimeout { get; set; }
 
-    [Option("dn", Required = false, Default = 64, HelpText = "延迟测试线程数量")]
+    [Option("dn", Required = false, Default = 32, HelpText = "延迟测试线程数量")]
     public required int DelayTestThreads { get; set; }
 
     [Option("dr", Required = false, Default = 4, HelpText = "延迟测试轮数")]
     public required int DelayTestRounds { get; set; }
 
     [Option("df", Required = false, Default = 1000, HelpText = "延迟测试过滤阈值(ms)")]
-    public required int DelayTestFilter { get; set; }
+    public required double DelayTestFilter { get; set; }
 
     [Option("se", Required = false, Default = false, HelpText = "是否进行下载测试")]
     public required bool SpeedTestEnable { get; set; }
@@ -44,7 +44,7 @@ public class CommandLineOptions
     public required int SpeedTestRounds { get; set; }
 
     [Option("sf", Required = false, Default = 500 * 1024 * 8, HelpText = "下载测试过滤阈值(bps)")]
-    public required int SpeedTestFilter { get; set; }
+    public required double SpeedTestFilter { get; set; }
 
     [Option("sort", Required = false, Default = SortPreference.speed, HelpText = "结果排序偏好")]
     public required SortPreference SortPreference { get; set; }
