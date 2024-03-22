@@ -51,16 +51,16 @@
   </ItemGroup>
 
   <!-- 平台资源嵌入 -->
-  <ItemGroup Condition="'$(Identifier)' == 'win-x64'">
+  <ItemGroup Condition="'$(RuntimeIdentifier)' == 'win-x64'">
     <EmbeddedResource Include="Resources\meta\win_amd64\*" />
   </ItemGroup>
-  <ItemGroup Condition="'$(Identifier)' == 'win-arm64'">
+  <ItemGroup Condition="'$(RuntimeIdentifier)' == 'win-arm64'">
     <EmbeddedResource Include="Resources\meta\win_arm64\*" />
   </ItemGroup>
-  <ItemGroup Condition="'$(Identifier)' == 'linux-x64'">
+  <ItemGroup Condition="'$(RuntimeIdentifier)' == 'linux-x64'">
     <EmbeddedResource Include="Resources\meta\linux_x64\*" />
   </ItemGroup>
-  <ItemGroup Condition="'$(Identifier)' == 'linux-arm64'">
+  <ItemGroup Condition="'$(RuntimeIdentifier)' == 'linux-arm64'">
     <EmbeddedResource Include="Resources\meta\linux_arm64\*" />
   </ItemGroup>
 </Project>
