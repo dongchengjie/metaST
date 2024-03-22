@@ -78,18 +78,22 @@ public class ProxyNode(Dictionary<dynamic, dynamic> info)
             {
                 Logger.Info("开始GEO重命名...");
                 ConcurrentDictionary<IWebProxy, GeoInfo> infoMap = [];
+                int chunkIndex = 0;
                 foreach (ProxyNode[] chunk in proxies.Chunk(Constants.MaxPortsOccupied))
                 {
                     // 查询GEO信息
                     MetaService.UsingProxies([.. chunk], proxied =>
                     {
-                        return proxied.AsParallel().Select(proxy =>
+                        return proxied.AsParallel().Select((proxy, index) =>
                         {
                             GeoInfo geoInfo = Task.Run(() => GeoElector.LookupAsnyc(proxy.Mixed)).Result;
                             infoMap.TryAdd(proxy.Mixed ??= new WebProxy(), geoInfo);
+                            int current = chunkIndex * Constants.MaxPortsOccupied + index + 1;
+                            Logger.Info(Strings.Padding(Emoji.EmojiToShort($"[{current}/{proxies.Count}] {proxy.Name}"), 64) + " ==> " + $"{geoInfo.CountryCode}");
                             return geoInfo;
                         }).ToList();
                     });
+                    chunkIndex += 1;
                 }
 
                 // 分配GEO信息，并重命名
@@ -115,9 +119,14 @@ public class ProxyNode(Dictionary<dynamic, dynamic> info)
 
     public static List<ProxyNode> Purify(List<ProxyNode> proxies)
     {
-        Logger.Info("开始节点净化...");
         List<ProxyNode> purified = [];
-        foreach (ProxyNode[] chunk in proxies.Chunk(Constants.MaxPortsOccupied)) { purified.AddRange(BinaryTest([.. chunk])); }
+        int chunkIndex = 0;
+        foreach (ProxyNode[] chunk in proxies.Chunk(Constants.MaxPortsOccupied))
+        {
+            purified.AddRange(BinaryTest([.. chunk]));
+            Logger.Info(Strings.Padding($"[{chunkIndex * Constants.MaxPortsOccupied + chunk.Length}/{proxies.Count}]", 8) + " 节点净化...");
+            chunkIndex += 1;
+        }
         if (purified.Count < proxies.Count)
         {
             Logger.Warn($"节点净化完成,排除{proxies.Count - purified.Count}个节点");
