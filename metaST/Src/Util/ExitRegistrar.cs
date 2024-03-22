@@ -12,50 +12,72 @@ public class ExitRegistrar
     public static void RegisterAction(Action<EventType> action) => actions.Enqueue(action);
 
     private delegate bool HandlerRoutine(EventType eventType);
-    [DllImport("Kernel32")]
 
+    [DllImport("Kernel32")]
     private static extern bool SetConsoleCtrlHandler(HandlerRoutine handlerRoutine, bool add);
+
+    [DllImport("libc.so.6", SetLastError = true)]
+    private static extern IntPtr signal(int signum, IntPtr handler);
     static ExitRegistrar()
     {
-        var handler = new HandlerRoutine((EventType type) =>
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            switch (type)
+            var handler = new HandlerRoutine((EventType type) =>
             {
-                case EventType.CTRL_C_EVENT:        // Ctrl + C
-                case EventType.CTRL_BREAK_EVENT:    // Ctrl + Break
-                case EventType.CLOSE_EVENT:         // 窗口关闭
-                case EventType.LOGOFF_EVENT:        // 退出登录
-                case EventType.SHUTDOWN_EVENT:      // 关机
-                    {
-                        try
+                switch (type)
+                {
+                    case EventType.CTRL_C_EVENT:        // Ctrl + C
+                    case EventType.CTRL_BREAK_EVENT:    // Ctrl + Break
+                    case EventType.CLOSE_EVENT:         // 窗口关闭
+                    case EventType.LOGOFF_EVENT:        // 退出登录
+                    case EventType.SHUTDOWN_EVENT:      // 关机
                         {
-                            Console.WriteLine("Waiting for program to exit...");
-                            while (actions.TryDequeue(out var action))
-                            {
-                                try
-                                {
-                                    action.Invoke(type);
-                                }
-                                catch (Exception ex)
-                                {
-                                    Console.WriteLine($"Error invoking exit action: {ex.Message}");
-                                }
-                            }
-                            Console.WriteLine("Program exited");
-                            return true;
+                            return TriggerExitActions(type);
                         }
-                        finally
-                        {
-                            Environment.Exit(-1);
-                        }
-                    }
-                default: return false;
-            }
-        });
+                    default: return false;
+                }
+            });
 
-        // 将委托实例固定在内存中，以确保不会被垃圾回收
-        IntPtr ptr = GCHandle.ToIntPtr(GCHandle.Alloc(handler));
-        SetConsoleCtrlHandler(handler, true);
+            // 将委托实例固定在内存中，以确保不会被垃圾回收
+            IntPtr ptr = GCHandle.ToIntPtr(GCHandle.Alloc(handler));
+            SetConsoleCtrlHandler(handler, true);
+        }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            Console.CancelKeyPress += (sender, e) =>
+            {
+                TriggerExitActions(EventType.CTRL_C_EVENT);
+            };
+        }
+        else
+        {
+            throw new PlatformNotSupportedException("Unsupported platform");
+        }
+    }
+
+    private static bool TriggerExitActions(EventType type)
+    {
+        try
+        {
+            Console.WriteLine("Waiting for program to exit...");
+            while (actions.TryDequeue(out var action))
+            {
+                try
+                {
+                    action.Invoke(type);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error invoking exit action: {ex.Message}");
+                }
+            }
+            Console.WriteLine("Program exited");
+            return true;
+        }
+        finally
+        {
+            Environment.Exit(-1);
+        }
     }
 }
 public enum EventType

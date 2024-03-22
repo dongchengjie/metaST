@@ -24,10 +24,10 @@ jobs:
       - name: 编译并发布
         id: build
         run: |
-          dotnet publish -c Release -r win-x64
-          dotnet publish -c Release -r win-arm64
-          dotnet publish -c Release -r linux-x64
-          dotnet publish -c Release -r linux-arm64
+          dotnet build --no-incremental ; dotnet publish -c Release -r win-x64
+          dotnet build --no-incremental ; dotnet publish -c Release -r win-arm64
+          dotnet build --no-incremental ; dotnet publish -c Release -r linux-x64
+          dotnet build --no-incremental ; dotnet publish -c Release -r linux-arm64
 
       - name: 文件移动、重命名
         id: rename
