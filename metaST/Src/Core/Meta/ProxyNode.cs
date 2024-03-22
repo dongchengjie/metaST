@@ -1,7 +1,6 @@
 using System.Collections.Concurrent;
 using System.Net;
 using Core.CommandLine;
-using Core.CommandLine.Enum;
 using Core.Geo;
 using Util;
 
@@ -9,7 +8,15 @@ namespace Core.Meta;
 
 public class ProxyNode(Dictionary<dynamic, dynamic> info)
 {
-    public int Id { get; } = info.GetHashCode();
+    public override bool Equals(object? obj)
+    {
+        return obj != null && GetHashCode() == obj.GetHashCode();
+    }
+
+    public override int GetHashCode()
+    {
+        return Type.GetHashCode() ^ Name.GetHashCode() ^ Port.GetHashCode();
+    }
 
     public Dictionary<dynamic, dynamic> Info { get; set; } = info;
 
@@ -40,24 +47,10 @@ public class ProxyNode(Dictionary<dynamic, dynamic> info)
 
     public GeoInfo GeoInfo { get; set; } = new GeoInfo();
 
-    public static List<ProxyNode> Distinct(List<ProxyNode> proxies, DistinctStrategy strategy)
+    public static List<ProxyNode> Distinct(List<ProxyNode> proxies)
     {
-        // 按去重策略去重
-        switch (strategy)
-        {
-            case DistinctStrategy.type_server_port:
-                proxies = proxies.DistinctBy((proxy) => string.Join('_', [proxy.Type, proxy.Server, proxy.Port])).ToList();
-                break;
-            case DistinctStrategy.type_server:
-                proxies = proxies.DistinctBy((proxy) => string.Join('_', [proxy.Type, proxy.Server])).ToList();
-                break;
-            case DistinctStrategy.server_port:
-                proxies = proxies.DistinctBy((proxy) => string.Join('_', [proxy.Server, proxy.Port])).ToList();
-                break;
-            case DistinctStrategy.server:
-                proxies = proxies.DistinctBy((proxy) => string.Join('_', [proxy.Server])).ToList();
-                break;
-        }
+        // 去重（协议类型 + 服务器 + 端口）
+        proxies = proxies.DistinctBy((proxy) => string.Join('_', [proxy.Type, proxy.Server, proxy.Port])).ToList();
         // 名称重复的添加序号后缀
         proxies = proxies
             .GroupBy(p => p.Name)
@@ -103,7 +96,7 @@ public class ProxyNode(Dictionary<dynamic, dynamic> info)
                     proxy.Name = $"{proxy.GeoInfo.Emoji} {proxy.GeoInfo.Country}";
                 });
                 // 国家名称_序号
-                Distinct(proxies, options.DistinctStrategy);
+                proxies = Distinct(proxies);
                 Logger.Info("GEO重命名完成");
             }
             // 添加节点前缀

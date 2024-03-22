@@ -25,7 +25,7 @@ public class MetaSpeedTest
             List<ProxyNode> proxies = MetaConfig.GetConfigProxies(options.Config);
             // 节点去重
             EnsurePorxiesLeft(proxies);
-            proxies = ProxyNode.Distinct(proxies, options.DistinctStrategy);
+            proxies = ProxyNode.Distinct(proxies);
             // 节点净化(分组 + 二分测试校验)
             EnsurePorxiesLeft(proxies);
             proxies = ProxyNode.Purify(proxies);
@@ -107,7 +107,7 @@ public class MetaSpeedTest
                         return proxied.Where(proxy =>
                         {
                             if (!delayTestResult.TryGetValue(proxy, out var result) || result == null) return true;
-                            return result.Result() > options.DelayTestFilter;
+                            return result.Result() <= 0 || result.Result() > options.DelayTestFilter;
                         }).ToList();
                     }));
                     batchIndex += 1;
@@ -147,7 +147,7 @@ public class MetaSpeedTest
                     {
                         // 筛选出下载速度不满足过滤条件的节点
                         if (!speedTestResult.TryGetValue(proxy, out var result) || result == null) return true;
-                        return result.Result() < options.DelayTestFilter;
+                        return result.Result() <= 0 || result.Result() < options.DelayTestFilter;
                     }).ToList();
                 }));
                 chunkIndex += 1;

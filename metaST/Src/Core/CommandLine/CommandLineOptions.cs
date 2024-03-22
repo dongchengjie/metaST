@@ -7,9 +7,6 @@ public class CommandLineOptions
     [Option("config", Required = true, HelpText = "clash配置文件路径(或链接地址)")]
     public required string Config { get; set; }
 
-    [Option("distinct", Required = false, Default = DistinctStrategy.type_server_port, HelpText = "节点去重策略")]
-    public required DistinctStrategy DistinctStrategy { get; set; }
-
     [Option("de", Required = false, Default = true, HelpText = "是否进行延迟测试")]
     public required bool DelayTestEnable { get; set; }
 
