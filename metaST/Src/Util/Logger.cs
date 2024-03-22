@@ -12,6 +12,7 @@ public class Logger
     public static double RefreshInterval { get; set; } = 1000;
     // 日志输出文件
     public static string LogPath { get; set; } = AppDomain.CurrentDomain.BaseDirectory;
+    private static readonly string logFileName = DateTimeOffset.Now.ToUnixTimeSeconds() + ".log";
     // 前置处理器
     public static Func<string, bool, string> PreProcessor { get; set; } = (str, console) => str;
     // 控制台原始颜色
@@ -62,7 +63,7 @@ public class Logger
         // 写入文件
         using MemoryStream stream = new(Encoding.UTF8.GetBytes(lines));
         Directory.CreateDirectory(Path.Combine(LogPath, "log"));
-        string logFile = Path.Combine(LogPath, "log", DateTimeOffset.Now.ToUnixTimeSeconds() + ".log");
+        string logFile = Path.Combine(LogPath, "log", logFileName);
         using FileStream fileStream = new(logFile, FileMode.Append);
         stream.CopyTo(fileStream);
     }
