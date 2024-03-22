@@ -6,10 +6,10 @@ namespace Core.Meta;
 public class MetaCore
 {
     // Meta内核解压路径
-    private static readonly string metaCorePath = Path.Combine(Constants.WorkSpace, Constants.executableName);
+    private static readonly string metaCorePath = Path.Combine(Constants.WorkSpace, Constants.ExecutableName);
     static MetaCore()
     {
-        string resourceName = "meta." + Platform.GetPlatform() + "." + Constants.executableName;
+        string resourceName = "meta." + Platform.GetPlatform() + "." + Constants.ExecutableName;
         Resources.Extract(resourceName, metaCorePath, false);
     }
 

@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Net;
 using Core.CommandLine;
 using Core.CommandLine.Enum;
@@ -76,15 +77,21 @@ public class ProxyNode(Dictionary<dynamic, dynamic> info)
             if (options.GeoLookup)
             {
                 Logger.Info("开始GEO重命名...");
-                // 查询GEO信息
-                Dictionary<IWebProxy, GeoInfo> infoMap = MetaService.UsingProxies(proxies, proxied =>
+                ConcurrentDictionary<IWebProxy, GeoInfo> infoMap = [];
+                foreach (ProxyNode[] chunk in proxies.Chunk(Constants.MaxPortsOccupied))
                 {
-                    return proxied
-                        .Select(proxy => Task.Run(() => GeoElector.LookupAsnyc(proxy.Mixed)))
-                        .Select(task => task.Result)
-                        .DistinctBy((info) => info.Proxy)
-                        .ToDictionary(info => info.Proxy ??= new WebProxy(), info => info);
-                });
+                    // 查询GEO信息
+                    MetaService.UsingProxies(proxies, proxied =>
+                    {
+                        return proxied.AsParallel().Select(proxy =>
+                        {
+                            GeoInfo geoInfo = Task.Run(() => GeoElector.LookupAsnyc(proxy.Mixed)).Result;
+                            infoMap.TryAdd(proxy.Mixed ??= new WebProxy(), geoInfo);
+                            return geoInfo;
+                        }).ToList();
+                    });
+                }
+
                 // 分配GEO信息，并重命名
                 proxies.ForEach((proxy) =>
                 {

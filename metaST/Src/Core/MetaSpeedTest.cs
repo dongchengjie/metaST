@@ -15,8 +15,6 @@ using Util;
 namespace Core.MetaSpeedTest;
 public class MetaSpeedTest
 {
-    // 最大占用端口数
-    private static readonly int MAX_PORTS_NUM = 200;
     public static void Main(CommandLineOptions options)
     {
         try
@@ -58,7 +56,7 @@ public class MetaSpeedTest
     private static void Initialize(CommandLineOptions options)
     {
         // 清理残余进程
-        Processes.FindAndKill(Constants.executableName);
+        Processes.FindAndKill(Constants.ExecutableName);
         // 日志配置
         Logger.LogLevel = options.Verbose ? LogLevel.trace : LogLevel.info;
         Logger.RefreshInterval = 500;
@@ -82,7 +80,7 @@ public class MetaSpeedTest
             Logger.Info("开始延迟测试...");
             List<ProxyNode> exclueded = [];
             int chunkIndex = 0;
-            foreach (ProxyNode[] chunk in proxies.Chunk(MAX_PORTS_NUM))
+            foreach (ProxyNode[] chunk in proxies.Chunk(Constants.MaxPortsOccupied))
             {
                 // 限制延迟测试并行度，提高准确率
                 int batchIndex = 0;
@@ -98,7 +96,7 @@ public class MetaSpeedTest
                                 DelayProfiler delayProfiler = new(options.DelayTestUrl, options.DelayTestTimeout, options.DelayTestRounds);
                                 DelayResult result = delayProfiler.TestAsync(item.Proxy.Mixed).Result;
                                 // 输出延迟测试结果
-                                int current = chunkIndex * MAX_PORTS_NUM + batchIndex * proxied.Count + item.Index + 1;
+                                int current = chunkIndex * Constants.MaxPortsOccupied + batchIndex * proxied.Count + item.Index + 1;
                                 result.Print(Strings.Padding(Emoji.EmojiToShort($"[{current}/{proxies.Count}] {item.Proxy.Name}"), 64));
                                 return new { item.Proxy, Result = result };
                             }).ToDictionary(item => item.Proxy, item => item.Result);
@@ -126,7 +124,7 @@ public class MetaSpeedTest
             Logger.Info("开始下载速度测试...");
             List<ProxyNode> exclueded = [];
             int chunkIndex = 0;
-            foreach (ProxyNode[] chunk in proxies.Chunk(MAX_PORTS_NUM))
+            foreach (ProxyNode[] chunk in proxies.Chunk(Constants.MaxPortsOccupied))
             {
                 Dictionary<ProxyNode, SpeedResult> speedTestResult = [];
                 exclueded.AddRange(MetaService.UsingProxies([.. chunk], (proxied) =>
@@ -138,7 +136,7 @@ public class MetaSpeedTest
                             SpeedProfiler speedProfiler = new(options.SpeedTestUrl, options.SpeedTestTimeout, options.SpeedTestDuration, options.SpeedTestRounds);
                             SpeedResult result = speedProfiler.TestAsync(item.Proxy.Mixed).Result;
                             // 输出下载速度测试结果
-                            int current = chunkIndex * MAX_PORTS_NUM + item.Index + 1;
+                            int current = chunkIndex * Constants.MaxPortsOccupied + item.Index + 1;
                             result.Print(Strings.Padding(Emoji.EmojiToShort($"[{current}/{proxies.Count}] {item.Proxy.Name}"), 64));
                             return new { item.Proxy, Result = result };
                         }).ToDictionary(item => item.Proxy, item => item.Result);

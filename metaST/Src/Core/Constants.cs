@@ -7,7 +7,7 @@ public class Constants
     // 内核名称
     public static readonly string MetaCoreName = "mihomo";
     // Meta内核可执行程序名
-    public static readonly string executableName = MetaCoreName + (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ".exe" : string.Empty);
+    public static readonly string ExecutableName = MetaCoreName + (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ".exe" : string.Empty);
     // 用户目录
     public static readonly string UserProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
     // 配置目录
@@ -20,4 +20,6 @@ public class Constants
     public static readonly string WorkSpace = Path.Combine(TempPath, "." + Assembly.GetEntryAssembly()?.GetName().Name);
     // 工作目录/临时目录
     public static readonly string WorkSpaceTemp = Path.Combine(WorkSpace, "temp");
+    // 最大占用端口数
+    public static readonly int MaxPortsOccupied = 200;
 }
