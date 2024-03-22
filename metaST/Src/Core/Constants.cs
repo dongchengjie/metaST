@@ -22,4 +22,6 @@ public class Constants
     public static readonly string WorkSpaceTemp = Path.Combine(WorkSpace, "temp");
     // 最大占用端口数
     public static readonly int MaxPortsOccupied = 200;
+    // 最大占用端口数
+    public static readonly int MaxDelayTestThreads = 64;
 }

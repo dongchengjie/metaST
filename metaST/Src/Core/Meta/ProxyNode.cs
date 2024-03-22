@@ -81,7 +81,7 @@ public class ProxyNode(Dictionary<dynamic, dynamic> info)
                 foreach (ProxyNode[] chunk in proxies.Chunk(Constants.MaxPortsOccupied))
                 {
                     // 查询GEO信息
-                    MetaService.UsingProxies(proxies, proxied =>
+                    MetaService.UsingProxies([.. chunk], proxied =>
                     {
                         return proxied.AsParallel().Select(proxy =>
                         {
@@ -111,5 +111,37 @@ public class ProxyNode(Dictionary<dynamic, dynamic> info)
             }
         }
         return proxies ?? [];
+    }
+
+    public static List<ProxyNode> Purify(List<ProxyNode> proxies)
+    {
+        Logger.Info("开始节点净化...");
+        List<ProxyNode> purified = [];
+        foreach (ProxyNode[] chunk in proxies.Chunk(Constants.MaxPortsOccupied)) { purified.AddRange(BinaryTest([.. chunk])); }
+        if (purified.Count < proxies.Count)
+        {
+            Logger.Warn($"节点净化完成,排除{proxies.Count - purified.Count}个节点");
+        }
+        else
+        {
+            Logger.Warn("节点净化完成");
+        }
+        return purified;
+    }
+
+    private static List<ProxyNode> BinaryTest(List<ProxyNode> proxies)
+    {
+        if (proxies != null && proxies.Count > 0)
+        {
+            try
+            {
+                return MetaService.UsingProxies(proxies, (proxied) => proxies);
+            }
+            catch
+            {
+                return proxies.Count > 1 ? [.. BinaryTest(proxies.Take(proxies.Count / 2).ToList()), .. BinaryTest(proxies.Skip(proxies.Count / 2).ToList())] : [];
+            }
+        }
+        return [];
     }
 }

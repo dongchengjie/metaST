@@ -26,6 +26,9 @@ public class MetaSpeedTest
             // 节点去重
             EnsurePorxiesLeft(proxies);
             proxies = ProxyNode.Distinct(proxies, options.DistinctStrategy);
+            // 节点净化(分组 + 二分测试校验)
+            EnsurePorxiesLeft(proxies);
+            proxies = ProxyNode.Purify(proxies);
             // 延迟测试、筛选
             proxies = DelayTestFilter(proxies, options);
             // 下载速度测试、筛选
@@ -84,7 +87,7 @@ public class MetaSpeedTest
             {
                 // 限制延迟测试并行度，提高准确率
                 int batchIndex = 0;
-                int concurrency = Math.Min(options.DelayTestThreads, 64);
+                int concurrency = Math.Min(options.DelayTestThreads, Constants.MaxDelayTestThreads);
                 foreach (ProxyNode[] batch in chunk.Chunk(concurrency))
                 {
                     exclueded.AddRange(MetaService.UsingProxies([.. batch], (proxied) =>
