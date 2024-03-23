@@ -96,8 +96,8 @@ public class MetaSpeedTest
             {
                 // 限制延迟测试并行度，提高准确率
                 int batchIndex = 0;
-                int concurrency = Math.Min(options.DelayTestThreads, Constants.MaxDelayTestThreads);
-                foreach (ProxyNode[] batch in chunk.Chunk(concurrency))
+                int parallelism = Math.Min(options.DelayTestThreads, Constants.MaxDelayTestThreads);
+                foreach (ProxyNode[] batch in chunk.Chunk(parallelism))
                 {
                     exclueded.AddRange(MetaService.UsingProxies([.. batch], (proxied) =>
                     {

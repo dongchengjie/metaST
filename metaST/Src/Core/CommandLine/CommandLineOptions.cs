@@ -16,7 +16,7 @@ public class CommandLineOptions
     [Option("dt", Required = false, Default = 1500, HelpText = "延迟测试超时(ms)")]
     public required int DelayTestTimeout { get; set; }
 
-    [Option("dn", Required = false, Default = 32, HelpText = "延迟测试线程数量")]
+    [Option("dn", Required = false, Default = 16, HelpText = "延迟测试线程数量")]
     public required int DelayTestThreads { get; set; }
 
     [Option("dr", Required = false, Default = 4, HelpText = "延迟测试轮数")]
