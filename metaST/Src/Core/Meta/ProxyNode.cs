@@ -138,7 +138,7 @@ public class ProxyNode(Dictionary<dynamic, dynamic> info)
         }
         else
         {
-            Logger.Warn("节点净化完成");
+            Logger.Info("节点净化完成");
         }
         return purified;
     }

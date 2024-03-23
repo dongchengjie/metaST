@@ -181,7 +181,7 @@ public class MetaSpeedTest
             configFile = Path.GetFileNameWithoutExtension(configFile);
             outputPath = Path.Combine(Constants.AppPath, configFile + "_result.yaml");
         }
-        Files.WriteToFile(new MemoryStream(Encoding.UTF8.GetBytes(configContent)), outputPath);
+        Files.WriteToFile(new MemoryStream(Encoding.UTF8.GetBytes(configContent)), Path.GetFullPath(outputPath));
         Logger.Info($"输出配置文件: {outputPath}");
     }
 }
