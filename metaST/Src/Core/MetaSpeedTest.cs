@@ -100,7 +100,7 @@ public class MetaSpeedTest
                                 DelayResult result = delayProfiler.TestAsync(item.Proxy.Mixed).Result;
                                 // 输出延迟测试结果
                                 int current = chunkIndex * Constants.MaxPortsOccupied + batchIndex * proxied.Count + item.Index + 1;
-                                result.Print(Strings.Padding(Emoji.EmojiToShort($"[{current}/{proxies.Count}] {item.Proxy.Name}"), 64));
+                                result.Print(Strings.Padding(Emoji.EmojiToShort($"[{current}/{proxies.Count}] {item.Proxy.Name}"), Constants.MaxSubject));
                                 return new { item.Proxy, Result = result };
                             }).ToDictionary(item => item.Proxy, item => item.Result);
                         // 筛选出延迟不满足过滤条件的节点
@@ -140,7 +140,7 @@ public class MetaSpeedTest
                             SpeedResult result = speedProfiler.TestAsync(item.Proxy.Mixed).Result;
                             // 输出下载速度测试结果
                             int current = chunkIndex * Constants.MaxPortsOccupied + item.Index + 1;
-                            result.Print(Strings.Padding(Emoji.EmojiToShort($"[{current}/{proxies.Count}] {item.Proxy.Name}"), 64));
+                            result.Print(Strings.Padding(Emoji.EmojiToShort($"[{current}/{proxies.Count}] {item.Proxy.Name}"), Constants.MaxSubject));
                             return new { item.Proxy, Result = result };
                         }).ToDictionary(item => item.Proxy, item => item.Result);
                     return proxied.Where(proxy =>

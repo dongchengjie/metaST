@@ -24,4 +24,6 @@ public class Constants
     public static readonly int MaxPortsOccupied = 500;
     // 最大占用端口数
     public static readonly int MaxDelayTestThreads = 64;
+    // 主体内容最大字符宽度s
+    public static readonly int MaxSubject = 48;
 }

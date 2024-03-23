@@ -82,7 +82,7 @@ public class ProxyNode(Dictionary<dynamic, dynamic> info)
                             GeoInfo geoInfo = Task.Run(() => GeoElector.LookupAsnyc(proxy.Mixed)).Result;
                             infoMap.TryAdd(proxy.Mixed ??= new WebProxy(), geoInfo);
                             int current = chunkIndex * Constants.MaxPortsOccupied + index + 1;
-                            Logger.Info(Strings.Padding(Emoji.EmojiToShort($"[{current}/{proxies.Count}] {proxy.Name}"), 64) + " ==> " + $"{geoInfo.CountryCode}");
+                            Logger.Info(Strings.Padding(Emoji.EmojiToShort($"[{current}/{proxies.Count}] {proxy.Name}"), Constants.MaxSubject) + " ==> " + $"{geoInfo.CountryCode}");
                             return geoInfo;
                         }).ToList();
                     });
@@ -117,7 +117,7 @@ public class ProxyNode(Dictionary<dynamic, dynamic> info)
         foreach (ProxyNode[] chunk in proxies.Chunk(Constants.MaxPortsOccupied))
         {
             purified.AddRange(BinaryTest([.. chunk]));
-            Logger.Info(Strings.Padding($"[{chunkIndex * Constants.MaxPortsOccupied + chunk.Length}/{proxies.Count}]", 8) + " 节点净化...");
+            Logger.Info(Strings.Padding($"[{chunkIndex * Constants.MaxPortsOccupied + chunk.Length}/{proxies.Count}]", Constants.MaxSubject) + " 节点净化...");
             chunkIndex += 1;
         }
         if (purified.Count < proxies.Count)
