@@ -174,6 +174,6 @@ public class ProxyNode(Dictionary<dynamic, dynamic> info)
         {
             return proxies.Take(Context.Options.Top).ToList();
         }
-        return [];
+        return proxies ?? [];
     }
 }
