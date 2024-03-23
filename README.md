@@ -1,6 +1,6 @@
 # metaST
 
-> A <a href="https://github.com/MetaCubeX/mihomo">clash.meta</a>-based CLI program for proxy testing.
+> A <a href="https://github.com/MetaCubeX/mihomo">Clash.Meta</a>-based CLI program for proxy testing.
 
 ## Features
 
@@ -9,6 +9,7 @@
 - Supports grouping proxies  by region.
 - Region emojis and flags provided.
 - Built-in rulesets provided.
+- Windows and Linux platform supported.
 
 ## Usage
 
