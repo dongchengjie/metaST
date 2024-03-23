@@ -1,16 +1,13 @@
-> 首个发布版本
-
 ### 新增
 
-- 基于 Clash.Meta 内核，支持多种协议
-- 支持节点去重、纠错排除
-- 支持节点延迟测试、筛选
-- 支持节点下载速度测试、筛选
-- 支持按节点归属地重命名、分组
-- 归属地 Emoji、分组国旗 Icon
-- 可选 Clash 规则集 [acl4ssr](https://github.com/ACL4SSR/ACL4SSR/tree/master)、[loyalsoldier](https://github.com/Loyalsoldier/clash-rules)
-- 支持 Windows、Linux 系统
+- GEO 查询添加并行度限制
+- 配置内容添加注释信息
 
 ### 变更
 
+- 延迟测试默认线程数变更为 16
+
 ### 修复
+
+- 修复 `bool` 类型命令行参数设置无效的问题
+- 修复 GEO 查询结果汇总处理错误
