@@ -1,7 +1,6 @@
 using System.Reflection;
 using System.Text;
 using Core.CommandLine;
-using Core.Geo;
 using Core.Meta;
 using Core.Meta.Config;
 using Core.Test.Profiler;
@@ -53,6 +52,8 @@ public class MetaSpeedTest
         }
         finally
         {
+            // 刷新输出
+            Logger.Terminate();
             // 程序结束时暂停
             if (options.Pause)
             {
