@@ -11,7 +11,7 @@ public partial class Youtube : IGeoLookup
         GeoInfo geoInfo = new();
         try
         {
-            string html = HttpRequest.GetForBody("https://www.youtube.com/", IGeoLookup.LookupTimout, proxy);
+            string html = HttpRequest.GetForBody("http://www.youtube.com/", IGeoLookup.LookupTimout, proxy);
             if (!string.IsNullOrWhiteSpace(html))
             {
                 if (html.Contains("\"gl\":") || html.Contains("\"remoteHost\""))

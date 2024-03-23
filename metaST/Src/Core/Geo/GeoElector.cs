@@ -42,6 +42,6 @@ public class GeoElector
             .GroupBy(identifier)
             .OrderByDescending(group => group.Count())
             .Select(group => group.Key)
-            .FirstOrDefault(key => key != null);
+            .FirstOrDefault(key => !string.IsNullOrWhiteSpace(key));
     }
 }
