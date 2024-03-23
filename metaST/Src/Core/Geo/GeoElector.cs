@@ -17,10 +17,12 @@ public class GeoElector
         return Task.Run(() =>
         {
             List<GeoInfo?> infos = [];
-            Task.WaitAny(
-                Task.WhenAll(instances.Select((instance) => Task.Run(() => infos.Add(instance?.Lookup(proxy)))).ToArray()),
-                Task.Delay(5000)
-            );
+            // 设置查询超时
+            IGeoLookup.LookupTimout = Context.Options.GeoLookupTimeout;
+            // 等待查询结束
+            Task.WaitAll(
+                instances.Select((instance) => Task.Run(() => infos.Add(instance?.Lookup(proxy)))
+            ).ToArray());
             infos = infos.Where(value => value != null).ToList();
             if (infos.Count > 0)
             {

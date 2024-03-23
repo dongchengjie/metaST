@@ -34,7 +34,7 @@ internal class Program
                 settings.AutoVersion = true;                    // 自动生成--version
                 settings.Copyright = string.Empty;              // 版权信息
                 settings.Heading = string.Empty;                // 顶部信息
-                settings.MaximumDisplayWidth = 100;             // 单行展示字数限制
+                settings.MaximumDisplayWidth = 128;             // 单行展示字数限制
                 return HelpText.DefaultParsingErrorsHandler(result, settings);
             }, e => e));
         }

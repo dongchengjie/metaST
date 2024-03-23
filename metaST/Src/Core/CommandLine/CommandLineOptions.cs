@@ -8,7 +8,7 @@ public class CommandLineOptions
     public required string Config { get; set; }
 
     [Option("de", Required = false, Default = true, HelpText = "是否进行延迟测试")]
-    public required bool DelayTestEnable { get; set; }
+    public required bool? DelayTestEnable { get; set; }
 
     [Option("du", Required = false, Default = "https://www.google.com/gen_204", HelpText = "延迟测试链接")]
     public required string DelayTestUrl { get; set; }
@@ -26,7 +26,7 @@ public class CommandLineOptions
     public required double DelayTestFilter { get; set; }
 
     [Option("se", Required = false, Default = false, HelpText = "是否进行下载测试")]
-    public required bool SpeedTestEnable { get; set; }
+    public required bool? SpeedTestEnable { get; set; }
 
     [Option("su", Required = false, Default = "https://cdn.cloudflare.steamstatic.com/steam/apps/256843155/movie_max.mp4", HelpText = "下载测试链接")]
     public required string SpeedTestUrl { get; set; }
@@ -52,8 +52,11 @@ public class CommandLineOptions
     [Option("tag", Required = false, HelpText = "节点命名前缀")]
     public string Tag { get; set; } = string.Empty;
 
-    [Option("geo", Required = false, Default = true, HelpText = "是否查询GEO信息并重命名")]
-    public required bool GeoLookup { get; set; }
+    [Option("geo", Required = false, Default = true, HelpText = "是否GEO查询并重命名")]
+    public required bool? GeoLookup { get; set; }
+
+    [Option("gt", Required = false, Default = 10 * 1000, HelpText = "GEO查询超时(ms)")]
+    public required int GeoLookupTimeout { get; set; }
 
     [Option("group", Required = false, Default = GroupType.regieon, HelpText = "代理组类型")]
     public required GroupType GroupType { get; set; }

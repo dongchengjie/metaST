@@ -35,12 +35,13 @@ public class MetaSpeedTest
             // 下载速度测试、筛选
             proxies = SpeedTestFilter(proxies);
             // 节点排序
+            EnsurePorxiesLeft(proxies);
             proxies = ProxyNode.Sort(proxies);
             // 截取前若干条记录
             proxies = ProxyNode.Truncate(proxies);
             // 节点GEO重命名
             EnsurePorxiesLeft(proxies);
-            proxies = !string.IsNullOrWhiteSpace(options.Tag) || options.GeoLookup ? ProxyNode.Rename(proxies) : proxies;
+            proxies = !string.IsNullOrWhiteSpace(options.Tag) || (options.GeoLookup ?? true) ? ProxyNode.Rename(proxies) : proxies;
             // 生成配置文件并输出
             EnsurePorxiesLeft(proxies);
             string configYaml = MetaConfig.GenerateConfig(proxies);
@@ -86,7 +87,7 @@ public class MetaSpeedTest
     private static List<ProxyNode> DelayTestFilter(List<ProxyNode> proxies)
     {
         CommandLineOptions options = Context.Options;
-        if (options.DelayTestEnable)
+        if (options.DelayTestEnable ?? true)
         {
             Logger.Info("开始延迟测试...");
             List<ProxyNode> exclueded = [];
@@ -132,7 +133,7 @@ public class MetaSpeedTest
     private static List<ProxyNode> SpeedTestFilter(List<ProxyNode> proxies)
     {
         CommandLineOptions options = Context.Options;
-        if (options.SpeedTestEnable)
+        if (options.SpeedTestEnable ?? false)
         {
             Logger.Info("开始下载速度测试...");
             List<ProxyNode> exclueded = [];

@@ -6,5 +6,5 @@ public interface IGeoLookup
 {
     GeoInfo Lookup(IWebProxy? proxy);
 
-    protected static readonly double LookupTimout = 3000;
+    public static double LookupTimout { get; set; } = 5000;
 }

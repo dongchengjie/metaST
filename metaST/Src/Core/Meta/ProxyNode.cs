@@ -73,10 +73,10 @@ public class ProxyNode(Dictionary<dynamic, dynamic> info)
         CommandLineOptions options = Context.Options;
         if (proxies != null && proxies.Count > 0)
         {
-            // 根据GEO重命名
-            if (options.GeoLookup)
+            // 查询GEO信息重命名
+            if (options.GeoLookup ?? true)
             {
-                Logger.Info("开始GEO重命名...");
+                Logger.Info("开始查询GEO信息...");
                 ConcurrentDictionary<IWebProxy, GeoInfo> infoMap = [];
                 int chunkIndex = 0;
                 foreach (ProxyNode[] chunk in proxies.Chunk(Constants.MaxPortsOccupied))
@@ -96,23 +96,29 @@ public class ProxyNode(Dictionary<dynamic, dynamic> info)
                     chunkIndex += 1;
                 }
 
-                // 分配GEO信息，并重命名
+                // 分配GEO信息
                 proxies.ForEach((proxy) =>
                 {
                     proxy.GeoInfo = proxy.Mixed != null && infoMap.TryGetValue(proxy.Mixed, out var geoInfo) ? geoInfo : new GeoInfo();
-                    proxy.Name = $"{proxy.GeoInfo.Emoji} {proxy.GeoInfo.Country}";
                 });
-                // 国家名称_序号
-                proxies = Distinct(proxies);
-                Logger.Info("GEO重命名完成");
+                Logger.Info("查询GEO信息完成");
             }
-            // 添加节点前缀
-            if (!string.IsNullOrWhiteSpace(options.Tag))
+            // 节点重命名
+            proxies.ForEach(proxy =>
             {
-                Logger.Info($"添加Tag: {options.Tag}");
-                proxies.ForEach(proxy => proxy.Name = $"{options.Tag}_{proxy.Name}");
-                Logger.Info($"添加Tag完成");
-            }
+                List<string?> frozen = [
+                    (options.GeoLookup??true) ? proxy.GeoInfo.Emoji : string.Empty
+                ];
+                List<string?> unfrozen = [
+                    !string.IsNullOrWhiteSpace(options.Tag) ? options.Tag : string.Empty,
+                    proxy.GeoInfo.Country
+                ];
+                string frozenPart = string.Join("_", frozen.Where(str => !string.IsNullOrWhiteSpace(str)).ToList());
+                string unfrozenPart = string.Join("_", unfrozen.Where(str => !string.IsNullOrWhiteSpace(str)).ToList());
+                proxy.Name = $"{frozenPart} {unfrozenPart}";
+            });
+            // 重名添加序号
+            proxies = Distinct(proxies);
         }
         return proxies ?? [];
     }
@@ -157,11 +163,11 @@ public class ProxyNode(Dictionary<dynamic, dynamic> info)
     public static List<ProxyNode> Sort(List<ProxyNode> proxies)
     {
         CommandLineOptions options = Context.Options;
-        if (SortPreference.delay.Equals(options.SortPreference) && options.DelayTestEnable)
+        if (SortPreference.delay.Equals(options.SortPreference) && (options.DelayTestEnable ?? true))
         {
             return [.. proxies.OrderBy((proxy) => proxy.DelayResult.Result())];
         }
-        if (SortPreference.speed.Equals(options.SortPreference) && options.SpeedTestEnable)
+        if (SortPreference.speed.Equals(options.SortPreference) && (options.SpeedTestEnable ?? false))
         {
             return [.. proxies.OrderByDescending((proxy) => proxy.SpeedResult.Result())];
         }
