@@ -1,4 +1,19 @@
+# 是否允许局域网访问
 allow-lan: true
+# 运行模式
+mode: rule
+# 日志级别
+log-level: info
+# 是否允许内核接受IPv6流量
+ipv6: true
+# HTTP REST API外部控制监听地址
+external-controller: 0.0.0.0:9090
+# 全局客户端指纹(支持VLESS,Vmess,trojan)
+global-client-fingerprint: chrome
+# 下载外部资源(proxy-provider、rule-provider、GEO等)时使用的UA
+global-ua: clash.meta
+
+# DNS配置
 dns:
   enable: true
   ipv6: true
@@ -8,6 +23,7 @@ dns:
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
   fake-ip-filter:
+    # 排除劫持NCSI(解决出现断网小地球)
     - '+.msftconnecttest.com'
     - '+.msftncsi.com'
   use-hosts: true
@@ -26,6 +42,12 @@ dns:
       - gfw
     ipcidr:
       - 240.0.0.0/4
+
+# 自动更新GEO
+geo-auto-update: false
+# 自动更新GEO间隔(单位: 小时)
+geo-update-interval: 24
+# 自定义GEO下载地址
 geox-url:
   geoip: ${options.GithubMirror}https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip.dat
   geosite: ${options.GithubMirror}https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geosite.dat
