@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using Util;
 
 namespace Core.Meta;
@@ -9,8 +10,18 @@ public class MetaCore
     private static readonly string metaCorePath = Path.Combine(Constants.WorkSpace, Constants.ExecutableName);
     static MetaCore()
     {
+        // 解压内核
         string resourceName = "meta." + Platform.GetPlatform() + "." + Constants.ExecutableName;
-        Resources.Extract(resourceName, metaCorePath, false);
+        Resources.Extract(resourceName, metaCorePath, true);
+        // 文件赋权
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            Processes.Start("icacls", metaCorePath + " /grant Everyone:(RX)", (sender, e) => { });
+        }
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            File.SetUnixFileMode(metaCorePath, UnixFileMode.OtherExecute | UnixFileMode.GroupExecute | UnixFileMode.UserExecute);
+        }
     }
 
     public static Task<Process> StartProxy(string configPath)
