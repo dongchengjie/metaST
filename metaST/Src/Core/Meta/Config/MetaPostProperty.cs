@@ -9,7 +9,6 @@ public partial class MetaPostProperty
 {
     public static string Resolve(string config)
     {
-        CommandLineOptions options = Context.Options;
         // 读取所有${}占位符
         Regex regex = PlaceholderRegex();
         MatchCollection matchCollection = regex.Matches(config);
@@ -26,7 +25,6 @@ public partial class MetaPostProperty
 
     private static string ProrpertyValue(string prorperty)
     {
-        CommandLineOptions options = Context.Options;
         // 处理命令行参数
         if (prorperty.StartsWith("options")) return OptionValue(prorperty);
         // 处理图标资源

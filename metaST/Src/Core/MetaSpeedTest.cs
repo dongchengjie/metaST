@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Text;
 using Core.CommandLine;
+using Core.Geo;
 using Core.Meta;
 using Core.Meta.Config;
 using Core.Test.Profiler;
@@ -33,12 +34,16 @@ public class MetaSpeedTest
             proxies = DelayTestFilter(proxies);
             // 下载速度测试、筛选
             proxies = SpeedTestFilter(proxies);
+            // 节点排序
+            proxies = ProxyNode.Sort(proxies);
+            // 截取前若干条记录
+            proxies = ProxyNode.Truncate(proxies);
             // 节点GEO重命名
             EnsurePorxiesLeft(proxies);
             proxies = !string.IsNullOrWhiteSpace(options.Tag) || options.GeoLookup ? ProxyNode.Rename(proxies) : proxies;
             // 生成配置文件并输出
             EnsurePorxiesLeft(proxies);
-            string configYaml = MetaConfig.GenerateRegionConfig(proxies);
+            string configYaml = MetaConfig.GenerateConfig(proxies);
             WriteToFile(configYaml);
         }
         catch (Exception ex)
@@ -101,6 +106,7 @@ public class MetaSpeedTest
                             {
                                 DelayProfiler delayProfiler = new(options.DelayTestUrl, options.DelayTestTimeout, options.DelayTestRounds);
                                 DelayResult result = delayProfiler.TestAsync(item.Proxy.Mixed).Result;
+                                item.Proxy.DelayResult = result;
                                 // 输出延迟测试结果
                                 int current = chunkIndex * Constants.MaxPortsOccupied + batchIndex * proxied.Count + item.Index + 1;
                                 result.Print(Strings.Padding(Emoji.EmojiToShort($"[{current}/{proxies.Count}] {item.Proxy.Name}"), Constants.MaxSubject));
@@ -142,6 +148,7 @@ public class MetaSpeedTest
                         {
                             SpeedProfiler speedProfiler = new(options.SpeedTestUrl, options.SpeedTestTimeout, options.SpeedTestDuration, options.SpeedTestRounds);
                             SpeedResult result = speedProfiler.TestAsync(item.Proxy.Mixed).Result;
+                            item.Proxy.SpeedResult = result;
                             // 输出下载速度测试结果
                             int current = chunkIndex * Constants.MaxPortsOccupied + item.Index + 1;
                             result.Print(Strings.Padding(Emoji.EmojiToShort($"[{current}/{proxies.Count}] {item.Proxy.Name}"), Constants.MaxSubject));
@@ -151,7 +158,7 @@ public class MetaSpeedTest
                     {
                         // 筛选出下载速度不满足过滤条件的节点
                         if (!speedTestResult.TryGetValue(proxy, out var result) || result == null) return true;
-                        return result.Result() <= 0 || result.Result() < options.DelayTestFilter;
+                        return result.Result() <= 0 || result.Result() < options.SpeedTestFilter;
                     }).ToList();
                 }));
                 chunkIndex += 1;

@@ -1,7 +1,9 @@
 using System.Collections.Concurrent;
 using System.Net;
 using Core.CommandLine;
+using Core.CommandLine.Enum;
 using Core.Geo;
+using Core.Test.Reuslt;
 using Util;
 
 namespace Core.Meta;
@@ -45,7 +47,11 @@ public class ProxyNode(Dictionary<dynamic, dynamic> info)
 
     public IWebProxy? Mixed { get; set; }
 
-    public GeoInfo GeoInfo { get; set; } = new GeoInfo();
+    public DelayResult DelayResult { get; set; } = new();
+
+    public SpeedResult SpeedResult { get; set; } = new();
+
+    public GeoInfo GeoInfo { get; set; } = new();
 
     public static List<ProxyNode> Distinct(List<ProxyNode> proxies)
     {
@@ -144,6 +150,29 @@ public class ProxyNode(Dictionary<dynamic, dynamic> info)
             {
                 return proxies.Count > 1 ? [.. BinaryTest(proxies.Take(proxies.Count / 2).ToList()), .. BinaryTest(proxies.Skip(proxies.Count / 2).ToList())] : [];
             }
+        }
+        return [];
+    }
+
+    public static List<ProxyNode> Sort(List<ProxyNode> proxies)
+    {
+        CommandLineOptions options = Context.Options;
+        if (SortPreference.delay.Equals(options.SortPreference) && options.DelayTestEnable)
+        {
+            return [.. proxies.OrderBy((proxy) => proxy.DelayResult.Result())];
+        }
+        if (SortPreference.speed.Equals(options.SortPreference) && options.SpeedTestEnable)
+        {
+            return [.. proxies.OrderByDescending((proxy) => proxy.SpeedResult.Result())];
+        }
+        return proxies;
+    }
+
+    public static List<ProxyNode> Truncate(List<ProxyNode> proxies)
+    {
+        if (Context.Options.Top > 0 && proxies != null && proxies.Count > 0)
+        {
+            return proxies.Take(Context.Options.Top).ToList();
         }
         return [];
     }

@@ -31,7 +31,7 @@ public class CommandLineOptions
     [Option("su", Required = false, Default = "https://cdn.cloudflare.steamstatic.com/steam/apps/256843155/movie_max.mp4", HelpText = "下载测试链接")]
     public required string SpeedTestUrl { get; set; }
 
-    [Option("st", Required = false, Default = 3000, HelpText = "下载测试连接超时(ms)")]
+    [Option("st", Required = false, Default = 5000, HelpText = "下载测试连接超时(ms)")]
     public required int SpeedTestTimeout { get; set; }
 
     [Option("sd", Required = false, Default = 10 * 1000, HelpText = "下载测试时长(ms)")]
@@ -40,10 +40,10 @@ public class CommandLineOptions
     [Option("sr", Required = false, Default = 1, HelpText = "下载测试测试轮数")]
     public required int SpeedTestRounds { get; set; }
 
-    [Option("sf", Required = false, Default = 500 * 1024 * 8, HelpText = "下载测试过滤阈值(bps)")]
+    [Option("sf", Required = false, Default = 1000 * 1024 * 8, HelpText = "下载测试过滤阈值(bps)")]
     public required double SpeedTestFilter { get; set; }
 
-    [Option("sort", Required = false, Default = SortPreference.speed, HelpText = "结果排序偏好")]
+    [Option("sort", Required = false, Default = SortPreference.delay, HelpText = "结果排序偏好")]
     public required SortPreference SortPreference { get; set; }
 
     [Option("top", Required = false, HelpText = "结果截选前若干条")]
@@ -55,7 +55,7 @@ public class CommandLineOptions
     [Option("geo", Required = false, Default = true, HelpText = "是否查询GEO信息并重命名")]
     public required bool GeoLookup { get; set; }
 
-    [Option("group", Required = false, Default = GroupType.standard, HelpText = "代理组类型")]
+    [Option("group", Required = false, Default = GroupType.regieon, HelpText = "代理组类型")]
     public required GroupType GroupType { get; set; }
 
     [Option("ruleset", Required = false, Default = RuleSet.acl4ssr, HelpText = "结果配置文件使用的规则集")]

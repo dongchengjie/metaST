@@ -1,6 +1,7 @@
 using System.Net;
 using System.Text;
 using Core.CommandLine;
+using Core.CommandLine.Enum;
 using Util;
 
 namespace Core.Meta.Config;
@@ -134,7 +135,17 @@ public class MetaConfig
         return new(config, configPath, portManager, proxies);
     }
 
-    public static string GenerateStandardConfig(List<ProxyNode> proxies)
+    public static string GenerateConfig(List<ProxyNode> proxies)
+    {
+        return Context.Options.GroupType switch
+        {
+            GroupType.standard => GenerateStandardConfig(proxies),
+            GroupType.regieon => GenerateRegionConfig(proxies),
+            _ => string.Empty,
+        };
+    }
+
+    private static string GenerateStandardConfig(List<ProxyNode> proxies)
     {
         CommandLineOptions options = Context.Options;
         // 读取模板内容
@@ -157,7 +168,7 @@ public class MetaConfig
         return config;
     }
 
-    public static string GenerateRegionConfig(List<ProxyNode> proxies)
+    private static string GenerateRegionConfig(List<ProxyNode> proxies)
     {
         CommandLineOptions options = Context.Options;
         // 读取模板内容
