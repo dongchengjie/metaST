@@ -10,9 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 安装p7zip
-        run: sudo apt-get install p7zip-full
-
       - name: 拉取最新代码
         uses: actions/checkout@v4
 
@@ -40,14 +37,6 @@ jobs:
           mv metaST/bin/Release/win-arm64/publish/metaST.exe metaST/dest/metaST-win-arm64.exe
           mv metaST/bin/Release/linux-x64/publish/metaST     metaST/dest/metaST-linux-amd64
           mv metaST/bin/Release/linux-arm64/publish/metaST   metaST/dest/metaST-linux-arm64
-
-      - name: 文件压缩
-        id: compress
-        run: |
-          7z a -mx9 -mmt$(nproc) metaST/dest/metaST-win-amd64.7z   metaST/dest/metaST-win-amd64.exe
-          7z a -mx9 -mmt$(nproc) metaST/dest/metaST-win-arm64.7z   metaST/dest/metaST-win-arm64.exe
-          7z a -mx9 -mmt$(nproc) metaST/dest/metaST-linux-amd64.7z metaST/dest/metaST-linux-amd64
-          7z a -mx9 -mmt$(nproc) metaST/dest/metaST-linux-arm64.7z metaST/dest/metaST-linux-arm64
 
       - name: 发布
         id: create_release
