@@ -16,9 +16,8 @@ public class HttpRequest
         {
             return action.Invoke(client);
         }
-        catch (Exception ex)
+        catch
         {
-            Console.Error.WriteLine($"Error using HttpClient: {ex.Message}");
             return default;
         }
     }

@@ -7,7 +7,6 @@ using Core.Test.Reuslt;
 using Util;
 
 namespace Core.Meta;
-
 public class ProxyNode(Dictionary<dynamic, dynamic> info)
 {
     public override bool Equals(object? obj)
