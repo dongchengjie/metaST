@@ -62,8 +62,9 @@ public class ProxyNode(Dictionary<dynamic, dynamic> info)
         return proxies;
     }
 
-    public static List<ProxyNode> Rename(List<ProxyNode> proxies, CommandLineOptions options)
+    public static List<ProxyNode> Rename(List<ProxyNode> proxies)
     {
+        CommandLineOptions options = Context.Options;
         if (proxies != null && proxies.Count > 0)
         {
             // 根据GEO重命名

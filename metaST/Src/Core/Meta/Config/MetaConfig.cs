@@ -116,6 +116,9 @@ public class MetaConfig
             .Replace("listeners: []", $"listeners: \n{listenerList}")
             .Replace("proxies: []", $"proxies: \n{proxyList}");
 
+        // 处理参数
+        config = MetaPostProperty.Resolve(config);
+
         // 输出到文件
         string configPath = Path.Combine(Constants.WorkSpaceTemp, "mixed", Guid.NewGuid().ToString() + ".yaml");
         Files.WriteToFile(new MemoryStream(Encoding.UTF8.GetBytes(config)), configPath);
@@ -131,8 +134,9 @@ public class MetaConfig
         return new(config, configPath, portManager, proxies);
     }
 
-    public static string GenerateStandardConfig(List<ProxyNode> proxies, CommandLineOptions options)
+    public static string GenerateStandardConfig(List<ProxyNode> proxies)
     {
+        CommandLineOptions options = Context.Options;
         // 读取模板内容
         string yaml = GetConfigTemplate("template.standard.yaml");
 
@@ -148,13 +152,14 @@ public class MetaConfig
             .Replace("rules: []", $"{rules}");
 
         // 处理参数
-        config = MetaPostProperty.Resolve(config, options);
+        config = MetaPostProperty.Resolve(config);
 
         return config;
     }
 
-    public static string GenerateRegionConfig(List<ProxyNode> proxies, CommandLineOptions options)
+    public static string GenerateRegionConfig(List<ProxyNode> proxies)
     {
+        CommandLineOptions options = Context.Options;
         // 读取模板内容
         string yaml = GetConfigTemplate("template.region.yaml");
 
@@ -196,7 +201,7 @@ public class MetaConfig
             .Replace("rules: []", $"{rules}");
 
         // 处理参数
-        config = MetaPostProperty.Resolve(config, options);
+        config = MetaPostProperty.Resolve(config);
 
         return config;
     }

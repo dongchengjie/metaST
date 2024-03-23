@@ -7,14 +7,15 @@ namespace Core.Meta.Config;
 
 public partial class MetaPostProperty
 {
-    public static string Resolve(string config, CommandLineOptions options)
+    public static string Resolve(string config)
     {
+        CommandLineOptions options = Context.Options;
         // 读取所有${}占位符
         Regex regex = PlaceholderRegex();
         MatchCollection matchCollection = regex.Matches(config);
         List<GroupCollection> groupCollections = matchCollection.Select(match => match.Groups).DistinctBy(groups => groups[0].Value).ToList();
         // 生成替换映射
-        Dictionary<string, string> replacements = groupCollections.ToDictionary(groups => groups[0].Value, groups => ProrpertyValue(groups[1].Value, options));
+        Dictionary<string, string> replacements = groupCollections.ToDictionary(groups => groups[0].Value, groups => ProrpertyValue(groups[1].Value));
         // 替换掉占位符
         foreach (KeyValuePair<string, string> entry in replacements)
         {
@@ -23,17 +24,19 @@ public partial class MetaPostProperty
         return config;
     }
 
-    private static string ProrpertyValue(string prorperty, CommandLineOptions options)
+    private static string ProrpertyValue(string prorperty)
     {
+        CommandLineOptions options = Context.Options;
         // 处理命令行参数
-        if (prorperty.StartsWith("options")) return OptionValue(prorperty, options);
+        if (prorperty.StartsWith("options")) return OptionValue(prorperty);
         // 处理图标资源
         if (prorperty.StartsWith("icons")) return IconBase64(prorperty);
         throw new InvalidDataException($"处理配置属性值错误，未知的属性: {prorperty}");
     }
 
-    private static string OptionValue(string prorperty, CommandLineOptions options)
+    private static string OptionValue(string prorperty)
     {
+        CommandLineOptions options = Context.Options;
         string json = JsonConvert.SerializeObject(options);
         Dictionary<string, dynamic>? optionMap = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
         prorperty = prorperty.Replace("options.", string.Empty);

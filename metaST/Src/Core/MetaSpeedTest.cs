@@ -30,16 +30,16 @@ public class MetaSpeedTest
             EnsurePorxiesLeft(proxies);
             proxies = ProxyNode.Purify(proxies);
             // 延迟测试、筛选
-            proxies = DelayTestFilter(proxies, options);
+            proxies = DelayTestFilter(proxies);
             // 下载速度测试、筛选
-            proxies = SpeedTestFilter(proxies, options);
+            proxies = SpeedTestFilter(proxies);
             // 节点GEO重命名
             EnsurePorxiesLeft(proxies);
-            proxies = !string.IsNullOrWhiteSpace(options.Tag) || options.GeoLookup ? ProxyNode.Rename(proxies, options) : proxies;
+            proxies = !string.IsNullOrWhiteSpace(options.Tag) || options.GeoLookup ? ProxyNode.Rename(proxies) : proxies;
             // 生成配置文件并输出
             EnsurePorxiesLeft(proxies);
-            string configYaml = MetaConfig.GenerateRegionConfig(proxies, options);
-            WriteToFile(configYaml, options);
+            string configYaml = MetaConfig.GenerateRegionConfig(proxies);
+            WriteToFile(configYaml);
         }
         catch (Exception ex)
         {
@@ -58,6 +58,8 @@ public class MetaSpeedTest
 
     private static void Initialize(CommandLineOptions options)
     {
+        // 设置上下文
+        Context.Options = options;
         // 清理残余进程
         Processes.FindAndKill(Constants.ExecutableName);
         // 日志配置
@@ -76,8 +78,9 @@ public class MetaSpeedTest
         }
     }
 
-    private static List<ProxyNode> DelayTestFilter(List<ProxyNode> proxies, CommandLineOptions options)
+    private static List<ProxyNode> DelayTestFilter(List<ProxyNode> proxies)
     {
+        CommandLineOptions options = Context.Options;
         if (options.DelayTestEnable)
         {
             Logger.Info("开始延迟测试...");
@@ -120,8 +123,9 @@ public class MetaSpeedTest
         return proxies;
     }
 
-    private static List<ProxyNode> SpeedTestFilter(List<ProxyNode> proxies, CommandLineOptions options)
+    private static List<ProxyNode> SpeedTestFilter(List<ProxyNode> proxies)
     {
+        CommandLineOptions options = Context.Options;
         if (options.SpeedTestEnable)
         {
             Logger.Info("开始下载速度测试...");
@@ -158,8 +162,9 @@ public class MetaSpeedTest
         return proxies;
     }
 
-    private static void WriteToFile(string configContent, CommandLineOptions options)
+    private static void WriteToFile(string configContent)
     {
+        CommandLineOptions options = Context.Options;
         string outputPath = options.Output ?? string.Empty;
         if (string.IsNullOrWhiteSpace(outputPath))
         {
