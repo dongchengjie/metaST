@@ -21,7 +21,7 @@ public class DBIP : IGeoLookup
         return new()
         {
             Method = HttpMethod.Get,
-            RequestUri = new Uri("http://api.db-ip.com/v2/free/self"),
+            RequestUri = new Uri("https://api.db-ip.com/v2/free/self"),
             Headers =
             {
                 { "Origin",  "https://db-ip.com/" },

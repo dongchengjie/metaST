@@ -48,7 +48,7 @@ public class MetaSpeedTest
         }
         catch (Exception ex)
         {
-            Logger.Error($"程序异常退出: {ex.Message}");
+            Logger.Error($"程序异常退出: {ex.Message}\n{ex.StackTrace}");
         }
         finally
         {
