@@ -1,14 +1,14 @@
-# metaST
+ <h1><img src="./metaST/Resources/icon.ico" alt="Clash" width="24"/><span>etaST</span></h1>
 
-> A <a href="https://github.com/MetaCubeX/mihomo">Clash.Meta</a>-based CLI program for proxy testing.
+> A <a href="https://github.com/MetaCubeX/mihomo">Clash.Meta</a>-based CLI program for proxy testing.s
 
 ## Features
 
 - Supports proxies delay and speed testing, filtering and sorting.
 - Supports proxies renaming using GEO lookup result.
 - Supports grouping proxies by region.
-- Region emojis and flags provided.
-- Built-in rulesets provided.
+- Emojis and flags of proxies' region provided.
+- Built-in rulesets ([ACL4SSR](https://github.com/ACL4SSR/ACL4SSR/tree/master), [Loyalsoldier](https://github.com/Loyalsoldier/clash-rules)) provided.
 - Windows and Linux platform supported.
 
 ## Usage
