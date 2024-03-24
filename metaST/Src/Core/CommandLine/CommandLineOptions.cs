@@ -13,7 +13,7 @@ public class CommandLineOptions
     [Option("du", Required = false, Default = "https://www.google.com/gen_204", HelpText = "延迟测试链接")]
     public required string DelayTestUrl { get; set; }
 
-    [Option("dt", Required = false, Default = 1500, HelpText = "延迟测试超时(ms)")]
+    [Option("dt", Required = false, Default = 1000, HelpText = "延迟测试超时(ms)")]
     public required int DelayTestTimeout { get; set; }
 
     [Option("dn", Required = false, Default = 16, HelpText = "延迟测试线程数量")]
@@ -42,6 +42,9 @@ public class CommandLineOptions
 
     [Option("sf", Required = false, Default = 1000 * 1024 * 8, HelpText = "下载测试过滤阈值(bps)")]
     public required double SpeedTestFilter { get; set; }
+
+    [Option("ff", Required = false, Default = 0.5, HelpText = "快速失败比率(测试一定比率仍无结果,直接失败)")]
+    public required double FailFastRatio { get; set; }
 
     [Option("sort", Required = false, Default = SortPreference.delay, HelpText = "结果排序偏好")]
     public required SortPreference SortPreference { get; set; }

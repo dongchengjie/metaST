@@ -54,6 +54,7 @@ public class ProxyNode(Dictionary<dynamic, dynamic> info)
 
     public static List<ProxyNode> Distinct(List<ProxyNode> proxies)
     {
+        Logger.Info("开始节点去重...");
         // 去重（协议类型 + 服务器 + 端口）
         proxies = proxies.DistinctBy((proxy) => string.Join('_', [proxy.Type, proxy.Server, proxy.Port])).ToList();
         // 名称重复的添加序号后缀
@@ -64,6 +65,7 @@ public class ProxyNode(Dictionary<dynamic, dynamic> info)
                 p.Name = grp.Count() > 1 ? $"{p.Name}_{i + 1}" : p.Name;
                 return p;
             })).ToList();
+        Logger.Info($"节点去重完成,剩余{proxies.Count}个节点");
         return proxies;
     }
 
@@ -129,16 +131,16 @@ public class ProxyNode(Dictionary<dynamic, dynamic> info)
         foreach (ProxyNode[] chunk in proxies.Chunk(Constants.MaxPortsOccupied))
         {
             purified.AddRange(BinaryTest([.. chunk]));
-            Logger.Info(Strings.Padding($"[{chunkIndex * Constants.MaxPortsOccupied + chunk.Length}/{proxies.Count}]", Constants.MaxSubject) + " 节点净化...");
+            Logger.Info(Strings.Padding($"[{chunkIndex * Constants.MaxPortsOccupied + chunk.Length}/{proxies.Count}]", Constants.MaxSubject) + " 节点配置校验...");
             chunkIndex += 1;
         }
         if (purified.Count < proxies.Count)
         {
-            Logger.Warn($"节点净化完成,排除{proxies.Count - purified.Count}个节点");
+            Logger.Warn($"节点配置校验完成,排除{proxies.Count - purified.Count}个节点");
         }
         else
         {
-            Logger.Info("节点净化完成");
+            Logger.Info("节点配置校验完成");
         }
         return purified;
     }
@@ -164,10 +166,12 @@ public class ProxyNode(Dictionary<dynamic, dynamic> info)
         CommandLineOptions options = Context.Options;
         if (SortPreference.delay.Equals(options.SortPreference) && (options.DelayTestEnable ?? true))
         {
+            Logger.Info("节点排序: 延迟升序");
             return [.. proxies.OrderBy((proxy) => proxy.DelayResult.Result())];
         }
         if (SortPreference.speed.Equals(options.SortPreference) && (options.SpeedTestEnable ?? false))
         {
+            Logger.Info("节点排序: 下载速度降序");
             return [.. proxies.OrderByDescending((proxy) => proxy.SpeedResult.Result())];
         }
         return proxies;
@@ -177,6 +181,7 @@ public class ProxyNode(Dictionary<dynamic, dynamic> info)
     {
         if (Context.Options.Top > 0 && proxies != null && proxies.Count > 0)
         {
+            Logger.Info($"截取前{Context.Options.Top}条配置");
             return proxies.Take(Context.Options.Top).ToList();
         }
         return proxies ?? [];

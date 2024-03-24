@@ -106,7 +106,7 @@ public class MetaSpeedTest
                             .Select((proxy, index) => new { Index = index, Proxy = proxy })
                             .Select(item =>
                             {
-                                DelayProfiler delayProfiler = new(options.DelayTestUrl, options.DelayTestTimeout, options.DelayTestRounds);
+                                DelayProfiler delayProfiler = new(options.DelayTestUrl, options.DelayTestTimeout, options.DelayTestRounds, options.FailFastRatio);
                                 DelayResult result = delayProfiler.TestAsync(item.Proxy.Mixed).Result;
                                 item.Proxy.DelayResult = result;
                                 // 输出延迟测试结果
@@ -148,7 +148,7 @@ public class MetaSpeedTest
                         .Select((proxy, index) => new { Index = index, Proxy = proxy })
                         .Select(item =>
                         {
-                            SpeedProfiler speedProfiler = new(options.SpeedTestUrl, options.SpeedTestTimeout, options.SpeedTestDuration, options.SpeedTestRounds);
+                            SpeedProfiler speedProfiler = new(options.SpeedTestUrl, options.SpeedTestTimeout, options.SpeedTestDuration, options.SpeedTestRounds, options.FailFastRatio);
                             SpeedResult result = speedProfiler.TestAsync(item.Proxy.Mixed).Result;
                             item.Proxy.SpeedResult = result;
                             // 输出下载速度测试结果
