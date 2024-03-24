@@ -28,8 +28,6 @@
     <Optimize>true</Optimize>
     <!-- 单文件 -->
     <PublishSingleFile>true</PublishSingleFile>
-    <!-- 单文件压缩 -->
-    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
     <!-- 包含.NET环境 -->
     <PublishSelfContained>true</PublishSelfContained>
   </PropertyGroup>
