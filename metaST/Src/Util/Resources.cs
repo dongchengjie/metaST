@@ -5,13 +5,21 @@ namespace Util;
 
 public class Resources
 {
-    public static void Extract(string resourceName, string dest, bool deleteIfExists = true)
+    public static void Extract(string resourceName, string dest, bool skipIfExists = false)
     {
         string resourcePath = ResourcePath(resourceName);
-        if (deleteIfExists && File.Exists(dest)) File.Delete(dest);
-        using Stream? stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourcePath);
-        using FileStream fileStream = new(dest, FileMode.Create);
-        stream?.CopyTo(fileStream);
+        // 如果文件已存在则跳过
+        if (skipIfExists && File.Exists(dest)) return;
+        try
+        {
+            using Stream? stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourcePath);
+            using FileStream fileStream = new(dest, FileMode.Create);
+            stream?.CopyTo(fileStream);
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error extracting resouce '{resourcePath}': {ex.Message}");
+        }
     }
 
     public static string ReadAsText(string resourceName, Encoding? encoding = null)

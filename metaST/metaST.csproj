@@ -16,10 +16,18 @@
 
   <!-- 开发配置 -->
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <RuntimeIdentifier Condition="'$(OS)' == 'Windows_NT' and '$(Processor_Architecture)' == 'AMD64'">win-x64</RuntimeIdentifier>
-    <RuntimeIdentifier Condition="'$(OS)' == 'Windows_NT' and '$(Processor_Architecture)' == 'ARM64'">win-arm64</RuntimeIdentifier>
-    <RuntimeIdentifier Condition="'$(OS)' != 'Windows_NT' and '$(Processor_Architecture)' == 'AMD64'">linux-x64</RuntimeIdentifier>
-    <RuntimeIdentifier Condition="'$(OS)' != 'Windows_NT' and '$(Processor_Architecture)' == 'AMD64'">linux-arm64</RuntimeIdentifier>
+    <RuntimeIdentifier Condition="'$(OS)' == 'Windows_NT' and '$(Processor_Architecture)' == 'AMD64'"
+      >win-x64</RuntimeIdentifier
+    >
+    <RuntimeIdentifier Condition="'$(OS)' == 'Windows_NT' and '$(Processor_Architecture)' == 'ARM64'"
+      >win-arm64</RuntimeIdentifier
+    >
+    <RuntimeIdentifier Condition="'$(OS)' != 'Windows_NT' and '$(Processor_Architecture)' == 'AMD64'"
+      >linux-x64</RuntimeIdentifier
+    >
+    <RuntimeIdentifier Condition="'$(OS)' != 'Windows_NT' and '$(Processor_Architecture)' == 'AMD64'"
+      >linux-arm64</RuntimeIdentifier
+    >
   </PropertyGroup>
 
   <!-- 生产配置 -->
@@ -48,6 +56,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\template\**\*" />
     <EmbeddedResource Include="Resources\icons\**\*" />
+    <EmbeddedResource Include="Resources\meta\*" />
   </ItemGroup>
 
   <!-- 平台资源嵌入 -->

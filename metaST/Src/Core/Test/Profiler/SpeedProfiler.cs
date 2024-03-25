@@ -55,6 +55,10 @@ public class SpeedProfiler(string url = "https://speed.cloudflare.com/__down?byt
                     }
                     catch (Exception ex)
                     {
+                        if (typeof(AggregateException).Equals(ex.GetType()))
+                        {
+                            while (ex.InnerException != null) ex = ex.InnerException;
+                        }
                         result.ErrMsg = ex.Message;
                         Logger.Debug($"Erroring Testing speed: {ex.Message}");
                         return false;

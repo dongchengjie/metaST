@@ -100,13 +100,7 @@ public class ProxyNode(Dictionary<dynamic, dynamic> info)
                 // 分配GEO信息
                 proxies.ForEach((proxy) =>
                 {
-                    proxy.GeoInfo = proxy.Mixed != null && infoMap.TryGetValue(proxy.Mixed, out var geoInfo) ? geoInfo : new GeoInfo();
-                    // 单独分组: Cloudflare
-                    if (proxy.GeoInfo.Organization.Contains("cloudflare", StringComparison.CurrentCultureIgnoreCase))
-                    {
-                        proxy.GeoInfo.CountryCode = "Cloudflare";
-                        proxy.GeoInfo.Country = "Cloudflare";
-                    }
+                    proxy.GeoInfo = proxy.Mixed != null && infoMap.TryGetValue(proxy.Mixed, out var geoInfo) ? geoInfo : new();
                 });
                 Logger.Info("查询GEO信息完成");
             }

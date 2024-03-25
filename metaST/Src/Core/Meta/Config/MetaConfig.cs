@@ -177,11 +177,34 @@ public class MetaConfig
         // 代理列表
         string proxyList = string.Join(Environment.NewLine, proxies.Select((proxy, index) => $"  - {Json.SerializeObject(proxy.Info)}"));
 
+        // 代理组顺序
+        List<string> groupOrder = proxies.Select(proxy => proxy.GeoInfo.CountryCode).Order().Distinct().ToList();
+        // 特殊分组处理
+        proxies.ForEach(proxy =>
+        {
+            // UNKNOWN 排序倒数第一
+            if (groupOrder.LastOrDefault() != "UNKNOWN")
+            {
+                groupOrder.Remove("UNKNOWN");
+                groupOrder.Add("UNKNOWN");
+            }
+            // Cloudflare 排序倒数第二
+            if (proxy.GeoInfo.Organization.Contains("Cloudflare", StringComparison.CurrentCultureIgnoreCase))
+            {
+                proxy.GeoInfo.CountryCode = "Cloudflare";
+                proxy.GeoInfo.Country = "Cloudflare";
+                if (groupOrder.ElementAtOrDefault(groupOrder.Count - 2) != "Cloudflare")
+                {
+                    groupOrder.Remove("Cloudflare");
+                    groupOrder.Insert(groupOrder.Count - 1, "Cloudflare");
+                }
+            }
+        });
         // 代理组列表
         List<string> groupNames = [];
         string groupList = string.Join(Environment.NewLine, proxies
             .GroupBy(proxy => proxy.GeoInfo.Country)
-            .OrderBy(group => "UNKNOWN".Equals(group.ToList()[0].GeoInfo.CountryCode) ? "ZZ" : group.ToList()[0].GeoInfo.CountryCode)
+            .OrderBy(group => groupOrder.IndexOf(group.ToList()[0].GeoInfo.CountryCode))
             .Select(group =>
             {
                 string country = group.ToList()[0].GeoInfo.Country + "节点";

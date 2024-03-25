@@ -4,6 +4,7 @@ namespace Core.Geo;
 
 public class GeoInfo
 {
+    public AGeoLookup GeoLookup { get; set; }
     public string Address { get; set; } = string.Empty;
     public string CountryCode { get; set; } = "UNKNOWN";
     public string? _country;
@@ -37,10 +38,11 @@ public class GeoInfo
     public IWebProxy? Proxy { get; set; }
     public GeoInfo()
     {
-
+        GeoLookup = new NullLookup();
     }
-    public GeoInfo(string address, string countryCode, string country, string organization, IWebProxy? proxy)
+    public GeoInfo(AGeoLookup geoLookup, string address, string countryCode, string country, string organization, IWebProxy? proxy)
     {
+        GeoLookup = geoLookup;
         Address = address;
         CountryCode = countryCode;
         Country = country;

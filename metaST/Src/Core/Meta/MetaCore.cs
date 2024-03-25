@@ -13,6 +13,10 @@ public class MetaCore
         // 解压内核
         string resourceName = "meta." + Platform.GetPlatform() + "." + Constants.ExecutableName;
         Resources.Extract(resourceName, metaCorePath, true);
+        // 解压GEO
+        Resources.Extract("meta.country.mmdb", Path.Combine(Constants.ConfigPath, "country.mmdb"), true);
+        Resources.Extract("geoip.dat", Path.Combine(Constants.ConfigPath, "geoip.dat"), true);
+        Resources.Extract("geosite.dat", Path.Combine(Constants.ConfigPath, "geosite.dat"), true);
         // 文件赋权
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
