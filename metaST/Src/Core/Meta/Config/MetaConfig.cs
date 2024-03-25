@@ -2,6 +2,7 @@ using System.Net;
 using System.Text;
 using Core.CommandLine;
 using Core.CommandLine.Enum;
+using Core.Test.Profiler;
 using Util;
 
 namespace Core.Meta.Config;
@@ -177,29 +178,38 @@ public class MetaConfig
         // 代理列表
         string proxyList = string.Join(Environment.NewLine, proxies.Select((proxy, index) => $"  - {Json.SerializeObject(proxy.Info)}"));
 
-        // 代理组顺序
-        List<string> groupOrder = proxies.Select(proxy => proxy.GeoInfo.CountryCode).Order().Distinct().ToList();
         // 特殊分组处理
         proxies.ForEach(proxy =>
         {
-            // UNKNOWN 排序倒数第一
-            if (groupOrder.LastOrDefault() != "UNKNOWN")
-            {
-                groupOrder.Remove("UNKNOWN");
-                groupOrder.Add("UNKNOWN");
-            }
-            // Cloudflare 排序倒数第二
+            // Cloudflare节点分组
             if (proxy.GeoInfo.Organization.Contains("Cloudflare", StringComparison.CurrentCultureIgnoreCase))
             {
                 proxy.GeoInfo.CountryCode = "Cloudflare";
                 proxy.GeoInfo.Country = "Cloudflare";
-                if (groupOrder.ElementAtOrDefault(groupOrder.Count - 2) != "Cloudflare")
-                {
-                    groupOrder.Remove("Cloudflare");
-                    groupOrder.Insert(groupOrder.Count - 1, "Cloudflare");
-                }
             }
         });
+
+        // 代理组排序(默认按国家代码升序)
+        List<string> groupOrder = proxies.Select(proxy => proxy.GeoInfo.CountryCode).Order().Distinct().ToList();
+        // 按照分组内节点平均延迟升序
+        if (SortPreference.delay.Equals(options.SortPreference) && (options.DelayTestEnable ?? true))
+        {
+            groupOrder = proxies
+                .GroupBy(proxy => proxy.GeoInfo.CountryCode)
+                .OrderBy(group => group.Select(proxy => proxy.DelayResult.Result()).Where(delay => delay > 0).Average())
+                .Select(group => group.Key)
+                .ToList();
+        }
+        // 按照分组内节点平均下载速度降序
+        if (SortPreference.speed.Equals(options.SortPreference) && (options.SpeedTestEnable ?? true))
+        {
+            groupOrder = proxies
+                .GroupBy(proxy => proxy.GeoInfo.CountryCode)
+                .OrderByDescending(group => group.Select(proxy => proxy.SpeedResult.Result()).Where(speed => speed > 0).Average())
+                .Select(group => group.Key)
+                .ToList();
+        }
+
         // 代理组列表
         List<string> groupNames = [];
         string groupList = string.Join(Environment.NewLine, proxies
