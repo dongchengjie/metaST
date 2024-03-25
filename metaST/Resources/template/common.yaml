@@ -1,3 +1,5 @@
+# 混合端口
+mixed-port: 7892
 # 是否允许局域网访问
 allow-lan: true
 # 运行模式
@@ -46,7 +48,7 @@ dns:
 # 自动更新GEO
 geo-auto-update: true
 # 自动更新GEO间隔(单位: 小时)
-geo-update-interval: 24
+geo-update-interval: 48
 # 自定义GEO下载地址
 geox-url:
   geoip: ${options.GithubMirror}https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip.dat
