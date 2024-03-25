@@ -11,7 +11,8 @@ public class IPSB : AJsonLookup
         {
             Method = HttpMethod.Get,
             RequestUri = new Uri("https://ipv4.ip.gs/addrinfo"),
-            Headers = {
+            Headers =
+            {
                 { "Accept-Language",  "en-US" },
                 { "Referer", "https://ip.gs/" }
             }
@@ -34,7 +35,8 @@ public class IPSB : AJsonLookup
         {
             Method = HttpMethod.Get,
             RequestUri = new Uri($"https://api.ip.sb/geoip/{address}"),
-            Headers = {
+            Headers =
+            {
                 { "Accept-Language",  "en-US" },
                 { "Referer", "https://ip.gs/api/" }
             }

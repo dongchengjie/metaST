@@ -49,7 +49,7 @@ public abstract class AJsonLookup : AGeoLookup
         if (!string.IsNullOrWhiteSpace(json))
         {
             ResultMapping mapping = addressLookup ? AddressResultMapping() : SelfResultMapping();
-            return ParseAndApply(json, new Dictionary<string, AttributesApplier<GeoInfo, string?>>()
+            ParseAndApply(geoInfo, json, new Dictionary<string, AttributesApplier<GeoInfo, string?>>()
             {
                 { mapping.AddressField,      (info, val) => info.Address = val ?? string.Empty      },
                 { mapping.CountryCodeField,  (info, val) => info.CountryCode = val ?? "UNKNOWN"     },
@@ -73,7 +73,7 @@ public abstract class AJsonLookup : AGeoLookup
         public string CountryField { get; set; } = "_CountryField";
         public string OrganizationField { get; set; } = "_OrganizationField";
     }
-    private static GeoInfo ParseAndApply(string? json, Dictionary<string, AttributesApplier<GeoInfo, string?>> actions)
+    private static void ParseAndApply(GeoInfo geoInfo, string? json, Dictionary<string, AttributesApplier<GeoInfo, string?>> actions)
     {
         if (!string.IsNullOrWhiteSpace(json))
         {
@@ -82,7 +82,6 @@ public abstract class AJsonLookup : AGeoLookup
                 JObject? jObject = JsonConvert.DeserializeObject<JObject>(json);
                 if (jObject != null)
                 {
-                    GeoInfo geoInfo = new();
                     foreach (var action in actions)
                     {
                         JToken? tmp = jObject;
@@ -97,7 +96,6 @@ public abstract class AJsonLookup : AGeoLookup
                             action.Value.Invoke(geoInfo, val);
                         }
                     }
-                    return geoInfo;
                 }
             }
             catch (Exception ex)
@@ -105,6 +103,5 @@ public abstract class AJsonLookup : AGeoLookup
                 Logger.Debug($"Error parsing Geo JSON: {ex.Message}");
             }
         }
-        return new();
     }
 }

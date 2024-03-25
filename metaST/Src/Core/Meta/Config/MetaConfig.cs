@@ -108,7 +108,7 @@ public class MetaConfig
 
         PortManager portManager = PortManager.Claim(proxies.Count);
         // mixed监听端口
-        string listenerList = string.Join(Environment.NewLine, proxies.Select((proxy, index) => $"- name: mixed{index}\n  type: mixed\n  port: {portManager.Get(index)}\n  proxy: {Json.SerializeObject(proxy.Name)}"));
+        string listenerList = string.Join(Environment.NewLine, proxies.Select((proxy, index) => $"- name: mixed{portManager.Get(index)}\n  type: mixed\n  port: {portManager.Get(index)}\n  proxy: {Json.SerializeObject(proxy.Name)}"));
         // mixed出口代理
         string proxyList = string.Join(Environment.NewLine, proxies.Select((proxy, index) => $"  - {Json.SerializeObject(proxy.Info)}"));
 

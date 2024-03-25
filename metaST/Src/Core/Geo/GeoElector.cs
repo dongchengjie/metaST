@@ -6,10 +6,10 @@ using static Core.Geo.AGeoLookup;
 namespace Core.Geo;
 public class GeoElector
 {
-    // 查询IP
-    private static readonly List<AGeoLookup> ipLookups;
-    // 查询GEO
-    private static readonly List<AGeoLookup> geoLookups;
+    // 支持查询当前连接GEO信息的实现
+    private static readonly List<AGeoLookup> selfLookups;
+    // 支持根据IP查询GEO信息的实现
+    private static readonly List<AGeoLookup> addressLookups;
     static GeoElector()
     {
         List<AGeoLookup> instances = [];
@@ -36,8 +36,8 @@ public class GeoElector
         // 设置查询超时
         instances.ForEach(instance => instance.LookupTimout = Context.Options.GeoLookupTimeout);
         // 分配实例对象
-        ipLookups = instances.Where(instance => new LookupType[] { LookupType.BOTH, LookupType.IP }.Contains(instance.Type())).ToList();
-        geoLookups = instances.Where(instance => new LookupType[] { LookupType.BOTH, LookupType.GEO }.Contains(instance.Type())).ToList();
+        selfLookups = instances.Where(instance => new LookupType[] { LookupType.BOTH, LookupType.IP }.Contains(instance.Type())).ToList();
+        addressLookups = instances.Where(instance => new LookupType[] { LookupType.BOTH, LookupType.GEO }.Contains(instance.Type())).ToList();
     }
 
     public static Task<GeoInfo> LookupAsnyc(IWebProxy? proxy)
@@ -46,14 +46,14 @@ public class GeoElector
         {
             // 查询IP信息
             List<GeoInfo> ips = [];
-            Task.WaitAll(ipLookups.Select((instance) => Task.Run(() => ips.Add(instance.Lookup(proxy)))).ToArray());
+            Task.WaitAll(selfLookups.Select((instance) => Task.Run(() => ips.Add(instance.Lookup(proxy)))).ToArray());
             // 选举IP信息
             string address = Elect(ips, (info) => info.Address, (key) => !string.IsNullOrWhiteSpace(key));
             if (!string.IsNullOrWhiteSpace(address))
             {
                 // 查询GEO信息
                 List<GeoInfo> geos = [];
-                Task.WaitAll(geoLookups.Select((instance) => Task.Run(() => geos.Add(instance.Lookup(proxy, address)))).ToArray());
+                Task.WaitAll(addressLookups.Select((instance) => Task.Run(() => geos.Add(instance.Lookup(proxy, address)))).ToArray());
                 // 选举GEO信息
                 string countryCode = Elect(geos, (info) => info.CountryCode, key => !string.IsNullOrWhiteSpace(key) && !"UNKNOWN".Equals(key), "UNKNOWN");
                 string country = Elect(geos, (info) => info.Country, key => !string.IsNullOrWhiteSpace(key));
@@ -68,7 +68,7 @@ public class GeoElector
     {
         string? elected = infos
             .GroupBy(groupBy)
-            // 置信度逆序
+            // 置信度从高到低排序
             .OrderByDescending(group => group.ToList().Select(info => info.GeoLookup.Confidence()).Sum())
             .Select(group => group.Key)
             .FirstOrDefault(key => filter == null || filter.Invoke(key));
