@@ -102,7 +102,7 @@ public class MetaSpeedTest
                 {
                     exclueded.AddRange(MetaService.UsingProxies([.. batch], (proxied) =>
                     {
-                        Dictionary<ProxyNode, DelayResult> delayTestResult = proxied.AsParallel()
+                        Dictionary<ProxyNode, DelayResult> delayTestResult = proxied.AsParallel().AsOrdered()
                             .Select((proxy, index) => new { Index = index, Proxy = proxy })
                             .Select(item =>
                             {

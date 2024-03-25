@@ -85,7 +85,7 @@ public class ProxyNode(Dictionary<dynamic, dynamic> info)
                     // 查询GEO信息
                     MetaService.UsingProxies([.. chunk], proxied =>
                     {
-                        return proxied.AsParallel().WithDegreeOfParallelism(Environment.ProcessorCount).Select((proxy, index) =>
+                        return proxied.AsParallel().AsOrdered().WithDegreeOfParallelism(Environment.ProcessorCount).Select((proxy, index) =>
                         {
                             GeoInfo geoInfo = Task.Run(() => GeoElector.LookupAsnyc(proxy.Mixed)).Result;
                             infoMap.TryAdd(proxy.Mixed ??= new WebProxy(), geoInfo);

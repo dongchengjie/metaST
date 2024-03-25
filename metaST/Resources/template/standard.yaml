@@ -11,7 +11,7 @@ proxy-groups:
 
   - name: 延迟选优
     type: url-test
-    tolerance: 100
+    tolerance: 50
     lazy: false
     interval: 300
     timeout: ${options.DelayTestTimeout}

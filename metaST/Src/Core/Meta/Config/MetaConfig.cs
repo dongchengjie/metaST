@@ -222,7 +222,7 @@ public class MetaConfig
                 return
                   "  - name: " + country + "\n"
                 + "    type: url-test\n"
-                + "    tolerance: 100\n"
+                + "    tolerance: 50\n"
                 + "    lazy: false\n"
                 + "    interval: 300\n"
                 + "    timeout: ${options.DelayTestTimeout}\n"
