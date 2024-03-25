@@ -22,6 +22,8 @@ public class MetaService
         }
         finally
         {
+            // 清理mixed配置文件
+            Files.DeleteFile(metaInfo.ConfigPath);
             Processes.Kill(task?.Result);
         }
     }
