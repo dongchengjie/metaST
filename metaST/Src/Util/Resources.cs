@@ -37,6 +37,7 @@ public class Resources
         string resourcePath = ResourcePath(resourceName);
         using Stream? stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourcePath);
         if (stream is null) return [];
+
         using MemoryStream memoryStream = new();
         stream.CopyTo(memoryStream);
         return memoryStream.ToArray();
