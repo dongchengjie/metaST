@@ -2,7 +2,6 @@ using System.Net;
 using System.Text;
 using Core.CommandLine;
 using Core.CommandLine.Enum;
-using Core.Test.Profiler;
 using Util;
 
 namespace Core.Meta.Config;
