@@ -4,6 +4,8 @@
   "dotnet.completion.showNameCompletionSuggestions": true,
   "dotnet.completion.showCompletionItemsFromUnimportedNamespaces": true,
 
+  "files.eol": "\n",
+
   "files.exclude": {
     ".gitattributes": true,
     ".gitignore": true,

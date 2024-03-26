@@ -56,7 +56,7 @@ public class Logger
         {
             Console.ForegroundColor = log.Color;
             Console.WriteLine(PreProcessor(log.ToString(), true));
-            lines = lines + PreProcessor(log.ToString(), false) + Environment.NewLine;
+            lines = lines + PreProcessor(log.ToString(), false) + "\n";
         }
         // 恢复颜色
         Console.ForegroundColor = primitiveColor;
