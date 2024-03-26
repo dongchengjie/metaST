@@ -1,4 +1,4 @@
- <h1><img src="./metaST/Resources/icon.ico" alt="Clash" width="24"/><span>etaST</span></h1>
+﻿ <h1><img src="./metaST/Resources/icon.ico" alt="Clash" width="24"/><span>etaST</span></h1>
 
 > A <a href="https://github.com/MetaCubeX/mihomo">Clash.Meta</a>-based CLI program for proxy testing.s
 

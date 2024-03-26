@@ -1,4 +1,4 @@
-using System.Net;
+﻿using System.Net;
 
 namespace Core.Geo;
 public class NullLookup : AGeoLookup

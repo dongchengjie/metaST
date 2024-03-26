@@ -1,4 +1,4 @@
-namespace Core.CommandLine.Enum;
+﻿namespace Core.CommandLine.Enum;
 public enum SortPreference
 {
     delay,  // 低延迟优先

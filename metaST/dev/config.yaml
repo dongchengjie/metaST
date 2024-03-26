@@ -1,4 +1,4 @@
-# 混合端口
+﻿# 混合端口
 mixed-port: 7892
 # 是否允许局域网访问
 allow-lan: true
