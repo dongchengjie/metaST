@@ -1,4 +1,4 @@
-﻿rules:
+rules:
   # 自定义规则
   - DOMAIN-SUFFIX,googleapis.cn,节点选择
   - DOMAIN-SUFFIX,gstatic.com,节点选择

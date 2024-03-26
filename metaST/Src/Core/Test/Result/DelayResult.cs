@@ -1,4 +1,4 @@
-﻿using Util;
+using Util;
 
 namespace Core.Test.Reuslt;
 

@@ -1,4 +1,4 @@
-﻿namespace Core.Geo;
+namespace Core.Geo;
 
 public class CountryNames
 {

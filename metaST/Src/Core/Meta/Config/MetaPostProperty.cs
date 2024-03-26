@@ -1,4 +1,4 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 using Core.CommandLine;
 using Newtonsoft.Json;
 using Util;

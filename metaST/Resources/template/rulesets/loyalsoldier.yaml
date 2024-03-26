@@ -1,4 +1,4 @@
-﻿rule-providers:
+rule-providers:
   reject:
     type: http
     behavior: domain

@@ -1,4 +1,4 @@
-﻿### 新增
+### 新增
 
 - 代理组新增 Alpha 内核参数`max-failed-times`配置
 

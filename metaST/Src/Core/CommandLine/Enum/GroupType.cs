@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 
 namespace Core.CommandLine.Enum;
 public enum GroupType

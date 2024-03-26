@@ -1,4 +1,4 @@
-﻿namespace Util;
+namespace Util;
 
 public class Files
 {

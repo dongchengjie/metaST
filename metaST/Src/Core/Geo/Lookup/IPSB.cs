@@ -1,4 +1,4 @@
-﻿namespace Core.Geo.Lookup;
+namespace Core.Geo.Lookup;
 
 public class IPSB : AJsonLookup
 {

@@ -1,4 +1,4 @@
-﻿namespace Core.Test;
+namespace Core.Test;
 
 public abstract class TestResult
 {

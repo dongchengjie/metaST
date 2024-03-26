@@ -1,4 +1,4 @@
-﻿using Core.CommandLine;
+using Core.CommandLine;
 
 namespace Core;
 #pragma warning disable CS8618 

@@ -1,4 +1,4 @@
-﻿rule-providers:
+rule-providers:
   Apple:
     type: http
     behavior: classical

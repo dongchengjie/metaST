@@ -1,4 +1,4 @@
-﻿using CommandLine;
+using CommandLine;
 using Core.CommandLine.Enum;
 
 namespace Core.CommandLine;
