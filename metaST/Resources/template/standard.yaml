@@ -11,11 +11,12 @@ proxy-groups:
 
   - name: 延迟选优
     type: url-test
-    tolerance: 50
+    tolerance: 100
     lazy: false
     interval: 300
     timeout: ${options.DelayTestTimeout}
     url: ${options.DelayTestUrl}
+    max-failed-times: 3
     icon: ${icons.speed.svg}
     include-all: true
 
@@ -25,6 +26,7 @@ proxy-groups:
     interval: 300
     timeout: ${options.DelayTestTimeout}
     url: ${options.DelayTestUrl}
+    max-failed-times: 3
     icon: ${icons.ambulance.svg}
     include-all: true
 
@@ -35,6 +37,7 @@ proxy-groups:
     interval: 300
     timeout: ${options.DelayTestTimeout}
     url: ${options.DelayTestUrl}
+    max-failed-times: 3
     icon: ${icons.balance.svg}
     include-all: true
 
@@ -45,6 +48,7 @@ proxy-groups:
     interval: 300
     timeout: ${options.DelayTestTimeout}
     url: ${options.DelayTestUrl}
+    max-failed-times: 3
     icon: ${icons.merry_go.svg}
     include-all: true
 

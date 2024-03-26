@@ -222,11 +222,12 @@ public class MetaConfig
                 return
                   "  - name: " + country + "\n"
                 + "    type: url-test\n"
-                + "    tolerance: 50\n"
+                + "    tolerance: 100\n"
                 + "    lazy: false\n"
                 + "    interval: 300\n"
                 + "    timeout: ${options.DelayTestTimeout}\n"
                 + "    url: ${options.DelayTestUrl}\n"
+                + "    max-failed-times: 3\n"
                 + "    icon: ${" + icon + "}\n"
                 + "    hidden: false\n"
                 + "    proxies: [" + string.Join(", ", group.Select(proxy => "'" + proxy.Name + "'")) + "]\n";
