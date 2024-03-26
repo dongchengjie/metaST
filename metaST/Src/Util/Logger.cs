@@ -56,7 +56,7 @@ public class Logger
         {
             Console.ForegroundColor = log.Color;
             Console.WriteLine(PreProcessor(log.ToString(), true));
-            lines = lines + PreProcessor(log.ToString(), false) + "\n";
+            lines = lines + PreProcessor(log.ToString(), false) + Environment.NewLine;
         }
         // 恢复颜色
         Console.ForegroundColor = primitiveColor;
@@ -132,7 +132,7 @@ public class Log
         };
         return string.Format(format, [
             DateTime,Level,Message,Location,
-            "\nStackTrace: \n  "  + string.Join("  ", StackTrace.GetFrames().Select((f) => f.ToString()))
+            Environment.NewLine+"StackTrace: "+Environment.NewLine+"  "  + string.Join("  ", StackTrace.GetFrames().Select((f) => f.ToString()))
         ]);
     }
 }

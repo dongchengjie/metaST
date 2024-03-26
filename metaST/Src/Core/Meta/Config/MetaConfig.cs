@@ -100,7 +100,7 @@ public class MetaConfig
         public List<ProxyNode> Proxies { get; set; } = proxies;
     }
 
-    public static string GetConfigTemplate(string resourceName) => string.Join("\n", [Resources.ReadAsText("template.common.yaml"), Resources.ReadAsText(resourceName)]);
+    public static string GetConfigTemplate(string resourceName) => string.Join(Environment.NewLine, [Resources.ReadAsText("template.common.yaml"), Resources.ReadAsText(resourceName)]);
 
     public static MetaInfo GenerateMixedConfig(List<ProxyNode> proxies)
     {
@@ -109,18 +109,18 @@ public class MetaConfig
         // mixed移除监听端口,防止多线程情况下端口冲突
         List<Regex> regexes = ((List<string>)["port", "socks-port", "mixed-port", "redir-port", "tproxy-port"])
             .Select(item => new Regex(@$"^{item} *?: *\d+$", RegexOptions.Compiled)).ToList();
-        yaml = string.Join("\n", yaml.Split("\n").Where(line => !regexes.Where(regex => regex.IsMatch(line.Trim())).Any()));
+        yaml = string.Join(Environment.NewLine, yaml.Split(Environment.NewLine).Where(line => !regexes.Where(regex => regex.IsMatch(line)).Any()));
 
         PortManager portManager = PortManager.Claim(proxies.Count);
         // mixed监听端口
-        string listenerList = string.Join("\n", proxies.Select((proxy, index) => $"- name: mixed{portManager.Get(index)}\n  type: mixed\n  port: {portManager.Get(index)}\n  proxy: {Json.SerializeObject(proxy.Name)}"));
+        string listenerList = string.Join(Environment.NewLine, proxies.Select((proxy, index) => $"- name: mixed{portManager.Get(index)}{Environment.NewLine}  type: mixed{Environment.NewLine}  port: {portManager.Get(index)}{Environment.NewLine}  proxy: {Json.SerializeObject(proxy.Name)}"));
         // mixed出口代理
-        string proxyList = string.Join("\n", proxies.Select((proxy, index) => $"  - {Json.SerializeObject(proxy.Info)}"));
+        string proxyList = string.Join(Environment.NewLine, proxies.Select((proxy, index) => $"  - {Json.SerializeObject(proxy.Info)}"));
 
         // 生成配置文件
         string config = yaml
-            .Replace("listeners: []", $"listeners: \n{listenerList}")
-            .Replace("proxies: []", $"proxies: \n{proxyList}");
+            .Replace("listeners: []", $"listeners: {Environment.NewLine}{listenerList}")
+            .Replace("proxies: []", $"proxies: {Environment.NewLine}{proxyList}");
 
         // 处理参数
         config = MetaPostProperty.Resolve(config);
@@ -157,14 +157,14 @@ public class MetaConfig
         string yaml = GetConfigTemplate("template.standard.yaml");
 
         // 代理列表
-        string proxyList = string.Join("\n", proxies.Select((proxy, index) => $"  - {Json.SerializeObject(proxy.Info)}"));
+        string proxyList = string.Join(Environment.NewLine, proxies.Select((proxy, index) => $"  - {Json.SerializeObject(proxy.Info)}"));
 
         // 读取规则集
         string rules = MetaRule.GetRuleSetRules(options.RuleSet);
 
         // 生成配置文件
         string config = yaml
-            .Replace("proxies: []", $"proxies: \n{proxyList}")
+            .Replace("proxies: []", $"proxies: {Environment.NewLine}{proxyList}")
             .Replace("rules: []", $"{rules}");
 
         // 处理参数
@@ -180,7 +180,7 @@ public class MetaConfig
         string yaml = GetConfigTemplate("template.region.yaml");
 
         // 代理列表
-        string proxyList = string.Join("\n", proxies.Select((proxy, index) => $"  - {Json.SerializeObject(proxy.Info)}"));
+        string proxyList = string.Join(Environment.NewLine, proxies.Select((proxy, index) => $"  - {Json.SerializeObject(proxy.Info)}"));
 
         // 特殊分组处理
         proxies.ForEach(proxy =>
@@ -216,7 +216,7 @@ public class MetaConfig
 
         // 代理组列表
         List<string> groupNames = [];
-        string groupList = string.Join("\n", proxies
+        string groupList = string.Join(Environment.NewLine, proxies
             .GroupBy(proxy => proxy.GeoInfo.Country)
             .OrderBy(group => groupOrder.IndexOf(group.ToList()[0].GeoInfo.CountryCode))
             .Select(group =>
@@ -225,17 +225,17 @@ public class MetaConfig
                 string icon = group.ToList()[0].GeoInfo.Icon;
                 groupNames.Add(country);
                 return
-                  "  - name: " + country + "\n"
-                + "    type: url-test\n"
-                + "    tolerance: 100\n"
-                + "    lazy: false\n"
-                + "    interval: 300\n"
-                + "    timeout: ${options.DelayTestTimeout}\n"
-                + "    url: ${options.DelayTestUrl}\n"
-                + "    max-failed-times: 3\n"
-                + "    icon: ${" + icon + "}\n"
-                + "    hidden: false\n"
-                + "    proxies: [" + string.Join(", ", group.Select(proxy => "'" + proxy.Name + "'")) + "]\n";
+                  "  - name: " + country + Environment.NewLine
+                + "    type: url-test" + Environment.NewLine
+                + "    tolerance: 100" + Environment.NewLine
+                + "    lazy: false" + Environment.NewLine
+                + "    interval: 300" + Environment.NewLine
+                + "    timeout: ${options.DelayTestTimeout}" + Environment.NewLine
+                + "    url: ${options.DelayTestUrl}" + Environment.NewLine
+                + "    max-failed-times: 3" + Environment.NewLine
+                + "    icon: ${" + icon + "}" + Environment.NewLine
+                + "    hidden: false" + Environment.NewLine
+                + "    proxies: [" + string.Join(", ", group.Select(proxy => "'" + proxy.Name + "'")) + "]" + Environment.NewLine;
             }).ToList()
         );
 
@@ -244,7 +244,7 @@ public class MetaConfig
 
         // 生成配置文件
         string config = yaml
-            .Replace("proxies: []", $"proxies: \n{proxyList}")
+            .Replace("proxies: []", $"proxies: {Environment.NewLine}{proxyList}")
             .Replace("# proxy-groups:", groupList)
             .Replace("'${region-groups}'", string.Join(", ", groupNames.Distinct().Select(name => "'" + name + "'")))
             .Replace("rules: []", $"{rules}");
