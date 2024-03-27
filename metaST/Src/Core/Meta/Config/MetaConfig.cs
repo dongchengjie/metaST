@@ -230,7 +230,7 @@ public class MetaConfig
                 + "    tolerance: 100" + Environment.NewLine
                 + "    lazy: false" + Environment.NewLine
                 + "    interval: 300" + Environment.NewLine
-                + "    timeout: ${options.DelayTestTimeout}" + Environment.NewLine
+                + "    timeout: 3000" + Environment.NewLine
                 + "    url: ${options.DelayTestUrl}" + Environment.NewLine
                 + "    max-failed-times: 3" + Environment.NewLine
                 + "    icon: ${" + icon + "}" + Environment.NewLine

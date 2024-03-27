@@ -13,7 +13,7 @@ proxy-groups:
     tolerance: 100
     lazy: false
     interval: 300
-    timeout: ${options.DelayTestTimeout}
+    timeout: 3000
     url: ${options.DelayTestUrl}
     max-failed-times: 3
     icon: ${icons.speed.svg}
@@ -22,7 +22,7 @@ proxy-groups:
   - name: 故障转移
     type: fallback
     interval: 300
-    timeout: ${options.DelayTestTimeout}
+    timeout: 3000
     url: ${options.DelayTestUrl}
     max-failed-times: 3
     icon: ${icons.ambulance.svg}
@@ -33,7 +33,7 @@ proxy-groups:
     strategy: round-robin
     lazy: false
     interval: 300
-    timeout: ${options.DelayTestTimeout}
+    timeout: 3000
     url: ${options.DelayTestUrl}
     max-failed-times: 3
     icon: ${icons.balance.svg}
@@ -44,7 +44,7 @@ proxy-groups:
     strategy: consistent-hashing
     lazy: false
     interval: 300
-    timeout: ${options.DelayTestTimeout}
+    timeout: 3000
     url: ${options.DelayTestUrl}
     max-failed-times: 3
     icon: ${icons.merry_go.svg}
