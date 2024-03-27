@@ -29,8 +29,6 @@ public class MetaConfig
                 }, 10 * 1000);
                 // 文件内容要求不为空
                 if (string.IsNullOrWhiteSpace(content)) throw new Exception(config);
-                // 需要Base64解码
-                if (Strings.IsBase64String(content)) content = Strings.ToBase64String(content, Encoding.UTF8);
                 Logger.Info("下载配置文件完成");
                 // 保存到临时目录
                 string dest = Path.Combine(Constants.WorkSpaceTemp, Strings.Md5(config) + ".yaml");
@@ -62,8 +60,10 @@ public class MetaConfig
         {
             // 解析配置文件
             string yaml = File.ReadAllText(config);
-            Dictionary<dynamic, dynamic> yamlObject = YamlDot.DeserializeObject(yaml);
+            // 尝试Base64解码
+            yaml = Strings.IsBase64String(yaml) ? Strings.Base64Decoding(yaml, Encoding.UTF8) : yaml;
 
+            Dictionary<dynamic, dynamic> yamlObject = YamlDot.DeserializeObject(yaml);
             // 如果存在proxies
             if (includeProxies && yamlObject.ContainsKey("proxies"))
             {

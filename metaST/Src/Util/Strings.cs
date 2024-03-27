@@ -22,11 +22,24 @@ public class Strings
 
     public static bool IsBase64String(string base64)
     {
-        Span<byte> buffer = new(new byte[base64.Length]);
-        return Convert.TryFromBase64String(base64, buffer, out _);
+        if (!string.IsNullOrWhiteSpace(base64))
+        {
+            // padding
+            base64 += Repeat("=", base64.Length % 4);
+            Span<byte> buffer = new(new byte[base64.Length]);
+            return Convert.TryFromBase64String(base64, buffer, out _);
+        }
+        return false;
     }
 
-    public static string ToBase64String(string str, Encoding encoding) => encoding.GetString(Convert.FromBase64String(str));
+    public static string Base64Encoding(string str, Encoding encoding) => Convert.ToBase64String(encoding.GetBytes(str));
+
+    public static string Base64Decoding(string base64, Encoding encoding)
+    {
+        // padding
+        base64 += Repeat("=", base64.Length % 4);
+        return encoding.GetString(Convert.FromBase64String(base64));
+    }
 
     public static string Md5(string input)
     {
@@ -34,4 +47,6 @@ public class Strings
         byte[] hashBytes = MD5.HashData(inputBytes);
         return BitConverter.ToString(hashBytes).Replace("-", string.Empty).ToLower();
     }
+
+    public static string Repeat(string str, int n) => string.Concat(Enumerable.Repeat(str, n));
 }
