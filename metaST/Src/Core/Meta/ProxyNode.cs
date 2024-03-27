@@ -38,9 +38,9 @@ public class ProxyNode(Dictionary<dynamic, dynamic> info)
         set { Info["server"] = value; }
     }
 
-    public int Port
+    public string Port
     {
-        get { return int.Parse(Info["port"]); }
+        get { return Info["port"]; }
         set { Info["port"] = value; }
     }
 
