@@ -44,10 +44,11 @@ jobs:
       - name: 文件压缩
         id: compress
         run: |
-          7z a -tzip -mx9 -mmt$(nproc) metaST/dest/metaST-win-amd64.zip   metaST/dest/metaST-win-amd64.exe
-          7z a -tzip -mx9 -mmt$(nproc) metaST/dest/metaST-win-arm64.zip   metaST/dest/metaST-win-arm64.exe
-          7z a -tzip -mx9 -mmt$(nproc) metaST/dest/metaST-linux-amd64.zip metaST/dest/metaST-linux-amd64
-          7z a -tzip -mx9 -mmt$(nproc) metaST/dest/metaST-linux-arm64.zip metaST/dest/metaST-linux-arm64
+          cd metaST/dest/
+          7z a -tzip -mx9 -mmt$(nproc) metaST-win-amd64.zip   metaST-win-amd64.exe
+          7z a -tzip -mx9 -mmt$(nproc) metaST-win-arm64.zip   metaST-win-arm64.exe
+          7z a -tzip -mx9 -mmt$(nproc) metaST-linux-amd64.zip metaST-linux-amd64
+          7z a -tzip -mx9 -mmt$(nproc) metaST-linux-arm64.zip metaST-linux-arm64
 
       - name: 发布
         id: create_release
