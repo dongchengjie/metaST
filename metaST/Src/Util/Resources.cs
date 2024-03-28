@@ -12,9 +12,14 @@ public class Resources
         if (skipIfExists && File.Exists(dest)) return;
         try
         {
-            using Stream? stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourcePath);
-            using FileStream fileStream = new(dest, FileMode.Create);
-            stream?.CopyTo(fileStream);
+            string? directory = Path.GetDirectoryName(dest);
+            if (directory != null)
+            {
+                Directory.CreateDirectory(directory);
+                using Stream? stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourcePath);
+                using FileStream fileStream = new(dest, FileMode.Create);
+                stream?.CopyTo(fileStream);
+            }
         }
         catch (Exception ex)
         {
