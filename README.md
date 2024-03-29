@@ -1,31 +1,38 @@
- <h1><img src="./metaST/Resources/icon.ico" alt="Clash" width="24"/><span>etaST</span></h1>
+ <h1><img src="./metaST/Resources/icon.ico" alt="M" width="24"/><span>etaST</span></h1>
 
-> A <a href="https://github.com/MetaCubeX/mihomo">Clash.Meta</a>-based CLI program for proxy testing.s
+> 一个基于<a href="https://github.com/MetaCubeX/mihomo">Clash.Meta</a>内核的节点测试 CLI 程序
 
-## Features
+## 功能
 
-- Supports proxies delay and speed testing, filtering and sorting.
-- Supports proxies renaming using GEO lookup result.
-- Supports grouping proxies by region.
-- Emojis and flags of proxies' region provided.
-- Built-in rulesets ([ACL4SSR](https://github.com/ACL4SSR/ACL4SSR/tree/master), [Loyalsoldier](https://github.com/Loyalsoldier/clash-rules)) provided.
-- Windows and Linux platform supported.
+- 支持节点延迟测试、下载速度测试，筛选、过滤
+- 支持根据节点地域归属重命名
+- 支持按照节点地域归属分组
+- 节点、代理组提供地域归属国旗 Icon
+- 内置规则集 [ACL4SSR](https://github.com/ACL4SSR/ACL4SSR/tree/master)、[Loyalsoldier](https://github.com/Loyalsoldier/clash-rules) 可供选择
+- 支持 Windows、Linux 系统
 
-## Usage
+## 用法
 
-### Basic
+### 基础用法
 
 ```bash
+# 使用本地配置文件
 metaST-<platform> --config D:/demo.yaml
+# 使用远程配置文件
+metaST-<platform> --config https://example.com/config.yaml
 ```
 
-### Example
+### 进阶用法
 
 ```bash
-metaST-<platform> --config D:/demo.yaml --dt 500 --se true --sf 4096000 --sort delay --top 10 --output E:/demo_result.yaml
+# 进行下载测试,延迟不超过500ms
+# 进行下载测试,速度不小于500KB/s
+# 按照延迟升序,取前20条结果
+# 输出到E:/example_result.yaml
+metaST-<platform> --config D:/demo.yaml --dt 500 --se true --sf 4096000 --sort delay --top 20 --output E:/example_result.yaml
 ```
 
-## CLI Arguments
+## 命令行参数
 
 ```bash
 --config  Required. clash配置文件路径(或链接地址)
@@ -78,7 +85,7 @@ metaST-<platform> --config D:/demo.yaml --dt 500 --se true --sf 4096000 --sort d
 
 --pause   (Default: false) 程序结束后等待
 
---help    Display this help screen.
+--help    打印帮助信息
 
---version Display version information.
+--version 打印版本信息
 ```
