@@ -89,3 +89,26 @@ metaST-<platform> --config D:/demo.yaml --dt 500 --se true --sf 4096000 --sort d
 
 --version 打印版本信息
 ```
+
+## FAQ
+
+1. 配置文件支持除 Clash 配置以外（如 v2ray）的配置吗？
+
+   不支持。仅支持 Clash 配置、Clash 节点池配置，以及 Base64 编码后的前两者配置。
+
+2. 支持测试的协议有哪些？
+
+   基于 Clash.Meta 内核，支持协议详见[文档](https://wiki.metacubex.one/config/proxies/ss/)
+
+3. 为什么不建议将延迟测试线程数设置得过大？
+
+   受线程调度、系统资源的限制，不可能每个线程都得到公平响应。线程数量过多，可能出现某些线程因高于平均时间才得到响应，导致测试结果偏大。
+
+4. 为什么要为`Cloudflare`节点单独分组？
+
+   1. 因为`Cloudflare`的节点可能为边缘节点，会出现跳 IP 的情况，测试结果仅是当时的 IP 归属。
+   2. 没有经过反代的`Cloudflare`节点无法访问某些托管在`Cloudflare`上的服务。
+
+5. 下载测试的链接有什么要求吗？
+
+   如果需要测试`Cloudflare`节点的下载速度，需要是`Cloudflare CDN`托管的服务，详见[可用的 Cloudflare 下载测速地址](https://github.com/XIU2/CloudflareSpeedTest/issues/6)
