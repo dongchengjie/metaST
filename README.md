@@ -11,7 +11,7 @@
 - 内置规则集 [ACL4SSR](https://github.com/ACL4SSR/ACL4SSR/tree/master)、[Loyalsoldier](https://github.com/Loyalsoldier/clash-rules) 可供选择
 - 支持 Windows、Linux 系统
 
-## 快速方法
+## 使用方法
 
 ### 快速使用
 
