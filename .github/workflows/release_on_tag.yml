@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: 安装p7zip
-        run: sudo apt-get install p7zip-full
+        run: sudo apt-get -y install p7zip-full
 
       - name: 拉取最新代码
         uses: actions/checkout@v4
