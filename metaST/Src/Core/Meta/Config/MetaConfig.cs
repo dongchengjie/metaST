@@ -107,8 +107,8 @@ public class MetaConfig
         // 读取模板内容
         string yaml = GetConfigTemplate("template.mixed.yaml");
         // mixed移除监听端口,防止多线程情况下端口冲突
-        List<Regex> regexes = ((List<string>)["port", "socks-port", "mixed-port", "redir-port", "tproxy-port"])
-            .Select(item => new Regex(@$"^{item} *?: *\d+$", RegexOptions.Compiled)).ToList();
+        List<Regex> regexes = ((List<string>)["port", "socks-port", "mixed-port", "redir-port", "tproxy-port", "external-controller"])
+            .Select(item => new Regex(@$"^{item} *?: *.+$", RegexOptions.Compiled)).ToList();
         yaml = string.Join(Environment.NewLine, yaml.Split(Environment.NewLine).Where(line => !regexes.Where(regex => regex.IsMatch(line.Trim())).Any()));
 
         PortManager portManager = PortManager.Claim(proxies.Count);
