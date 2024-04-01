@@ -2,7 +2,6 @@
 
 ### 变更
 
-- 更新 meta 内核至 `1.18.3`
-- 更新 geo
-
 ### 修复
+
+- 修复 mixed 测试配置 未移除 `external-controller`配置
