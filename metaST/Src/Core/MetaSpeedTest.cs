@@ -10,7 +10,7 @@ using Util;
 // 程序信息
 [assembly: AssemblyTitle("metaST")]
 [assembly: AssemblyDescription("A Clash.Meta-based CLI program for proxy testing.")]
-[assembly: AssemblyVersion("1.1.1")]
+[assembly: AssemblyVersion("1.1.3")]
 
 namespace Core.MetaSpeedTest;
 public class MetaSpeedTest
@@ -68,7 +68,7 @@ public class MetaSpeedTest
         // 设置上下文
         Context.Options = options;
         // 清理残余进程
-        Processes.FindAndKill(Constants.ExecutableName);
+        Processes.FindAndKill(Constants.RuntimeExecutable);
         // 日志配置
         Logger.LogLevel = options.Verbose ? LogLevel.trace : LogLevel.info;
         Logger.RefreshInterval = 500;

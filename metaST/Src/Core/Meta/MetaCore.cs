@@ -6,13 +6,13 @@ namespace Core.Meta;
 
 public class MetaCore
 {
-    // Meta内核解压路径
-    private static readonly string metaCorePath = Path.Combine(Constants.WorkSpace, Constants.ExecutableName);
+    // 内核解压路径
+    private static readonly string runtimeExecutablePath = Path.Combine(Constants.WorkSpace, Constants.RuntimeExecutable);
     static MetaCore()
     {
         // 解压内核
-        string resourceName = "meta." + Platform.GetPlatform() + "." + Constants.ExecutableName;
-        Resources.Extract(resourceName, metaCorePath, true);
+        string resourceName = "meta." + Platform.GetPlatform() + "." + Constants.MetaExecutable;
+        Resources.Extract(resourceName, runtimeExecutablePath, true);
         // 解压GEO
         Resources.Extract("meta.country.mmdb", Path.Combine(Constants.ConfigPath, "country.mmdb"), true);
         Resources.Extract("meta.geoip.dat", Path.Combine(Constants.ConfigPath, "geoip.dat"), true);
@@ -20,18 +20,18 @@ public class MetaCore
         // 文件赋权
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            Processes.Start("icacls", metaCorePath + " /grant Everyone:(RX)", (sender, e) => { });
+            Processes.Start("icacls", runtimeExecutablePath + " /grant Everyone:(RX)", (sender, e) => { });
         }
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            File.SetUnixFileMode(metaCorePath, UnixFileMode.OtherExecute | UnixFileMode.GroupExecute | UnixFileMode.UserExecute);
+            File.SetUnixFileMode(runtimeExecutablePath, UnixFileMode.OtherExecute | UnixFileMode.GroupExecute | UnixFileMode.UserExecute);
         }
     }
 
     public static Task<Process> StartProxy(string configPath)
     {
         TaskCompletionSource<bool> tcs = new();
-        Task<Process> task = Processes.Start(metaCorePath, "-f " + configPath, (sender, e) =>
+        Task<Process> task = Processes.Start(runtimeExecutablePath, "-f " + configPath, (sender, e) =>
         {
             Logger.Trace(e.Data ?? string.Empty);
             if (!tcs.Task.IsCompleted && !string.IsNullOrEmpty(e.Data))

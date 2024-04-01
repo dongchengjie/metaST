@@ -5,13 +5,15 @@ namespace Core;
 public class Constants
 {
     // 内核名称
-    public static readonly string MetaCoreName = "mihomo";
-    // Meta内核可执行程序名
-    public static readonly string ExecutableName = MetaCoreName + (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ".exe" : string.Empty);
+    public static readonly string MetaCore = "mihomo";
+    // 内核可执行程序名
+    public static readonly string MetaExecutable = MetaCore + (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ".exe" : string.Empty);
+    // 运行时可执行程序名(防止影响其他mihomo进程)
+    public static readonly string RuntimeExecutable = Assembly.GetEntryAssembly()?.GetName().Name + "_" + MetaExecutable;
     // 用户目录
     public static readonly string UserProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
     // 配置目录
-    public static readonly string ConfigPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".config" + Path.DirectorySeparatorChar + MetaCoreName + Path.DirectorySeparatorChar);
+    public static readonly string ConfigPath = Path.Combine(UserProfile, ".config", "mihomo");
     // 临时文件目录
     public static readonly string TempPath = Path.GetTempPath();
     // 应用程序目录
