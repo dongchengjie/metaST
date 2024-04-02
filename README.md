@@ -37,6 +37,8 @@ metaST-<platform> --config D:/demo.yaml --dt 500 --se true --sf 4096000 --sort d
 ```bash
 --config  Required. clash配置文件路径(或链接地址)
 
+--proxy   资源下载代理(http://host:port)
+
 --de      (Default: true) 是否进行延迟测试
 
 --du      (Default: https://www.google.com/gen_204) 延迟测试链接

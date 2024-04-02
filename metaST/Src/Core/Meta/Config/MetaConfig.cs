@@ -26,7 +26,7 @@ public class MetaConfig
                     // 设置User-Agent为clash
                     client.DefaultRequestHeaders.Add("User-Agent", "clash");
                     return client.GetAsync(config).Result.Content.ReadAsStringAsync().Result;
-                }, 10 * 1000);
+                }, 30 * 1000, new WebProxy(Context.Options.Porxy));
                 // 文件内容要求不为空
                 if (string.IsNullOrWhiteSpace(content)) throw new Exception(config);
                 Logger.Info("下载配置文件完成");

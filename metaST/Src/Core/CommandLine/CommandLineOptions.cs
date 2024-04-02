@@ -7,6 +7,9 @@ public class CommandLineOptions
     [Option("config", Required = true, HelpText = "clash配置文件路径(或链接地址)")]
     public required string Config { get; set; }
 
+    [Option("proxy", Required = false, HelpText = "资源下载代理(http://host:port)")]
+    public required string Porxy { get; set; }
+
     [Option("de", Required = false, Default = true, HelpText = "是否进行延迟测试")]
     public required bool? DelayTestEnable { get; set; }
 
