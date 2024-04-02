@@ -23,9 +23,9 @@ public class Constants
     // 工作目录/临时目录
     public static readonly string WorkSpaceTemp = Path.Combine(WorkSpace, "temp");
     // 最大占用端口数
-    public static readonly int MaxPortsOccupied = 500;
-    // 最大占用端口数
-    public static readonly int MaxDelayTestThreads = 64;
+    public static readonly int MaxPortsOccupied = 200;
+    // 最大延迟测速线程数
+    public static readonly int MaxDelayTestThreads = 128;
     // 主体内容最大字符宽度s
     public static readonly int MaxSubject = 48;
 }

@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Net;
 using System.Net.Sockets;
 
@@ -5,61 +6,67 @@ namespace Util;
 
 public class PortManager : IDisposable
 {
-    private static readonly int startingPort = 50000;
-    private static readonly int endingPort = 65000;
-    private static int currentPort = startingPort + new Random().Next(endingPort - startingPort);
-    private readonly List<Socket> sockets = [];
-    private readonly List<int> ports = [];
+    private readonly ConcurrentBag<TcpListener> listeners = [];
+    private readonly ConcurrentBag<int> ports = [];
     private PortManager() { }
     public static PortManager Claim(int portNum)
     {
         PortManager manager = new();
-        int acquired = 0;
-        while (acquired < portNum)
+        Parallel.For(0, portNum, (i) =>
         {
-            Socket? socket = null;
-            try
-            {
-                socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                IPEndPoint localEP = new(IPAddress.Loopback, currentPort);
-                socket.Bind(localEP);
-                manager.sockets.Add(socket);
-                IPEndPoint? endPoint = (IPEndPoint?)socket.LocalEndPoint;
-                manager.ports.Add(endPoint != null ? endPoint.Port : -1);
-                acquired++;
-            }
-            catch
-            {
-                CloseSocket(socket);
-                Thread.Sleep(100);
-            }
-            finally
-            {
-                currentPort = currentPort + 1 <= endingPort ? currentPort + 1 : startingPort;
-            }
-        }
+            TcpListener listener = new(IPAddress.Loopback, 0);
+            listener.Start();
+            manager.listeners.Add(listener);
+            manager.ports.Add(((IPEndPoint)listener.LocalEndpoint).Port);
+        });
         return manager;
     }
 
     public int Get(int index)
     {
-        return ports[index];
+        return ports.ElementAt(index);
     }
 
     public int Use(int index)
     {
-        CloseSocket(sockets[index]);
-        return ports[index];
+        Release(listeners.ElementAt(index));
+        return ports.ElementAt(index);
     }
 
     public void Dispose()
     {
-        sockets.ForEach(CloseSocket);
+        Task.WaitAll(listeners.Select(listener => Task.Run(() => Release(listener))).ToArray());
         GC.SuppressFinalize(this);
     }
 
-    private static void CloseSocket(Socket? socket)
+    private static void Release(TcpListener listener)
     {
-        if (socket != null) using (socket) { }
+        if (listener != null)
+        {
+            using (listener)
+            {
+                int port = ((IPEndPoint)listener.LocalEndpoint).Port;
+                listener.Stop();
+                WaitForPortRelease(port);
+            }
+        }
+    }
+
+    private static void WaitForPortRelease(int port, int timeout = 5000)
+    {
+        using CancellationTokenSource cts = new(timeout);
+        CancellationToken token = cts.Token;
+        while (!token.IsCancellationRequested)
+        {
+            using Socket socket = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            if (Task.WaitAny(socket.ConnectAsync(IPAddress.Loopback, port), Task.Delay(50)) == 0)
+            {
+                Thread.Sleep(50);
+            }
+            else
+            {
+                return;
+            }
+        }
     }
 }
