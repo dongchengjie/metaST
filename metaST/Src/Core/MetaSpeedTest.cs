@@ -5,12 +5,13 @@ using Core.Meta;
 using Core.Meta.Config;
 using Core.Test.Profiler;
 using Core.Test.Reuslt;
+using Stats;
 using Util;
 
 // 程序信息
 [assembly: AssemblyTitle("metaST")]
 [assembly: AssemblyDescription("A Clash.Meta-based CLI program for proxy testing.")]
-[assembly: AssemblyVersion("1.1.3")]
+[assembly: AssemblyVersion("1.1.4")]
 
 namespace Core.MetaSpeedTest;
 public class MetaSpeedTest
@@ -41,10 +42,9 @@ public class MetaSpeedTest
             // 节点GEO重命名
             EnsurePorxiesLeft(proxies);
             proxies = !string.IsNullOrWhiteSpace(options.Tag) || (options.GeoLookup ?? true) ? ProxyNode.Rename(proxies) : proxies;
-            // 生成配置文件并输出
+            // 输出
             EnsurePorxiesLeft(proxies);
-            string configYaml = MetaConfig.GenerateConfig(proxies);
-            WriteToFile(configYaml);
+            FilesOutput(proxies);
         }
         catch (Exception ex)
         {
@@ -171,17 +171,33 @@ public class MetaSpeedTest
         return proxies;
     }
 
-    private static void WriteToFile(string configContent)
+    private static void FilesOutput(List<ProxyNode> proxies)
     {
         CommandLineOptions options = Context.Options;
-        string outputPath = options.Output ?? string.Empty;
-        if (string.IsNullOrWhiteSpace(outputPath))
+        // 决定输出路径
+        string configOutput = options.Output ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(configOutput))
         {
             string configFile = options.Config.StartsWith("http") ? Strings.Md5(options.Config) : options.Config;
             configFile = Path.GetFileNameWithoutExtension(configFile);
-            outputPath = Path.Combine(Constants.AppPath, configFile + "_result.yaml");
+            configOutput = Path.Combine(Constants.AppPath, configFile + "_result.yaml");
         }
-        Files.WriteToFile(new MemoryStream(Encoding.UTF8.GetBytes(configContent)), Path.GetFullPath(outputPath));
-        Logger.Info($"输出配置文件: {outputPath}");
+
+        // 输出配置文件
+        string configContent = MetaConfig.GenerateConfig(proxies);
+        Files.WriteToFile(new MemoryStream(Encoding.UTF8.GetBytes(configContent)), Path.GetFullPath(configOutput));
+        Logger.Info($"输出配置文件: {configOutput}");
+
+        // 输出CSV文件
+        string csvOutput = Path.Combine(Path.GetDirectoryName(Path.GetFullPath(configOutput)) ?? string.Empty, Path.GetFileNameWithoutExtension(configOutput) + ".csv");
+        string csvContent = CSV.Generate(proxies);
+        Files.WriteToFile(new MemoryStream(Encoding.UTF8.GetBytes(csvContent)), Path.GetFullPath(csvOutput));
+        Logger.Info($"输出CSV文件: {csvOutput}");
+
+        // 输出饼图文件
+        string pieChartOutput = Path.Combine(Path.GetDirectoryName(Path.GetFullPath(configOutput)) ?? string.Empty, Path.GetFileNameWithoutExtension(configOutput) + ".md");
+        string pieChartContent = PieChart.Generate(proxies);
+        Files.WriteToFile(new MemoryStream(Encoding.UTF8.GetBytes(pieChartContent)), Path.GetFullPath(pieChartOutput));
+        Logger.Info($"输出饼图文件: {pieChartOutput}");
     }
 }

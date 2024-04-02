@@ -18,7 +18,7 @@ public class DelayProfiler(string url = "https://www.google.com/gen_204", int ti
         {
             DelayResult result = new();
             int succeded = 0;
-            for (int i = 0; i <= Rounds; i++)
+            for (int i = 0; i < Rounds; i++)
             {
                 bool flag = HttpRequest.UsingHttpClient((client) =>
                 {
