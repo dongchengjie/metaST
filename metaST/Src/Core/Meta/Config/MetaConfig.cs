@@ -21,12 +21,13 @@ public class MetaConfig
             {
                 Logger.Info("下载配置文件：" + config);
                 // 下载获取文件内容
+                IWebProxy? proxy = string.IsNullOrEmpty(Context.Options.Porxy) ? null : new WebProxy(Context.Options.Porxy);
                 string? content = HttpRequest.UsingHttpClient((client) =>
                 {
                     // 设置User-Agent为clash
                     client.DefaultRequestHeaders.Add("User-Agent", "clash");
                     return client.GetAsync(config).Result.Content.ReadAsStringAsync().Result;
-                }, 30 * 1000, new WebProxy(Context.Options.Porxy));
+                }, 30 * 1000, proxy);
                 // 文件内容要求不为空
                 if (string.IsNullOrWhiteSpace(content)) throw new Exception(config);
                 Logger.Info("下载配置文件完成");
