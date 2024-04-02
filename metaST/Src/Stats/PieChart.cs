@@ -71,9 +71,16 @@ public class PieChart
         double max = numbers.Max();
         int width = (int)(Math.Ceiling(3.5 * STDEV(numbers) * Math.Pow(numbers.Count(), -1 / 3.0) / 10) * 10);
         List<Range> ranges = [];
-        for (double current = min; current < max; current += width)
+        if (width > 0)
         {
-            ranges.Add(new Range { start = current, end = current + width });
+            for (double current = min; current < max; current += width)
+            {
+                ranges.Add(new Range { start = current, end = current + width });
+            }
+        }
+        else
+        {
+            ranges.Add(new Range { start = numbers.ElementAt(0), end = numbers.ElementAt(0) + 1 });
         }
         return ranges;
     }
