@@ -26,6 +26,6 @@ public class Constants
     public static readonly int MaxPortsOccupied = 200;
     // 最大延迟测速线程数
     public static readonly int MaxDelayTestThreads = 128;
-    // 主体内容最大字符宽度s
-    public static readonly int MaxSubject = 48;
+    // 主体内容最大字符宽度
+    public static readonly int MaxSubject = 64;
 }

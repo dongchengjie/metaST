@@ -119,7 +119,11 @@ public class ProxyNode(Dictionary<dynamic, dynamic> info)
                 proxy.Name = $"{frozenPart} {unfrozenPart}";
             });
             // 重名添加序号
-            proxies = Distinct(proxies);
+            if (proxies.Select(proxy => proxy.Name).Distinct().Count() != proxies.Count)
+            {
+                proxies = Distinct(proxies);
+                proxies = Sort(proxies);        // Distinct会按照分组排序
+            }
         }
         return proxies ?? [];
     }

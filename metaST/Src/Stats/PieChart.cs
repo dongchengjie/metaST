@@ -1,3 +1,4 @@
+using System.Collections.Specialized;
 using Core;
 using Core.CommandLine;
 using Core.Meta;
@@ -15,46 +16,55 @@ public class PieChart
         if (options.DelayTestEnable ?? true)
         {
             List<double> delays = proxies.Select(proxy => proxy.DelayResult.Result()).ToList();
-            Dictionary<string, int> delayFrequncy = Frequncy(delays, (start, end) => $"{(int)start}-{(int)end}ms");
+            List<KeyValuePair<string, int>> delayFrequncy = Frequncy(delays, (range) => range.start, (range) => $"{(int)range.start}-{(int)range.end}ms");
             charts = $"{charts}{Environment.NewLine}{PieContent("延迟分布", delayFrequncy)}";
         }
         // 下载速度分布
         if (options.SpeedTestEnable ?? false)
         {
             List<double> speeds = proxies.Select(proxy => proxy.SpeedResult.Result()).ToList();
-            Dictionary<string, int> speedFrequncy = Frequncy(speeds, (start, end) => $"{start / 8 / 1024 / 1024:0.00}-{end / 8 / 1024 / 1024:0.00}MB/s");
+            List<KeyValuePair<string, int>> speedFrequncy = Frequncy(speeds, (range) => -range.start, (range) => $"{range.start / 8 / 1024 / 1024:0.00}-{range.end / 8 / 1024 / 1024:0.00}MB/s");
             charts = $"{charts}{Environment.NewLine}{PieContent("下载速度分布", speedFrequncy)}";
         }
         // 地域分布
         if (options.GeoLookup ?? true)
         {
-            Dictionary<string, int> regieonFrequncy = proxies.GroupBy(proxy => proxy.GeoInfo.Country).ToDictionary(group => group.Key, group => group.Count());
+            List<KeyValuePair<string, int>> regieonFrequncy = proxies.GroupBy(proxy => proxy.GeoInfo.Country).Select(group => new KeyValuePair<string, int>(group.Key, group.Count())).ToList();
             charts = $"{charts}{Environment.NewLine}{PieContent("地域分布", regieonFrequncy)}";
         }
         // 协议分布
-        Dictionary<string, int> typeFrequncy = proxies.GroupBy(proxy => proxy.Type.ToLower()).ToDictionary(group => group.Key, group => group.Count());
+        List<KeyValuePair<string, int>> typeFrequncy = proxies.GroupBy(proxy => proxy.Type.ToLower()).Select(group => new KeyValuePair<string, int>(group.Key, group.Count())).ToList();
         charts = $"{charts}{Environment.NewLine}{PieContent("协议分布", typeFrequncy)}";
 
         return charts;
     }
 
-    private static string PieContent(string title, Dictionary<string, int> frequncy)
+    private static string PieContent(string title, ICollection<KeyValuePair<string, int>> frequncy)
     {
         if (frequncy.Count > 0)
         {
-            string stats = string.Join(Environment.NewLine, frequncy.OrderByDescending(entry => entry.Value).Select(entry => $"\"{entry.Key}\" : {entry.Value}").ToList());
+            string stats = string.Join(Environment.NewLine, frequncy.Select(entry => $"\"{entry.Key}\" : {entry.Value}").ToList());
             return string.Join(Environment.NewLine, ["```mermaid", "pie showData", $"title {title}", stats, "```"]);
         }
         return string.Empty;
     }
 
-    private static Dictionary<string, int> Frequncy(IEnumerable<double> numbers, Func<double, double, string>? formatter)
+    private static List<KeyValuePair<string, int>> Frequncy(IEnumerable<double> numbers, Func<Range, object>? orderBy, Func<Range, string>? formatter)
     {
-        formatter ??= (start, end) => $"[{start},{end}]";
         List<Range> ranges = GetRanges(numbers);
         return numbers
             .GroupBy(number => ranges.Where(range => number >= range.start && number < range.end).First())
-            .ToDictionary(group => formatter(group.Key.start, group.Key.end), (group) => group.Count());
+            .Select(group =>
+            {
+                group.Key.frequncy = group.Count();
+                return group.Key;
+            })
+            .OrderBy(range => (orderBy ??= (r) => r.frequncy)(range))
+            .Select(range =>
+            {
+                range.label = (formatter ??= (r) => $"{r.start}-{r.end}")(range);
+                return new KeyValuePair<string, int>(range.label, range.frequncy);
+            }).ToList();
     }
     private static List<Range> GetRanges(IEnumerable<double> numbers)
     {
@@ -86,5 +96,7 @@ public class PieChart
     {
         public double start;
         public double end;
+        public string label = string.Empty;
+        public int frequncy;
     }
 }
