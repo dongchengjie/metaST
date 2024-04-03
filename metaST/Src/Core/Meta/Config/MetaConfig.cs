@@ -228,10 +228,10 @@ public class MetaConfig
                 return
                   "  - name: " + country + Environment.NewLine
                 + "    type: url-test" + Environment.NewLine
-                + "    tolerance: 100" + Environment.NewLine
+                + "    tolerance: 50" + Environment.NewLine
                 + "    lazy: false" + Environment.NewLine
                 + "    interval: 300" + Environment.NewLine
-                + "    timeout: 3000" + Environment.NewLine
+                + "    timeout: 2000" + Environment.NewLine
                 + "    url: ${options.DelayTestUrl}" + Environment.NewLine
                 + "    max-failed-times: 3" + Environment.NewLine
                 + "    icon: ${" + icon + "}" + Environment.NewLine

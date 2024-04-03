@@ -10,6 +10,8 @@ log-level: info
 ipv6: true
 # HTTP REST API外部控制监听地址
 external-controller: 0.0.0.0:9090
+# HTTP REST API外部控制密钥
+secret: ''
 # TCP并发
 tcp-concurrent: true
 # 全局客户端指纹(支持VLESS,Vmess,trojan)

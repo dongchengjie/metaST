@@ -15,14 +15,14 @@ public class PieChart
         if (options.DelayTestEnable ?? true)
         {
             List<double> delays = proxies.Select(proxy => proxy.DelayResult.Result()).ToList();
-            List<KeyValuePair<string, int>> delayFrequncy = Frequncy(delays, (range) => range.start, (range) => $"{(int)range.start}-{(int)range.end}ms");
+            List<KeyValuePair<string, int>> delayFrequncy = Frequncy(delays, range => range.start, range => $"{(int)range.start}-{(int)range.end}ms");
             charts = $"{charts}{Environment.NewLine}{PieContent("延迟分布", delayFrequncy)}";
         }
         // 下载速度分布
         if (options.SpeedTestEnable ?? false)
         {
             List<double> speeds = proxies.Select(proxy => proxy.SpeedResult.Result()).ToList();
-            List<KeyValuePair<string, int>> speedFrequncy = Frequncy(speeds, (range) => -range.start, (range) => $"{range.start / 8 / 1024 / 1024:0.00}-{range.end / 8 / 1024 / 1024:0.00}MB/s");
+            List<KeyValuePair<string, int>> speedFrequncy = Frequncy(speeds, range => -range.start, range => $"{range.start / 8 / 1024 / 1024:0.00}-{range.end / 8 / 1024 / 1024:0.00}MB/s");
             charts = $"{charts}{Environment.NewLine}{PieContent("下载速度分布", speedFrequncy)}";
         }
         // 地域分布
@@ -69,6 +69,7 @@ public class PieChart
     {
         double min = numbers.Min();
         double max = numbers.Max();
+        // Scott's normal reference rule
         int width = (int)(Math.Ceiling(3.5 * STDEV(numbers) * Math.Pow(numbers.Count(), -1 / 3.0) / 10) * 10);
         List<Range> ranges = [];
         if (width > 0)
