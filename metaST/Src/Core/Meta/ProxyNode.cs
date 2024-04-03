@@ -56,6 +56,7 @@ public class ProxyNode(Dictionary<dynamic, dynamic> info)
     {
         Logger.Info("开始节点去重...");
         // 去重（协议类型 + 服务器 + 端口）
+        proxies = proxies.Where(proxy => proxy.Info.ContainsKey("type") && proxy.Info.ContainsKey("server") && proxy.Info.ContainsKey("port")).ToList();
         proxies = proxies.DistinctBy((proxy) => string.Join('_', [proxy.Type, proxy.Server, proxy.Port])).ToList();
         // 名称重复的添加序号后缀
         proxies = proxies
