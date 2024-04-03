@@ -6,7 +6,7 @@ proxy-groups:
   - name: 节点选择
     type: select
     icon: ${icons.adjust.svg}
-    proxies: ['延迟选优', '故障转移', '负载均衡(轮询)', '负载均衡(散列)', 'DIRECT', '${region-groups}']
+    proxies: ['延迟选优', '故障转移', '负载均衡(散列)', '负载均衡(轮询)', 'DIRECT', '${region-groups}']
 
   - name: 延迟选优
     type: url-test
@@ -28,17 +28,6 @@ proxy-groups:
     icon: ${icons.ambulance.svg}
     proxies: ['${region-groups}']
 
-  - name: 负载均衡(轮询)
-    type: load-balance
-    strategy: round-robin
-    lazy: false
-    interval: 300
-    timeout: 2000
-    url: ${options.DelayTestUrl}
-    max-failed-times: 3
-    icon: ${icons.balance.svg}
-    proxies: ['${region-groups}']
-
   - name: 负载均衡(散列)
     type: load-balance
     strategy: consistent-hashing
@@ -50,30 +39,41 @@ proxy-groups:
     icon: ${icons.merry_go.svg}
     proxies: ['${region-groups}']
 
+  - name: 负载均衡(轮询)
+    type: load-balance
+    strategy: round-robin
+    lazy: false
+    interval: 300
+    timeout: 2000
+    url: ${options.DelayTestUrl}
+    max-failed-times: 3
+    icon: ${icons.balance.svg}
+    proxies: ['${region-groups}']
+
   - name: 谷歌服务
     type: select
     icon: ${icons.google.svg}
-    proxies: ['节点选择', '延迟选优', '故障转移', '负载均衡(轮询)', '负载均衡(散列)', '全局直连', '${region-groups}']
+    proxies: ['节点选择', '延迟选优', '故障转移', '负载均衡(散列)', '负载均衡(轮询)', '全局直连', '${region-groups}']
 
   - name: 国外媒体
     type: select
     icon: ${icons.youtube.svg}
-    proxies: ['节点选择', '延迟选优', '故障转移', '负载均衡(轮询)', '负载均衡(散列)', '全局直连', '${region-groups}']
+    proxies: ['节点选择', '延迟选优', '故障转移', '负载均衡(散列)', '负载均衡(轮询)', '全局直连', '${region-groups}']
 
   - name: 电报消息
     type: select
     icon: ${icons.telegram.svg}
-    proxies: ['节点选择', '延迟选优', '故障转移', '负载均衡(轮询)', '负载均衡(散列)', '全局直连', '${region-groups}']
+    proxies: ['节点选择', '延迟选优', '故障转移', '负载均衡(散列)', '负载均衡(轮询)', '全局直连', '${region-groups}']
 
   - name: 微软服务
     type: select
     icon: ${icons.microsoft.svg}
-    proxies: ['全局直连', '节点选择', '延迟选优', '故障转移', '负载均衡(轮询)', '负载均衡(散列)', '${region-groups}']
+    proxies: ['全局直连', '节点选择', '延迟选优', '故障转移', '负载均衡(散列)', '负载均衡(轮询)', '${region-groups}']
 
   - name: 苹果服务
     type: select
     icon: ${icons.apple.svg}
-    proxies: ['节点选择', '延迟选优', '故障转移', '负载均衡(轮询)', '负载均衡(散列)', '全局直连', '${region-groups}']
+    proxies: ['节点选择', '延迟选优', '故障转移', '负载均衡(散列)', '负载均衡(轮询)', '全局直连', '${region-groups}']
 
   - name: 广告过滤
     type: select
@@ -83,7 +83,7 @@ proxy-groups:
   - name: 全局直连
     type: select
     icon: ${icons.link.svg}
-    proxies: ['DIRECT', '节点选择', '延迟选优', '故障转移', '负载均衡(轮询)', '负载均衡(散列)', '${region-groups}']
+    proxies: ['DIRECT', '节点选择', '延迟选优', '故障转移', '负载均衡(散列)', '负载均衡(轮询)', '${region-groups}']
 
   - name: 全局拦截
     type: select
@@ -93,7 +93,7 @@ proxy-groups:
   - name: 漏网之鱼
     type: select
     icon: ${icons.fish.svg}
-    proxies: ['节点选择', '延迟选优', '故障转移', '负载均衡(轮询)', '负载均衡(散列)', '全局直连', '${region-groups}']
+    proxies: ['节点选择', '延迟选优', '故障转移', '负载均衡(散列)', '负载均衡(轮询)', '全局直连', '${region-groups}']
 
 # proxy-groups:
 
