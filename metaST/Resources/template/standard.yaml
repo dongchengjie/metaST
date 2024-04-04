@@ -12,7 +12,7 @@ proxy-groups:
   - name: 延迟选优
     type: url-test
     tolerance: 50
-    lazy: false
+    lazy: true
     interval: 300
     timeout: 2000
     url: ${options.DelayTestUrl}
@@ -22,7 +22,7 @@ proxy-groups:
 
   - name: 故障转移
     type: fallback
-    lazy: false
+    lazy: true
     interval: 300
     timeout: 2000
     url: ${options.DelayTestUrl}
@@ -33,7 +33,7 @@ proxy-groups:
   - name: 负载均衡(散列)
     type: load-balance
     strategy: consistent-hashing
-    lazy: false
+    lazy: true
     interval: 300
     timeout: 2000
     url: ${options.DelayTestUrl}
@@ -44,7 +44,7 @@ proxy-groups:
   - name: 负载均衡(轮询)
     type: load-balance
     strategy: round-robin
-    lazy: false
+    lazy: true
     interval: 300
     timeout: 2000
     url: ${options.DelayTestUrl}

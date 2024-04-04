@@ -8,13 +8,12 @@ mode: rule
 log-level: info
 # 是否允许内核接受IPv6流量
 ipv6: true
-# HTTP REST API外部控制监听地址
+# HTTP REST API外部控制监听地址、访问密钥
 external-controller: 0.0.0.0:9090
-# HTTP REST API外部控制密钥
 secret: ''
 # TCP并发
 tcp-concurrent: true
-# 全局客户端指纹(支持VLESS,Vmess,trojan)
+# 全局客户端指纹(支持VLESS,VMess,Trojan)
 global-client-fingerprint: chrome
 # 下载外部资源(proxy-provider、rule-provider、GEO等)时使用的UA
 global-ua: clash.meta
@@ -23,9 +22,7 @@ global-ua: clash.meta
 dns:
   enable: true
   ipv6: true
-  default-nameserver:
-    - 1.1.1.1
-    - 8.8.8.8
+  default-nameserver: [1.1.1.1, 223.5.5.5]
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
   fake-ip-filter:
@@ -34,20 +31,26 @@ dns:
     - '+.msftncsi.com'
   use-hosts: true
   nameserver:
-    - https://doh.pub/dns-query
+    # 阿里云公共DNS
     - https://dns.alidns.com/dns-query
+    # 腾讯DNSPod
+    - https://doh.pub/dns-query
+    # 360安全DNS
+    - https://doh.360.cn/dns-query
   fallback:
+    # Cloudflare
     - https://1.1.1.1/dns-query
-    - https://1.0.0.1/dns-query
+    # OpenDNS
     - https://208.67.222.222/dns-query
     - https://208.67.220.220/dns-query
+    # Mullvad
+    - https://194.242.2.2/dns-query
+    - https://194.242.2.3/dns-query
   fallback-filter:
     geoip: true
     geoip-code: CN
-    geosite:
-      - gfw
-    ipcidr:
-      - 240.0.0.0/4
+    geosite: [gfw]
+    ipcidr: [240.0.0.0/4]
 
 # 自动更新GEO
 geo-auto-update: true
