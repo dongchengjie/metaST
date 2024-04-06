@@ -111,6 +111,8 @@ public class MetaConfig
         List<Regex> regexes = ((List<string>)["port", "socks-port", "mixed-port", "redir-port", "tproxy-port", "external-controller"])
             .Select(item => new Regex(@$"^{item} *?: *.+$", RegexOptions.Compiled)).ToList();
         yaml = string.Join(Environment.NewLine, yaml.Split(Environment.NewLine).Where(line => !regexes.Where(regex => regex.IsMatch(line.Trim())).Any()));
+        // 关闭GEO自动更新，防止更新异常终止，导致后续不能处理IP
+        yaml = yaml.Replace("geo-auto-update: true", "geo-auto-update: false");
 
         PortManager portManager = PortManager.Claim(proxies.Count);
         // mixed监听端口

@@ -15,7 +15,7 @@ secret: ''
 tcp-concurrent: true
 # 全局客户端指纹(支持VLESS,VMess,Trojan)
 global-client-fingerprint: chrome
-# 下载外部资源(proxy-provider、rule-provider、GEO等)时使用的UA
+# 下载外部资源(proxy-provider、rule-provider、GEO等)使用的UA
 global-ua: clash.meta
 
 # DNS配置
