@@ -1,18 +1,20 @@
 # 混合端口
 mixed-port: 7890
-# 是否允许局域网访问
+# 局域网访问控制(白名单/黑名单)
 allow-lan: true
+lan-allowed-ips: ['0.0.0.0/0', '::/0']
+lan-disallowed-ips: []
 # 运行模式
 mode: rule
 # 日志级别
 log-level: info
-# 是否允许内核接受IPv6流量
+# 接受IPv6流量
 ipv6: true
-# HTTP REST API外部控制监听地址、访问密钥
+# 外部控制监听地址、访问密钥
 external-controller: 0.0.0.0:9090
 secret: ''
-# 更换延迟计算方式(去除握手等额外延迟)
-unified-delay: false
+# 延迟计算去除握手等额外延迟
+unified-delay: true
 # TCP并发
 tcp-concurrent: true
 # 全局客户端指纹(支持VLESS,VMess,Trojan)
@@ -21,47 +23,39 @@ global-client-fingerprint: chrome
 global-ua: clash.meta
 
 # DNS配置
+nameservers: &nameservers
+  - https://dns.alidns.com/dns-query # 阿里云公共DNS
+  - https://doh.pub/dns-query # 腾讯DNSPod
+  - https://doh.360.cn/dns-query # 360安全DNS
+fallback_nameservers: &fallback_nameservers
+  - https://1.1.1.1/dns-query # Cloudflare
+  - https://208.67.222.222/dns-query # OpenDNS(主)
+  - https://208.67.220.220/dns-query # OpenDNS(备)
+  - https://194.242.2.2/dns-query # Mullvad(主)
+  - https://194.242.2.3/dns-query # Mullvad(备)
 dns:
   enable: true
   ipv6: true
-  default-nameserver: [1.1.1.1, 223.5.5.5]
+  use-hosts: true
+  cache-algorithm: arc
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
-  fake-ip-filter:
-    # 排除劫持NCSI(解决出现断网小地球)
-    - '+.msftconnecttest.com'
-    - '+.msftncsi.com'
-  use-hosts: true
-  nameserver:
-    # 阿里云公共DNS
-    - https://dns.alidns.com/dns-query
-    # 腾讯DNSPod
-    - https://doh.pub/dns-query
-    # 360安全DNS
-    - https://doh.360.cn/dns-query
-  fallback:
-    # Cloudflare
-    - https://1.1.1.1/dns-query
-    # OpenDNS
-    - https://208.67.222.222/dns-query
-    - https://208.67.220.220/dns-query
-    # Mullvad
-    - https://194.242.2.2/dns-query
-    - https://194.242.2.3/dns-query
+  fake-ip-filter: ['+.msftconnecttest.com', '+.msftncsi.com']
+  default-nameserver: [1.1.1.1, 223.5.5.5]
+  nameserver-policy:
+    'geosite:private,geolocation-cn': *nameservers
+    'geosite:google,youtube,telegram,gfw,geolocation-!cn': *fallback_nameservers
+  nameserver: *nameservers
+  fallback: *fallback_nameservers
   fallback-filter:
     geoip: true
     geoip-code: CN
-    geosite: [gfw]
     ipcidr: [240.0.0.0/4]
-  # 缓存替换算法: lru(最近最少使用,默认)、arc(自适应替换缓存,命中效果好,占用更多的内存空间)
-  cache-algorithm: arc
 
-# 自动更新GEO
+# GEO自动更新、更新间隔(单位: 小时)、更新下载地址
 geo-auto-update: true
-# 自动更新GEO间隔(单位: 小时)
 geo-update-interval: 48
-# 自定义GEO下载地址
 geox-url:
-  geoip: ${options.GithubMirror}https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip.dat
-  geosite: ${options.GithubMirror}https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geosite.dat
-  mmdb: ${options.GithubMirror}https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/country.mmdb
+  geoip: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.dat
+  geosite: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat
+  mmdb: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/country.mmdb
