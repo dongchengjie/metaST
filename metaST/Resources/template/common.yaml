@@ -11,6 +11,8 @@ ipv6: true
 # HTTP REST API外部控制监听地址、访问密钥
 external-controller: 0.0.0.0:9090
 secret: ''
+# 更换延迟计算方式(去除握手等额外延迟)
+unified-delay: false
 # TCP并发
 tcp-concurrent: true
 # 全局客户端指纹(支持VLESS,VMess,Trojan)
@@ -51,6 +53,8 @@ dns:
     geoip-code: CN
     geosite: [gfw]
     ipcidr: [240.0.0.0/4]
+  # 缓存替换算法: lru(最近最少使用,默认)、arc(自适应替换缓存,命中效果好,占用更多的内存空间)
+  cache-algorithm: arc
 
 # 自动更新GEO
 geo-auto-update: true

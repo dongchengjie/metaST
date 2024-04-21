@@ -67,7 +67,10 @@ public class CommandLineOptions
     [Option("group", Required = false, Default = GroupType.regieon, HelpText = "代理组类型")]
     public required GroupType GroupType { get; set; }
 
-    [Option("ruleset", Required = false, Default = RuleSet.acl4ssr, HelpText = "结果配置文件使用的规则集")]
+    [Option("icon", Required = false, Default = IconType.http, HelpText = "图标类型")]
+    public required IconType IconType { get; set; }
+
+    [Option("ruleset", Required = false, Default = RuleSet.loyalsoldier, HelpText = "结果配置文件使用的规则集")]
     public required RuleSet RuleSet { get; set; }
 
     [Option("mirror", Required = false, Default = "https://mirror.ghproxy.com/", HelpText = "Github资源镜像加速地址")]

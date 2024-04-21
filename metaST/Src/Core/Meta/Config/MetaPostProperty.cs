@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using Core.CommandLine;
+using Core.CommandLine.Enum;
 using Newtonsoft.Json;
 using Util;
 
@@ -47,6 +48,17 @@ public partial class MetaPostProperty
 
     private static string ResolveIcon(string prorperty)
     {
+        CommandLineOptions options = Context.Options;
+        // http远程Icon
+        if (options.IconType.Equals(IconType.http))
+        {
+            string githubMirror = options.GithubMirror;
+            string repository = "https://raw.githubusercontent.com/dongchengjie/metaST/main/metaST/Resources/";
+            string extension = Path.GetExtension(prorperty);
+            string iconPath = prorperty.Replace(".", "/").Replace(extension.Replace(".", "/"), extension);
+            return $"{githubMirror}{repository}{iconPath}";
+        }
+        // Base64编码Icon
         byte[] bytes = Resources.ReadAsBytes(prorperty);
         bytes = bytes.Length > 0 ? bytes : Resources.ReadAsBytes(prorperty = "icons.unknown.svg");
         string base64 = Convert.ToBase64String(bytes);
