@@ -156,29 +156,29 @@ rule-providers:
 
 rules:
   # acl4ssr规则集
-  - RULE-SET,Apple,苹果服务
-  - RULE-SET,Bing,微软服务
-  - RULE-SET,Microsoft,微软服务
-  - RULE-SET,OneDrive,微软服务
-  - RULE-SET,Netflix,国外媒体
-  - RULE-SET,ProxyMedia,国外媒体
-  - RULE-SET,Google,谷歌服务
-  - RULE-SET,Telegram,电报消息
-  - RULE-SET,ProxyGFWlist,节点选择
-  - RULE-SET,ChinaCompanyIp,全局直连
-  - RULE-SET,ChinaDomain,全局直连
-  - RULE-SET,ChinaIp,全局直连
-  - RULE-SET,ChinaIpV6,全局直连
-  - RULE-SET,ChinaMedia,全局直连
-  - RULE-SET,Download,全局直连
-  - RULE-SET,LocalAreaNetwork,全局直连
-  - RULE-SET,UnBan,全局直连
-  - RULE-SET,BanAD,广告过滤
-  - RULE-SET,BanEasyList,广告过滤
-  - RULE-SET,BanEasyListChina,广告过滤
-  - RULE-SET,BanEasyPrivacy,广告过滤
-  - RULE-SET,BanProgramAD,广告过滤
+  - RULE-SET,Apple,苹果服务,no-resolve
+  - RULE-SET,Bing,微软服务,no-resolve
+  - RULE-SET,Microsoft,微软服务,no-resolve
+  - RULE-SET,OneDrive,微软服务,no-resolve
+  - RULE-SET,Netflix,国外媒体,no-resolve
+  - RULE-SET,ProxyMedia,国外媒体,no-resolve
+  - RULE-SET,Google,谷歌服务,no-resolve
+  - RULE-SET,Telegram,电报消息,no-resolve
+  - RULE-SET,ProxyGFWlist,节点选择,no-resolve
+  - RULE-SET,ChinaCompanyIp,全局直连,no-resolve
+  - RULE-SET,ChinaDomain,全局直连,no-resolve
+  - RULE-SET,ChinaIp,全局直连,no-resolve
+  - RULE-SET,ChinaIpV6,全局直连,no-resolve
+  - RULE-SET,ChinaMedia,全局直连,no-resolve
+  - RULE-SET,Download,全局直连,no-resolve
+  - RULE-SET,LocalAreaNetwork,全局直连,no-resolve
+  - RULE-SET,UnBan,全局直连,no-resolve
+  - RULE-SET,BanAD,广告过滤,no-resolve
+  - RULE-SET,BanEasyList,广告过滤,no-resolve
+  - RULE-SET,BanEasyListChina,广告过滤,no-resolve
+  - RULE-SET,BanEasyPrivacy,广告过滤,no-resolve
+  - RULE-SET,BanProgramAD,广告过滤,no-resolve
   # 其他
-  - GEOIP,LAN,全局直连
-  - GEOIP,CN,全局直连
+  - GEOIP,LAN,全局直连,no-resolve
+  - GEOIP,CN,全局直连,no-resolve
   - MATCH,漏网之鱼
