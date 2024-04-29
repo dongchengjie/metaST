@@ -41,17 +41,13 @@ dns:
   cache-algorithm: arc
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
-  fake-ip-filter: ['+.msftconnecttest.com', '+.msftncsi.com']
-  default-nameserver: [1.1.1.1, 223.5.5.5]
+  fake-ip-filter: ['+.lan', '+.local', '+.msftconnecttest.com', '+.msftncsi.com']
+  default-nameserver: ['223.5.5.5', '114.114.114.114', '1.1.1.1', '8.8.8.8']
   nameserver-policy:
-    'geosite:private,geolocation-cn': *nameservers
-    'geosite:google,youtube,telegram,gfw,geolocation-!cn': *fallback_nameservers
+    'geosite:private,cn,geolocation-cn': nameservers,
+    'geosite:google,youtube,telegram,gfw,geolocation-!cn': fallback_nameservers
   nameserver: *nameservers
   fallback: *fallback_nameservers
-  fallback-filter:
-    geoip: true
-    geoip-code: CN
-    ipcidr: [240.0.0.0/4]
 
 # GEO自动更新、更新间隔(单位: 小时)、更新下载地址
 geo-auto-update: true
