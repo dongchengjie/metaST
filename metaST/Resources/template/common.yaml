@@ -2,7 +2,7 @@
 mixed-port: 7890
 # 局域网访问控制(白名单/黑名单)
 allow-lan: true
-lan-allowed-ips: ['0.0.0.0/0', '::/0']
+lan-allowed-ips: ["0.0.0.0/0", "::/0"]
 lan-disallowed-ips: []
 # 运行模式
 mode: rule
@@ -12,7 +12,7 @@ log-level: info
 ipv6: true
 # 外部控制监听地址、访问密钥
 external-controller: 0.0.0.0:9090
-secret: ''
+secret: ""
 # 延迟计算去除握手等额外延迟
 unified-delay: true
 # TCP并发
@@ -41,13 +41,14 @@ dns:
   cache-algorithm: arc
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
-  fake-ip-filter: ['+.lan', '+.local', '+.msftconnecttest.com', '+.msftncsi.com']
-  default-nameserver: ['223.5.5.5', '114.114.114.114', '1.1.1.1', '8.8.8.8']
-  nameserver-policy:
-    'geosite:private,cn,geolocation-cn': nameservers,
-    'geosite:google,youtube,telegram,gfw,geolocation-!cn': fallback_nameservers
+  fake-ip-filter: ["+.lan", "+.local", "+.msftconnecttest.com", "+.msftncsi.com"]
+  default-nameserver: ["223.5.5.5", "114.114.114.114", "1.1.1.1", "8.8.8.8"]
   nameserver: *nameservers
-  fallback: *fallback_nameservers
+  proxy-server-nameserver: *nameservers
+  nameserver-policy:
+    "+.mirror.ghproxy.com": *fallback_nameservers
+    "geosite:private,cn,geolocation-cn": *nameservers
+    "geosite:google,youtube,telegram,gfw,geolocation-!cn": *fallback_nameservers
 
 # GEO自动更新、更新间隔(单位: 小时)、更新下载地址
 geo-auto-update: true

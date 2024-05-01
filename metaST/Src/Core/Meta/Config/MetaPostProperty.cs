@@ -53,10 +53,10 @@ public partial class MetaPostProperty
         if (options.IconType.Equals(IconType.http))
         {
             string githubMirror = options.GithubMirror;
-            string repository = "https://raw.githubusercontent.com/dongchengjie/metaST/main/metaST/Resources/";
+            string repository = "https://fastly.jsdelivr.net/gh/dongchengjie/metaST@main/metaST/Resources/";
             string extension = Path.GetExtension(prorperty);
             string iconPath = prorperty.Replace(".", "/").Replace(extension.Replace(".", "/"), extension);
-            return $"{githubMirror}{repository}{iconPath}";
+            return $"{repository}{iconPath}";
         }
         // Base64编码Icon
         byte[] bytes = Resources.ReadAsBytes(prorperty);
