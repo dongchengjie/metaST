@@ -37,11 +37,20 @@ fallback_nameservers: &fallback_nameservers
 dns:
   enable: true
   ipv6: true
-  use-hosts: true
+  use-system-hosts: false
   cache-algorithm: arc
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
-  fake-ip-filter: ["+.lan", "+.local", "+.msftconnecttest.com", "+.msftncsi.com"]
+  fake-ip-filter:
+    [
+      "+.lan",
+      "+.local",
+      "+.msftconnecttest.com",
+      "+.msftncsi.com",
+      "localhost.ptlogin2.qq.com",
+      "localhost.sec.qq.com",
+      "localhost.work.weixin.qq.com"
+    ]
   default-nameserver: ["223.5.5.5", "114.114.114.114", "1.1.1.1", "8.8.8.8"]
   nameserver: *nameservers
   proxy-server-nameserver: *nameservers
