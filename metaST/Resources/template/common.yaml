@@ -14,7 +14,7 @@ ipv6: true
 external-controller: 0.0.0.0:9090
 secret: ""
 # 延迟计算去除握手等额外延迟
-unified-delay: true
+unified-delay: false
 # TCP并发
 tcp-concurrent: true
 # 全局客户端指纹(支持VLESS,VMess,Trojan)
@@ -23,11 +23,11 @@ global-client-fingerprint: chrome
 global-ua: clash.meta
 
 # DNS配置
-nameservers: &nameservers
+domestic_nameservers: &domestic_nameservers
   - https://dns.alidns.com/dns-query # 阿里云公共DNS
   - https://doh.pub/dns-query # 腾讯DNSPod
   - https://doh.360.cn/dns-query # 360安全DNS
-fallback_nameservers: &fallback_nameservers
+foreign_nameservers: &foreign_nameservers
   - https://1.1.1.1/dns-query # Cloudflare(主)
   - https://1.0.0.1/dns-query # Cloudflare(备)
   - https://208.67.222.222/dns-query # OpenDNS(主)
@@ -49,15 +49,15 @@ dns:
       "+.msftncsi.com",
       "localhost.ptlogin2.qq.com",
       "localhost.sec.qq.com",
-      "localhost.work.weixin.qq.com"
+      "localhost.work.weixin.qq.com",
     ]
-  default-nameserver: ["223.5.5.5", "114.114.114.114", "1.1.1.1", "8.8.8.8"]
-  nameserver: *nameservers
-  proxy-server-nameserver: *nameservers
+  default-nameserver: ["223.5.5.5", "119.29.29.29", "1.1.1.1", "8.8.8.8"]
+  nameserver: *domestic_nameservers
+  proxy-server-nameserver: *domestic_nameservers
   nameserver-policy:
-    "+.mirror.ghproxy.com": *fallback_nameservers
-    "geosite:private,cn,geolocation-cn": *nameservers
-    "geosite:google,youtube,telegram,gfw,geolocation-!cn": *fallback_nameservers
+    "+.mirror.ghproxy.com": *foreign_nameservers
+    "geosite:private,cn,geolocation-cn": *domestic_nameservers
+    "geosite:google,youtube,telegram,gfw,geolocation-!cn": *foreign_nameservers
 
 # GEO自动更新、更新间隔(单位: 小时)、更新下载地址
 geo-auto-update: true

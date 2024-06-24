@@ -249,7 +249,7 @@ public class MetaConfig
         string config = yaml
             .Replace("proxies: []", $"proxies: {Environment.NewLine}{proxyList}")
             .Replace("# proxy-groups:", groupList)
-            .Replace("'${region-groups}'", string.Join(", ", groupNames.Distinct().Select(name => "'" + name + "'")))
+            .Replace("\"${region-groups}\"", string.Join(", ", groupNames.Distinct().Select(name => "'" + name + "'")))
             .Replace("rules: []", $"{rules}");
 
         // 处理参数

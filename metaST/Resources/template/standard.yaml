@@ -6,10 +6,10 @@ proxy-groups:
   - name: 节点选择
     type: select
     icon: ${icons.adjust.svg}
-    proxies: ['延迟选优', '故障转移', '负载均衡(散列)', '负载均衡(轮询)', 'DIRECT']
+    proxies: ["自动选择", "DIRECT"]
     include-all: true
 
-  - name: 延迟选优
+  - name: 自动选择
     type: url-test
     tolerance: 50
     lazy: true
@@ -20,88 +20,56 @@ proxy-groups:
     icon: ${icons.speed.svg}
     include-all: true
 
-  - name: 故障转移
-    type: fallback
-    lazy: true
-    interval: 300
-    timeout: 2000
-    url: ${options.DelayTestUrl}
-    max-failed-times: 3
-    icon: ${icons.ambulance.svg}
-    include-all: true
-
-  - name: 负载均衡(散列)
-    type: load-balance
-    strategy: consistent-hashing
-    lazy: true
-    interval: 300
-    timeout: 2000
-    url: ${options.DelayTestUrl}
-    max-failed-times: 3
-    icon: ${icons.merry_go.svg}
-    include-all: true
-
-  - name: 负载均衡(轮询)
-    type: load-balance
-    strategy: round-robin
-    lazy: true
-    interval: 300
-    timeout: 2000
-    url: ${options.DelayTestUrl}
-    max-failed-times: 3
-    icon: ${icons.balance.svg}
-    include-all: true
-
   - name: 谷歌服务
     type: select
     icon: ${icons.google.svg}
-    proxies: ['节点选择', '延迟选优', '故障转移', '负载均衡(散列)', '负载均衡(轮询)', '全局直连']
+    proxies: ["节点选择", "自动选择", "全局直连"]
     include-all: true
 
   - name: 国外媒体
     type: select
     icon: ${icons.youtube.svg}
-    proxies: ['节点选择', '延迟选优', '故障转移', '负载均衡(散列)', '负载均衡(轮询)', '全局直连']
+    proxies: ["节点选择", "自动选择", "全局直连"]
     include-all: true
 
   - name: 电报消息
     type: select
     icon: ${icons.telegram.svg}
-    proxies: ['节点选择', '延迟选优', '故障转移', '负载均衡(散列)', '负载均衡(轮询)', '全局直连']
+    proxies: ["节点选择", "自动选择", "全局直连"]
     include-all: true
 
   - name: 微软服务
     type: select
     icon: ${icons.microsoft.svg}
-    proxies: ['全局直连', '节点选择', '延迟选优', '故障转移', '负载均衡(散列)', '负载均衡(轮询)']
+    proxies: ["全局直连", "节点选择", "自动选择"]
     include-all: true
 
   - name: 苹果服务
     type: select
     icon: ${icons.apple.svg}
-    proxies: ['节点选择', '延迟选优', '故障转移', '负载均衡(散列)', '负载均衡(轮询)', '全局直连']
+    proxies: ["节点选择", "自动选择", "全局直连"]
     include-all: true
 
   - name: 广告过滤
     type: select
     icon: ${icons.bug.svg}
-    proxies: ['REJECT', 'DIRECT']
+    proxies: ["REJECT", "DIRECT"]
 
   - name: 全局直连
     type: select
     icon: ${icons.link.svg}
-    proxies: ['DIRECT', '节点选择', '延迟选优', '故障转移', '负载均衡(散列)', '负载均衡(轮询)']
+    proxies: ["DIRECT", "节点选择", "自动选择"]
     include-all: true
 
   - name: 全局拦截
     type: select
     icon: ${icons.block.svg}
-    proxies: ['REJECT', 'DIRECT']
+    proxies: ["REJECT", "DIRECT"]
 
   - name: 漏网之鱼
     type: select
     icon: ${icons.fish.svg}
-    proxies: ['节点选择', '延迟选优', '故障转移', '负载均衡(散列)', '负载均衡(轮询)', '全局直连']
+    proxies: ["节点选择", "自动选择", "全局直连"]
     include-all: true
 
 # 规则

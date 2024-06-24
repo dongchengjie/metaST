@@ -15,7 +15,7 @@ public class MetaRule
         string? resourceName = defaultValue?.Value?.ToString();
         if (!string.IsNullOrWhiteSpace(resourceName))
         {
-            string commonRules = Resources.ReadAsText("template.rulesets.common.yaml");
+            string commonRules = Resources.ReadAsText("template.ruleset.common.yaml");
             string rules = Resources.ReadAsText(resourceName);
             // 通用规则优先匹配
             return rules.Replace("rules:", commonRules);
