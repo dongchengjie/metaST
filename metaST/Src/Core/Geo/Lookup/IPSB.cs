@@ -10,11 +10,11 @@ public class IPSB : AJsonLookup
         return new()
         {
             Method = HttpMethod.Get,
-            RequestUri = new Uri("https://ipv4.ip.gs/addrinfo"),
+            RequestUri = new Uri("https://api.ip.sb/geoip"),
             Headers =
             {
                 { "Accept-Language",  "en-US" },
-                { "Referer", "https://ip.gs/" }
+                { "Referer", "https://ip.sb/api/" }
             }
         };
     }
@@ -22,10 +22,10 @@ public class IPSB : AJsonLookup
     {
         return new ResultMapping()
         {
-            AddressField = "address",
-            CountryCodeField = "_CountryCodeField",
+            AddressField = "ip",
+            CountryCodeField = "country_code",
             CountryField = "country",
-            OrganizationField = "isp.name"
+            OrganizationField = "organization"
         };
     }
 
