@@ -7,5 +7,5 @@ public enum GroupType
     standard,   // 标准分组
 
     [DefaultValue("template.region.yaml")]
-    regieon     // 地域分组
+    region     // 地域分组
 }

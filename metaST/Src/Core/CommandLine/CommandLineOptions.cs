@@ -64,7 +64,7 @@ public class CommandLineOptions
     [Option("gt", Required = false, Default = 10 * 1000, HelpText = "GEO查询超时(ms)")]
     public required int GeoLookupTimeout { get; set; }
 
-    [Option("group", Required = false, Default = GroupType.regieon, HelpText = "代理组类型")]
+    [Option("group", Required = false, Default = GroupType.region, HelpText = "代理组类型")]
     public required GroupType GroupType { get; set; }
 
     [Option("icon", Required = false, Default = IconType.http, HelpText = "图标类型")]

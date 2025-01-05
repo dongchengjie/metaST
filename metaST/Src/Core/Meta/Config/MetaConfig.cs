@@ -148,7 +148,7 @@ public class MetaConfig
         return Context.Options.GroupType switch
         {
             GroupType.standard => GenerateStandardConfig(proxies),
-            GroupType.regieon => GenerateRegionConfig(proxies),
+            GroupType.region => GenerateRegionConfig(proxies),
             _ => string.Empty,
         };
     }
@@ -230,9 +230,9 @@ public class MetaConfig
                 return
                   "  - name: " + country + Environment.NewLine
                 + "    type: url-test" + Environment.NewLine
-                + "    tolerance: 50" + Environment.NewLine
+                + "    tolerance: 100" + Environment.NewLine
                 + "    lazy: false" + Environment.NewLine
-                + "    interval: 300" + Environment.NewLine
+                + "    interval: 180" + Environment.NewLine
                 + "    timeout: 2000" + Environment.NewLine
                 + "    url: ${options.DelayTestUrl}" + Environment.NewLine
                 + "    max-failed-times: 3" + Environment.NewLine

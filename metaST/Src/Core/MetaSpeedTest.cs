@@ -11,7 +11,7 @@ using Util;
 // 程序信息
 [assembly: AssemblyTitle("metaST")]
 [assembly: AssemblyDescription("A Clash.Meta-based CLI program for proxy testing.")]
-[assembly: AssemblyVersion("1.1.18")]
+[assembly: AssemblyVersion("1.1.19")]
 
 namespace Core.MetaSpeedTest;
 public class MetaSpeedTest
@@ -25,25 +25,25 @@ public class MetaSpeedTest
             // 获取节点列表
             List<ProxyNode> proxies = MetaConfig.GetConfigProxies(options.Config);
             // 节点去重
-            EnsurePorxiesLeft(proxies);
+            EnsureProxiesLeft(proxies);
             proxies = ProxyNode.Distinct(proxies);
             // 节点净化(分组 + 二分测试校验)
-            EnsurePorxiesLeft(proxies);
+            EnsureProxiesLeft(proxies);
             proxies = ProxyNode.Purify(proxies);
             // 延迟测试、筛选
             proxies = DelayTestFilter(proxies);
             // 下载速度测试、筛选
             proxies = SpeedTestFilter(proxies);
             // 节点排序
-            EnsurePorxiesLeft(proxies);
+            EnsureProxiesLeft(proxies);
             proxies = ProxyNode.Sort(proxies);
             // 截取前若干条记录
             proxies = ProxyNode.Truncate(proxies);
             // 节点GEO重命名
-            EnsurePorxiesLeft(proxies);
+            EnsureProxiesLeft(proxies);
             proxies = !string.IsNullOrWhiteSpace(options.Tag) || (options.GeoLookup ?? true) ? ProxyNode.Rename(proxies) : proxies;
             // 输出
-            EnsurePorxiesLeft(proxies);
+            EnsureProxiesLeft(proxies);
             FilesOutput(proxies);
         }
         catch (Exception ex)
@@ -77,7 +77,7 @@ public class MetaSpeedTest
         ExitRegistrar.RegisterAction(type => Logger.Terminate());
     }
 
-    private static void EnsurePorxiesLeft(List<ProxyNode> proxies)
+    private static void EnsureProxiesLeft(List<ProxyNode> proxies)
     {
         if (proxies == null || proxies.Count == 0)
         {
@@ -91,7 +91,7 @@ public class MetaSpeedTest
         if (options.DelayTestEnable ?? true)
         {
             Logger.Info("开始延迟测试...");
-            List<ProxyNode> exclueded = [];
+            List<ProxyNode> excluded = [];
             int chunkIndex = 0;
             foreach (ProxyNode[] chunk in proxies.Chunk(Constants.MaxPortsOccupied))
             {
@@ -100,7 +100,7 @@ public class MetaSpeedTest
                 int parallelism = Math.Min(options.DelayTestThreads, Constants.MaxDelayTestThreads);
                 foreach (ProxyNode[] batch in chunk.Chunk(parallelism))
                 {
-                    exclueded.AddRange(MetaService.UsingProxies([.. batch], (proxied) =>
+                    excluded.AddRange(MetaService.UsingProxies([.. batch], (proxied) =>
                     {
                         Dictionary<ProxyNode, DelayResult> delayTestResult = proxied.AsParallel().AsOrdered()
                             .Select((proxy, index) => new { Index = index, Proxy = proxy })
@@ -125,8 +125,8 @@ public class MetaSpeedTest
                 }
                 chunkIndex += 1;
             }
-            proxies = proxies.Except(exclueded).ToList();
-            Logger.Info($"延迟测试完成,排除掉{exclueded.Count}个节点,剩余{proxies.Count}个节点");
+            proxies = proxies.Except(excluded).ToList();
+            Logger.Info($"延迟测试完成,排除掉{excluded.Count}个节点,剩余{proxies.Count}个节点");
         }
         return proxies;
     }
@@ -137,12 +137,12 @@ public class MetaSpeedTest
         if (options.SpeedTestEnable ?? false)
         {
             Logger.Info("开始下载速度测试...");
-            List<ProxyNode> exclueded = [];
+            List<ProxyNode> excluded = [];
             int chunkIndex = 0;
             foreach (ProxyNode[] chunk in proxies.Chunk(Constants.MaxPortsOccupied))
             {
                 Dictionary<ProxyNode, SpeedResult> speedTestResult = [];
-                exclueded.AddRange(MetaService.UsingProxies([.. chunk], (proxied) =>
+                excluded.AddRange(MetaService.UsingProxies([.. chunk], (proxied) =>
                 {
                     Dictionary<ProxyNode, SpeedResult> speedTestResult = proxied
                         .Select((proxy, index) => new { Index = index, Proxy = proxy })
@@ -165,8 +165,8 @@ public class MetaSpeedTest
                 }));
                 chunkIndex += 1;
             }
-            proxies = proxies.Except(exclueded).ToList();
-            Logger.Info($"下载速度测试完成,排除掉{exclueded.Count}个节点,剩余{proxies.Count}个节点");
+            proxies = proxies.Except(excluded).ToList();
+            Logger.Info($"下载速度测试完成,排除掉{excluded.Count}个节点,剩余{proxies.Count}个节点");
         }
         return proxies;
     }

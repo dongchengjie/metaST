@@ -10,8 +10,8 @@ proxy-groups:
 
   - name: 自动选择
     type: url-test
-    tolerance: 100
-    lazy: true
+    tolerance: 200
+    lazy: false
     interval: 60
     timeout: 2000
     url: ${options.DelayTestUrl}
