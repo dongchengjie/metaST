@@ -147,6 +147,7 @@ public class ProxyNode(Dictionary<dynamic, dynamic> info)
         {
             Logger.Info("节点配置校验完成");
         }
+        purified.ForEach(proxy => proxy.Name += $"_{Guid.NewGuid()}");
         return purified;
     }
 
