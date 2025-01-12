@@ -131,6 +131,7 @@ public class ProxyNode(Dictionary<dynamic, dynamic> info)
 
     public static List<ProxyNode> Purify(List<ProxyNode> proxies)
     {
+        proxies.ForEach(proxy => proxy.Name += $"_{Guid.NewGuid()}");
         List<ProxyNode> purified = [];
         int chunkIndex = 0;
         foreach (ProxyNode[] chunk in proxies.Chunk(Constants.MaxPortsOccupied))
@@ -147,7 +148,6 @@ public class ProxyNode(Dictionary<dynamic, dynamic> info)
         {
             Logger.Info("节点配置校验完成");
         }
-        purified.ForEach(proxy => proxy.Name += $"_{Guid.NewGuid()}");
         return purified;
     }
 
