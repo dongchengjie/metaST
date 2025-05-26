@@ -119,6 +119,8 @@ public class ProxyNode(Dictionary<dynamic, dynamic> info)
                 string unfrozenPart = string.Join("_", unfrozen.Where(str => !string.IsNullOrWhiteSpace(str)).ToList());
                 proxy.Name = $"{frozenPart} {unfrozenPart}";
             });
+            // 排除中国节点
+            proxies = proxies.Where(proxy => proxy.Name != "中国").ToList();
             // 重名添加序号
             if (proxies.Select(proxy => proxy.Name).Distinct().Count() != proxies.Count)
             {
