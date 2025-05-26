@@ -11,7 +11,7 @@ using Util;
 // 程序信息
 [assembly: AssemblyTitle("metaST")]
 [assembly: AssemblyDescription("A Clash.Meta-based CLI program for proxy testing.")]
-[assembly: AssemblyVersion("1.1.22")]
+[assembly: AssemblyVersion("1.1.23")]
 
 namespace Core.MetaSpeedTest;
 public class MetaSpeedTest
